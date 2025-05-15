@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار JavaScript التفاعلي</title>
+  <link rel="stylesheet" href="exam-js-style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>اختبار JavaScript التفاعلي</h1>
+    <form id="quiz-form">
+      <!-- السؤال 1: اختيار متعدد -->
+      <div class="question" id="q1">
+        <p>1. ما هي الدالة المستخدمة لتحويل نص إلى عدد صحيح؟</p>
+        <label><input type="radio" name="q1" value="a"> parseInt()</label>
+        <label><input type="radio" name="q1" value="b"> parseFloat()</label>
+        <label><input type="radio" name="q1" value="c"> Number()</label>
+      </div>
+
+      <!-- السؤال 2: إدخال نص -->
+      <div class="question" id="q2">
+        <p>2. ما هو الكلمة المفتاحية لتعريف متغير ثابت؟</p>
+        <input type="text" name="q2">
+      </div>
+
+      <!-- السؤال 3: اختيار متعدد -->
+      <div class="question" id="q3">
+        <p>3. أي طريقة تُستخدم لإضافة عنصر إلى نهاية مصفوفة؟</p>
+        <label><input type="radio" name="q3" value="a"> push()</label>
+        <label><input type="radio" name="q3" value="b"> pop()</label>
+        <label><input type="radio" name="q3" value="c"> shift()</label>
+      </div>
+
+      <!-- السؤال 4: صح/خطأ -->
+      <div class="question" id="q4">
+        <p>4. يمكن إعادة تعيين قيمة متغير معرف بـ let داخل نفس النطاق.</p>
+        <label><input type="radio" name="q4" value="true"> صح</label>
+        <label><input type="radio" name="q4" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 5: اختيار متعدد -->
+      <div class="question" id="q5">
+        <p>5. ما هي الدالة المستخدمة لتحديد حدث النقر على عنصر؟</p>
+        <label><input type="radio" name="q5" value="a"> addEventListener()</label>
+        <label><input type="radio" name="q5" value="b"> onclick()</label>
+        <label><input type="radio" name="q5" value="c"> bind()</label>
+      </div>
+
+      <!-- السؤال 6: إدخال نص -->
+      <div class="question" id="q6">
+        <p>6. ما هي الطريقة المستخدمة لتحديد عنصر بواسطة معرفه (ID)؟</p>
+        <input type="text" name="q6">
+      </div>
+
+      <!-- السؤال 7: اختيار متعدد -->
+      <div class="question" id="q7">
+        <p>7. أي قيمة تُرجع دالة إذا لم يتم تحديد قيمة إرجاع؟</p>
+        <label><input type="radio" name="q7" value="a"> undefined</label>
+        <label><input type="radio" name="q7" value="b"> null</label>
+        <label><input type="radio" name="q7" value="c"> 0</label>
+      </div>
+
+      <!-- السؤال 8: صح/خطأ -->
+      <div class="question" id="q8">
+        <p>8. الكائنات في JavaScript يتم تمريرها بالقيمة (by value).</p>
+        <label><input type="radio" name="q8" value="false"> خطأ</label>
+        <label><input type="radio" name="q8" value="true"> صح</label>
+      </div>
+
+      <!-- السؤال 9: إدخال نص -->
+      <div class="question" id="q9">
+        <p>9. ما هي الكلمة المفتاحية لتعريف دالة بدون اسم؟</p>
+        <input type="text" name="q9">
+      </div>
+
+      <!-- السؤال 10: اختيار متعدد -->
+      <div class="question" id="q10">
+        <p>10. أي طريقة تُستخدم لدمج مصفوفتين؟</p>
+        <label><input type="radio" name="q10" value="a"> concat()</label>
+        <label><input type="radio" name="q10" value="b"> join()</label>
+        <label><input type="radio" name="q10" value="c"> merge()</label>
+      </div>
+
+      <!-- السؤال 11: إدخال نص -->
+      <div class="question" id="q11">
+        <p>11. ما هي الطريقة المستخدمة لتحويل مصفوفة إلى نص؟</p>
+        <input type="text" name="q11">
+      </div>
+
+      <!-- السؤال 12: اختيار متعدد -->
+      <div class="question" id="q12">
+        <p>12. أي خاصية تُستخدم لتحديد نص داخل عنصر HTML؟</p>
+        <label><input type="radio" name="q12" value="a"> textContent</label>
+        <label><input type="radio" name="q12" value="b"> innerHTML</label>
+        <label><input type="radio" name="q12" value="c"> Both a and b</label>
+      </div>
+
+      <!-- السؤال 13: صح/خطأ -->
+      <div class="question" id="q13">
+        <p>13. يمكن استخدام const لتعريف متغير يتغير محتواه داخل كائن.</p>
+        <label><input type="radio" name="q13" value="true"> صح</label>
+        <label><input type="radio" name="q13" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 14: إدخال نص -->
+      <div class="question" id="q14">
+        <p>14. ما هي الطريقة المستخدمة لإزالة العنصر الأخير من مصفوفة؟</p>
+        <input type="text" name="q14">
+      </div>
+
+      <!-- السؤال 15: اختيار متعدد -->
+      <div class="question" id="q15">
+        <p>15. أي طريقة تُستخدم لتصفية عناصر المصفوفة بناءً على شرط؟</p>
+        <label><input type="radio" name="q15" value="a"> filter()</label>
+        <label><input type="radio" name="q15" value="b"> map()</label>
+        <label><input type="radio" name="q15" value="c"> reduce()</label>
+      </div>
+
+      <!-- السؤال 16: كود -->
+      <div class="question" id="q16">
+        <p>16. اكتب كود JavaScript لتغيير لون خلفية زر إلى الأحمر عند النقر عليه.</p>
+        <textarea name="q16" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 17: اختيار متعدد -->
+      <div class="question" id="q17">
+        <p>17. أي كائن يُستخدم لتحديد عناصر بواسطة اسم الفئة؟</p>
+        <label><input type="radio" name="q17" value="a"> document.getElementsByClassName()</label>
+        <label><input type="radio" name="q17" value="b"> document.querySelector()</label>
+        <label><input type="radio" name="q17" value="c"> Both a and b</label>
+      </div>
+
+      <!-- السؤال 18: صح/خطأ -->
+      <div class="question" id="q18">
+        <p>18. الدوال المعرفة بـ function expression يتم رفعها (hoisted).</p>
+        <label><input type="radio" name="q18" value="false"> خطأ</label>
+        <label><input type="radio" name="q18" value="true"> صح</label>
+      </div>
+
+      <!-- السؤال 19: إدخال نص -->
+      <div class="question" id="q19">
+        <p>19. ما هي الكلمة المفتاحية لتعريف متغير محلي في ES6؟</p>
+        <input type="text" name="q19">
+      </div>
+
+      <!-- السؤال 20: اختيار متعدد -->
+      <div class="question" id="q20">
+        <p>20. أي طريقة تُستخدم لتحديد حدث إدخال نص في حقل؟</p>
+        <label><input type="radio" name="q20" value="a"> oninput</label>
+        <label><input type="radio" name="q20" value="b"> onchange</label>
+        <label><input type="radio" name="q20" value="c"> Both a and b</label>
+      </div>
+
+      <!-- السؤال 21: كود -->
+      <div class="question" id="q21">
+        <p>21. اكتب كود JavaScript لإنشاء قائمة عناصر من مصفوفة وإضافتها إلى div.</p>
+        <textarea name="q21" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 22: اختيار متعدد -->
+      <div class="question" id="q22">
+        <p>22. أي طريقة تُستخدم لتحويل كائن إلى JSON؟</p>
+        <label><input type="radio" name="q22" value="a"> JSON.stringify()</label>
+        <label><input type="radio" name="q22" value="b"> JSON.parse()</label>
+        <label><input type="radio" name="q22" value="c"> JSON.convert()</label>
+      </div>
+
+      <!-- السؤال 23: صح/خطأ -->
+      <div class="question" id="q23">
+        <p>23. يمكن استخدام async/await للتعامل مع العمليات المتزامنة.</p>
+        <label><input type="radio" name="q23" value="true"> صح</label>
+        <label><input type="radio" name="q23" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 24: إدخال نص -->
+      <div class="question" id="q24">
+        <p>24. ما هي الطريقة المستخدمة للبحث عن عنصر في مصفوفة؟</p>
+        <input type="text" name="q24">
+      </div>
+
+      <!-- السؤال 25: اختيار متعدد -->
+      <div class="question" id="q25">
+        <p>25. أي طريقة تُستخدم لتكرار عملية على كل عنصر في مصفوفة؟</p>
+        <label><input type="radio" name="q25" value="a"> forEach()</label>
+        <label><input type="radio" name="q25" value="b"> map()</label>
+        <label><input type="radio" name="q25" value="c"> Both a and b</label>
+      </div>
+
+      <!-- السؤال 26: كود -->
+      <div class="question" id="q26">
+        <p>26. اكتب كود JavaScript لعكس نص مُدخل في حقل نص وعرضه في div.</p>
+        <textarea name="q26" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 27: إدخال نص -->
+      <div class="question" id="q27">
+        <p>27. ما هي الكلمة المفتاحية لتصدير وحدة في ES6؟</p>
+        <input type="text" name="q27">
+      </div>
+
+      <!-- السؤال 28: كود -->
+      <div class="question" id="q28">
+        <p>28. اكتب كود JavaScript لفرز مصفوفة أرقام تصاعديًا وعرضها.</p>
+        <textarea name="q28" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 29: إدخال نص -->
+      <div class="question" id="q29">
+        <p>29. ما هي الطريقة المستخدمة لإنشاء عنصر HTML جديد؟</p>
+        <input type="text" name="q29">
+      </div>
+
+      <!-- السؤال 30: كود -->
+      <div class="question" id="q30">
+        <p>30. اكتب كود JavaScript لإنشاء عداد يزداد كل ثانية باستخدام setInterval.</p>
+        <textarea name="q30" rows="5" cols="50"></textarea>
+      </div>
+
+      <button type="submit">إنهاء الاختبار</button>
+    </form>
+    <div id="result" class="hidden"></div>
+    <button id="retake" class="hidden">إعادة الاختبار</button>
+  </div>
+  <script src="exam-js-js.js"></script>
+</body>
+</html>

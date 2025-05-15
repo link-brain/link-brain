@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اختبار CSS التفاعلي</title>
+  <link rel="stylesheet" href="exam-css-style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>اختبار CSS التفاعلي</h1>
+    <form id="quiz-form">
+      <!-- السؤال 1: اختيار متعدد -->
+      <div class="question" id="q1">
+        <p>1. ما هي الخاصية المستخدمة لتغيير لون النص عند تمرير الفأرة؟</p>
+        <label><input type="radio" name="q1" value="a"> :hover { color }</label>
+        <label><input type="radio" name="q1" value="b"> :active { color }</label>
+        <label><input type="radio" name="q1" value="c"> :focus { color }</label>
+      </div>
+
+      <!-- السؤال 2: إدخال نص -->
+      <div class="question" id="q2">
+        <p>2. ما هي الخاصية المستخدمة لتحديد أولوية المحدد (specificity) عند التكرار؟</p>
+        <input type="text" name="q2">
+      </div>
+
+      <!-- السؤال 3: اختيار متعدد -->
+      <div class="question" id="q3">
+        <p>3. أي قيمة لـ display تُستخدم لإنشاء تخطيط Flexbox؟</p>
+        <label><input type="radio" name="q3" value="a"> flex</label>
+        <label><input type="radio" name="q3" value="b"> grid</label>
+        <label><input type="radio" name="q3" value="c"> inline</label>
+      </div>
+
+      <!-- السؤال 4: صح/خطأ -->
+      <div class="question" id="q4">
+        <p>4. خاصية animation تتطلب تحديد @keyframes لتعمل.</p>
+        <label><input type="radio" name="q4" value="true"> صح</label>
+        <label><input type="radio" name="q4" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 5: اختيار متعدد -->
+      <div class="question" id="q5">
+        <p>5. ما هي الخاصية المستخدمة لتحديد تباعد العناصر في Grid؟</p>
+        <label><input type="radio" name="q5" value="a"> grid-gap</label>
+        <label><input type="radio" name="q5" value="b"> grid-spacing</label>
+        <label><input type="radio" name="q5" value="c"> grid-margin</label>
+      </div>
+
+      <!-- السؤال 6: إدخال نص -->
+      <div class="question" id="q6">
+        <p>6. ما هي الخاصية المستخدمة لتحديد انتقال سلس للخلفية؟</p>
+        <input type="text" name="q6">
+      </div>
+
+      <!-- السؤال 7: اختيار متعدد -->
+      <div class="question" id="q7">
+        <p>7. أي قيمة لـ position تجعل العنصر خارج تدفق الصفحة؟</p>
+        <label><input type="radio" name="q7" value="a"> absolute</label>
+        <label><input type="radio" name="q7" value="b"> relative</label>
+        <label><input type="radio" name="q7" value="c"> static</label>
+      </div>
+
+      <!-- السؤال 8: صح/خطأ -->
+      <div class="question" id="q8">
+        <p>8. يمكن استخدام وحدة vw لتحديد حجم يعتمد على عرض النافذة.</p>
+        <label><input type="radio" name="q8" value="true"> صح</label>
+        <label><input type="radio" name="q8" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 9: إدخال نص -->
+      <div class="question" id="q9">
+        <p>9. ما هي الخاصية المستخدمة لتحديد تكبير العنصر؟</p>
+        <input type="text" name="q9">
+      </div>
+
+      <!-- السؤال 10: اختيار متعدد -->
+      <div class="question" id="q10">
+        <p>10. أي خاصية تُستخدم لتحديد محاذاة العناصر في Flexbox أفقيًا؟</p>
+        <label><input type="radio" name="q10" value="a"> justify-content</label>
+        <label><input type="radio" name="q10" value="b"> align-items</label>
+        <label><input type="radio" name="q10" value="c"> flex-direction</label>
+      </div>
+
+      <!-- السؤال 11: إدخال نص -->
+      <div class="question" id="q11">
+        <p>11. ما هي الخاصية المستخدمة لتحديد ظل النص؟</p>
+        <input type="text" name="q11">
+      </div>
+
+      <!-- السؤال 12: اختيار متعدد -->
+      <div class="question" id="q12">
+        <p>12. ما هي القيمة التي تجعل العنصر مخفيًا دون إزالته من التدفق؟</p>
+        <label><input type="radio" name="q12" value="a"> visibility: hidden</label>
+        <label><input type="radio" name="q12" value="b"> display: none</label>
+        <label><input type="radio" name="q12" value="c"> opacity: 0</label>
+      </div>
+
+      <!-- السؤال 13: صح/خطأ -->
+      <div class="question" id="q13">
+        <p>13. خاصية clip-path تُستخدم لتحديد حدود العنصر.</p>
+        <label><input type="radio" name="q13" value="false"> خطأ</label>
+        <label><input type="radio" name="q13" value="true"> صح</label>
+      </div>
+
+      <!-- السؤال 14: إدخال نص -->
+      <div class="question" id="q14">
+        <p>14. ما هي الخاصية المستخدمة لتحديد نوع الحدود؟</p>
+        <input type="text" name="q14">
+      </div>
+
+      <!-- السؤال 15: اختيار متعدد -->
+      <div class="question" id="q15">
+        <p>15. أي قيمة لـ overflow تُظهر شريط تمرير؟</p>
+        <label><input type="radio" name="q15" value="a"> scroll</label>
+        <label><input type="radio" name="q15" value="b"> hidden</label>
+        <label><input type="radio" name="q15" value="c"> visible</label>
+      </div>
+
+      <!-- السؤال 16: كود -->
+      <div class="question" id="q16">
+        <p>16. اكتب كود HTML/CSS لتوسيط div أفقيًا وعموديًا داخل حاوية باستخدام Flexbox.</p>
+        <textarea name="q16" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 17: اختيار متعدد -->
+      <div class="question" id="q17">
+        <p>17. أي خاصية تُستخدم لتحديد عدد الأعمدة في Grid؟</p>
+        <label><input type="radio" name="q17" value="a"> grid-template-columns</label>
+        <label><input type="radio" name="q17" value="b"> grid-template-rows</label>
+        <label><input type="radio" name="q17" value="c"> grid-column</label>
+      </div>
+
+      <!-- السؤال 18: صح/خطأ -->
+      <div class="question" id="q18">
+        <p>18. يمكن استخدام متغيرات CSS (مثل --color) في جميع المتصفحات القديمة.</p>
+        <label><input type="radio" name="q18" value="false"> خطأ</label>
+        <label><input type="radio" name="q18" value="true"> صح</label>
+      </div>
+
+      <!-- السؤال 19: إدخال نص -->
+      <div class="question" id="q19">
+        <p>19. ما هي الخاصية المستخدمة لتحديد تأخير الانتقال؟</p>
+        <input type="text" name="q19">
+      </div>
+
+      <!-- السؤال 20: اختيار متعدد -->
+      <div class="question" id="q20">
+        <p>20. أي قيمة لـ text-decoration تُضيف خطًا أسفل النص؟</p>
+        <label><input type="radio" name="q20" value="a"> underline</label>
+        <label><input type="radio" name="q20" value="b"> overline</label>
+        <label><input type="radio" name="q20" value="c"> line-through</label>
+      </div>
+
+      <!-- السؤال 21: كود -->
+      <div class="question" id="q21">
+        <p>21. اكتب كود CSS لإنشاء زر يتغير لونه إلى الأحمر عند التمرير (hover).</p>
+        <textarea name="q21" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 22: اختيار متعدد -->
+      <div class="question" id="q22">
+        <p>22. أي خاصية تُستخدم لتحديد تسلسل الرسوم المتحركة؟</p>
+        <label><input type="radio" name="q22" value="a"> animation</label>
+        <label><input type="radio" name="q22" value="b"> transition</label>
+        <label><input type="radio" name="q22" value="c"> keyframes</label>
+      </div>
+
+      <!-- السؤال 23: صح/خطأ -->
+      <div class="question" id="q23">
+        <p>23. خاصية object-fit تُستخدم لتحديد كيفية ملاءمة الصور داخل العنصر.</p>
+        <label><input type="radio" name="q23" value="true"> صح</label>
+        <label><input type="radio" name="q23" value="false"> خطأ</label>
+      </div>
+
+      <!-- السؤال 24: إدخال نص -->
+      <div class="question" id="q24">
+        <p>24. ما هي الخاصية المستخدمة لتحديد تباعد الأحرف؟</p>
+        <input type="text" name="q24">
+      </div>
+
+      <!-- السؤال 25: اختيار متعدد -->
+      <div class="question" id="q25">
+        <p>25. أي قيمة لـ cursor تُظهر مؤشر يد؟</p>
+        <label><input type="radio" name="q25" value="a"> pointer</label>
+        <label><input type="radio" name="q25" value="b"> default</label>
+        <label><input type="radio" name="q25" value="c"> move</label>
+      </div>
+
+      <!-- السؤال 26: كود -->
+      <div class="question" id="q26">
+        <p>26. اكتب كود CSS لإنشاء مربع يدور 360 درجة عند التمرير باستخدام transform.</p>
+        <textarea name="q26" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 27: اختيار متعدد -->
+      <div class="question" id="q27">
+        <p>27. أي خاصية تُستخدم لتحديد ترتيب العناصر في Flexbox؟</p>
+        <label><input type="radio" name="q27" value="a"> order</label>
+        <label><input type="radio" name="q27" value="b"> flex-order</label>
+        <label><input type="radio" name="q27" value="c"> z-index</label>
+      </div>
+
+      <!-- السؤال 28: كود -->
+      <div class="question" id="q28">
+        <p>28. اكتب كود HTML/CSS لإنشاء قائمة أفقية باستخدام Flexbox.</p>
+        <textarea name="q28" rows="5" cols="50"></textarea>
+      </div>
+
+      <!-- السؤال 29: إدخال نص -->
+      <div class="question" id="q29">
+        <p>29. ما هي الخاصية المستخدمة لتحديد الحد الأدنى للعرض؟</p>
+        <input type="text" name="q29">
+      </div>
+
+      <!-- السؤال 30: كود -->
+      <div class="question" id="q30">
+        <p>30. اكتب كود CSS لإنشاء تأثير تلاشي (fade-in) باستخدام animation و @keyframes.</p>
+        <textarea name="q30" rows="5" cols="50"></textarea>
+      </div>
+
+      <button type="submit">إنهاء الاختبار</button>
+    </form>
+    <div id="result" class="hidden"></div>
+    <button id="retake" class="hidden">إعادة الاختبار</button>
+  </div>
+  <script src="exam-css-js.js"></script>
+</body>
+</html>
