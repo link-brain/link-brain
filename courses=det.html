@@ -48,15 +48,16 @@
 </head>
 <body style="text-align:center; margin-top:50px;">
 
-  <h2>تسجيل الدخول إلى Edumates</h2>
-  <button id="loginBtn">تسجيل الدخول بجوجل</button>
-  <button id="logoutBtn" style="display:none;">تسجيل الخروج</button>
-  <p id="userInfo"></p>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-  <script>
-    // ⚙️ إعداد Firebase
-    const firebaseConfig = {
- apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
   authDomain: "edumates-983dd.firebaseapp.com",
   projectId: "edumates-983dd",
   storageBucket: "edumates-983dd.firebasestorage.app",
@@ -65,14 +66,9 @@
   measurementId: "G-L1KCZTW8R9"
 };
 
-    // 🚀 تهيئة Firebase
-    firebase.initializeApp(firebaseConfig);
-
-    const provider = new firebase.auth.GoogleAuthProvider();
-
-    // 🟢 تسجيل الدخول
-    document.getElementById('loginBtn').onclick = () => {
-      firebase.auth().signIn
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 </head>
 <body>
     <nav class="navbar">
