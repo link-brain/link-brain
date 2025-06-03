@@ -38,6 +38,41 @@
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
+    <!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>تسجيل الدخول</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+</head>
+<body style="text-align:center; margin-top:50px;">
+
+  <h2>تسجيل الدخول إلى Edumates</h2>
+  <button id="loginBtn">تسجيل الدخول بجوجل</button>
+  <button id="logoutBtn" style="display:none;">تسجيل الخروج</button>
+  <p id="userInfo"></p>
+
+  <script>
+    // ⚙️ إعداد Firebase
+    const firebaseConfig = {
+ apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+  authDomain: "edumates-983dd.firebaseapp.com",
+  projectId: "edumates-983dd",
+  storageBucket: "edumates-983dd.firebasestorage.app",
+  messagingSenderId: "172548876353",
+  appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+  measurementId: "G-L1KCZTW8R9"
+};
+
+    // 🚀 تهيئة Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    // 🟢 تسجيل الدخول
+    document.getElementById('loginBtn').onclick = () => {
+      firebase.auth().signIn
 </head>
 <body>
     <nav class="navbar">
