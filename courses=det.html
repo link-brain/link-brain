@@ -61,7 +61,42 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
     </script>
-    </head>
+    <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+// إعداد Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyBfHCxGjQO08B82GyLn515ZYQXqfiLPhjw4",
+  authDomain: "edumates-983dd.firebaseapp.com",
+  projectId: "edumates-983dd",
+  storageBucket: "edumates-983dd.appspot.com",
+  messagingSenderId: "172548876353",
+  appId: "1:172548876353:web:955bf4125a83d264c43ec0"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// زر تسجيل الدخول
+const googleLoginBtn = document.getElementById("googleLoginBtn");
+
+googleLoginBtn.addEventListener("click", () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const user = result.user;
+      console.log("تم تسجيل الدخول:", user.displayName);
+      // ✅ بعد تسجيل الدخول بنجاح، إعادة التوجيه:
+      window.location.href = "home.html"; // عدّل الصفحة حسب مشروعك
+    })
+    .catch((error) => {
+      console.error("خطأ في تسجيل الدخول عبر جوجل:", error.message);
+    });
+}); 
+    </script>
+</head>
 <body>
     <nav class="navbar">
         <a href="index.html" class="logo">Edumates</a>
