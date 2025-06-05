@@ -6,27 +6,14 @@
     <title>Edumates - تعلم Frontend</title>
     <link rel="stylesheet" href="courses=det-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edumates - تعلم Frontend</title>
-    <link rel="stylesheet" href="courses=det-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-L6LJJZ6S57"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-L6LJJZ6S57');
-</script>
-   
-    
-    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6LJJZ6S57"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-L6LJJZ6S57');
+    </script>
 </head>
 <body>
     <nav class="navbar">
@@ -35,10 +22,11 @@
             <a href="index.html" class="nav-link active">الرئيسية</a>
             <a href="courses.html" class="nav-link">الكورسات</a>
             <a href="#footer" class="nav-link">اتصل بنا</a>
-            <form id="loginForm">
-                <button id="googleLoginBtn">تسجيل الدخول عبر جوجل</button>
+            <button id="googleLoginBtn" class="google-login-btn">
+                <i class="fab fa-google"></i> تسجيل الدخول عبر جوجل
+            </button>
         </div>
-        </form><a href="courses.html"><button class="btn watch-courses-btn">العوده</button></a>
+        <a href="courses.html"><button class="btn watch-courses-btn">العوده</button></a>
         <span class="mobile-menu-btn"><i class="fas fa-bars"></i></span>
     </nav>
 
@@ -69,7 +57,7 @@
                         <li><a href="https://youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij">دوره abdalrhman Gamal</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- محتوى مجاني بالكامل</p>
-                                <p>- شرح مبسط  </p>
+                                <p>- شرح مبسط</p>
                                 <p>- تغطيه جميع الاساسيات</p>
                             </div>
                         </li>
@@ -99,9 +87,9 @@
                                 <p>- شرح مفصل</p>
                             </div>
                         </li>
-                        
+                    </ul>
                 </div>
-                </ul><div class="quiz-button">
+                <div class="quiz-button">
                     <a href="exam-html.html"><button class="btn quiz-btn">اختبار HTML</button></a>
                 </div>
             </div>
@@ -131,13 +119,13 @@
                             <div class="features-list">
                                 <p>- شرح عملي</p>
                                 <p>- html+css</p>
-                                <p>- شرح الاساسيات </p>
+                                <p>- شرح الاساسيات</p>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4> مواقع مهمه</h4>
+                    <h4>مواقع مهمه</h4>
                     <ul>
                         <li><a href="https://wiki.hsoub.com/CSS">شرح مبسط لcss</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
@@ -152,8 +140,10 @@
                                 <p>- جميع الاكود</p>
                                 <p>- مرجع احترافي</p>
                             </div>
-                                     </div>
-                </ul><div class="quiz-button">
+                        </li>
+                    </ul>
+                </div>
+                <div class="quiz-button">
                     <a href="exam-css.html"><button class="btn quiz-btn">اختبار CSS</button></a>
                 </div>
             </div>
@@ -189,7 +179,7 @@
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4> مواقع ومراجع </h4>
+                    <h4>مواقع ومراجع</h4>
                     <ul>
                         <li><a href="https://www.w3schools.com/jsrEF/default.asp">مرجع لجميع اكواد اللغه</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
@@ -198,18 +188,16 @@
                                 <p>- مجاني أونلاين</p>
                             </div>
                         </li>
-                        <li><a href="https://elzero.org/question-learn-javascript/">نصائح للبدا في جافا اسكريبت </a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
+                        <li><a href="https://elzero.org/question-learn-javascript/">نصائح للبدا في جافا اسكريبت</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- تركيز على الأساسيات</p>
                                 <p>- نصائح متقدمة</p>
                                 <p>- أسلوب مختصر</p>
                             </div>
                         </li>
-                            </div>
-                        </li>
                     </ul>
                 </div>
-                </ul><div class="quiz-button">
+                <div class="quiz-button">
                     <a href="exam-js.html"><button class="btn quiz-btn">اختبار JavaScript</button></a>
                 </div>
             </div>
@@ -222,7 +210,7 @@
                 <h3 class="footer-logo">Edumates</h3>
                 <p class="footer-description">منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك</p>
                 <div class="social-links">
-                                       <a href="https://www.facebook.com/profile.php?id=100091389987617" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100091389987617" class="social-link"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://x.com/AHMed_Alshaab?t=TUIaCyRqTfiQXCtgn29aGQ&s=09" class="social-link"><i class="fab fa-twitter"></i></a>
                     <a href="https://www.linkedin.com/in/ahmed-abdulkarem-5a8ab3286?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link"><i class="fab fa-linkedin-in"></i></a>
                 </div>
@@ -298,6 +286,6 @@
         </div>
     </div>
 
-    <script src="courses=det-script.js"></script>
+    <script src="courses=det-script.js" type="module"></script>
 </body>
 </html>
