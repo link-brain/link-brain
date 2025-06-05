@@ -23,6 +23,30 @@ document.addEventListener('DOMContentLoaded', function() {
             if (elements.mobileMenuBtn) {
                 elements.mobileMenuBtn.addEventListener('click', this.toggleMobileMenu);
             }
+      
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+    authDomain: "edumates-983dd.firebaseapp.com",
+    projectId: "edumates-983dd",
+    storageBucket: "edumates-983dd.firebasestorage.app",
+    messagingSenderId: "172548876353",
+    appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+    measurementId: "G-L1KCZTW8R9"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+
 
             // Close Menu on Link Click
             document.querySelectorAll('.nav-link').forEach(link => {
