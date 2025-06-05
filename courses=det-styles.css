@@ -591,3 +591,71 @@ body {
 a {
     text-decoration: none;
 }
+/* في ملف courses=det-styles.css، أضف هذه الأنماط في قسم Interactive Elements */
+
+/* أنماط تسجيل الدخول بالجوجل */
+.google-login-btn {
+    background-color: var(--white);
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.google-login-btn:hover {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.google-login-btn i {
+    font-size: 1.1rem;
+}
+
+/* أنماط حالة المستخدم بعد تسجيل الدخول */
+.user-logged-in {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.user-logged-in:hover {
+    background-color: var(--primary-dark);
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--white);
+}
+
+.logout-icon {
+    margin-right: 0.5rem;
+    transition: var(--transition);
+}
+
+.logout-icon:hover {
+    color: var(--accent-red);
+    transform: scale(1.1);
+}
+
+/* إضافة مسافة للزر في القائمة */
+.nav-links {
+    gap: 1rem;
+}
