@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
-            messages.reverse().forEach((message) => {
+            .forEach((message) => {
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
