@@ -75,7 +75,7 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .nav-link {
@@ -130,7 +130,7 @@ body {
 .watch-courses-btn {
     background-color: var(--primary-blue);
     color: var(--white);
-    box-shadow: var(--box影子);
+    box-shadow: var(--box-shadow);
 }
 
 .watch-courses-btn:hover {
@@ -169,6 +169,96 @@ body {
     font-size: 1.5rem;
     cursor: pointer;
     color: var(--primary-blue);
+}
+
+/* Google Login Button */
+.google-login-btn {
+    background-color: var(--white);
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.google-login-btn:hover,
+.google-login-btn:focus {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.google-login-btn i {
+    font-size: 1.1rem;
+}
+
+.user-logged-in {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+}
+
+.user-logged-in:hover {
+    background-color: var(--primary-dark);
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--white);
+}
+
+.logout-icon {
+    margin-right: 0.5rem;
+    transition: var(--transition);
+}
+
+.logout-icon:hover {
+    color: var(--accent-red);
+    transform: scale(1.1);
+}
+
+/* Chat Button */
+.chat-btn {
+    background-color: var(--white);
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.chat-btn:hover,
+.chat-btn:focus {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.chat-btn i {
+    font-size: 1.1rem;
 }
 
 /* Breadcrumbs */
@@ -331,6 +421,181 @@ body {
     justify-content: center;
 }
 
+/* Chat Popup */
+.chat-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-popup.active {
+    display: flex;
+}
+
+.chat-content {
+    background-color: var(--white);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--box-shadow);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.close-chat {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    transition: var(--transition);
+}
+
+.close-chat:hover,
+.close-chat:focus {
+    color: var(--primary-blue);
+    outline: none;
+}
+
+.chat-content h2 {
+    font-size: 1.8rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.chat-loading {
+    text-align: center;
+    color: var(--text-medium);
+    font-size: 1rem;
+    padding: 1rem;
+    display: none;
+}
+
+.chat-loading.active {
+    display: block;
+}
+
+.load-more-btn {
+    background-color: var(--accent-green);
+    color: var(--white);
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--border-radius);
+    margin: 0 auto;
+}
+
+.load-more-btn:hover,
+.load-more-btn:focus {
+    background-color: #388e3c;
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.chat-messages {
+    flex: 1;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: var(--light-bg);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    word-break: break-word;
+}
+
+.message.user-message {
+    background-color: var(--primary-light);
+    color: var(--white);
+    margin-left: 2rem;
+    margin-right: 1rem;
+}
+
+.message-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.message-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.message-sender {
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.message-text {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+}
+
+.chat-input {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 0.7rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+#messageInput:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+}
+
+.send-message-btn {
+    background-color: var(--primary-blue);
+    color: var(--white);
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.send-message-btn:hover,
+.send-message-btn:focus {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    outline: none;
+}
+
 /* Roadmap Popup */
 .roadmap-popup {
     display: none;
@@ -371,8 +636,10 @@ body {
     transition: var(--transition);
 }
 
-.close-roadmap:hover {
+.close-roadmap:hover,
+.close-roadmap:focus {
     color: var(--primary-blue);
+    outline: none;
 }
 
 .roadmap-content h2 {
@@ -452,10 +719,12 @@ body {
     font-size: 1.1rem;
 }
 
-.social-link:hover {
+.social-link:hover,
+.social-link:focus {
     background-color: var(--white);
     color: var(--primary-blue);
     transform: translateY(-3px);
+    outline: none;
 }
 
 .footer-links {
@@ -502,9 +771,11 @@ body {
     transition: var(--transition);
 }
 
-.footer-link:hover {
+.footer-link:hover,
+.footer-link:focus {
     color: var(--white);
     padding-right: 5px;
+    outline: none;
 }
 
 .footer-column i {
@@ -588,74 +859,27 @@ body {
     }
 }
 
+/* Responsive Design for Chat */
+@media (max-width: 768px) {
+    .chat-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    .chat-input {
+        flex-direction: column;
+    }
+    #messageInput {
+        width: 100%;
+    }
+    .send-message-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .chat-messages {
+        max-height: 50vh;
+    }
+}
+
 a {
     text-decoration: none;
-}
-/* في ملف courses=det-styles.css، أضف هذه الأنماط في قسم Interactive Elements */
-
-/* أنماط تسجيل الدخول بالجوجل */
-.google-login-btn {
-    background-color: var(--white);
-    color: var(--primary-blue);
-    border: 2px solid var(--primary-blue);
-    padding: 0.7rem 1.5rem;
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    transition: var(--transition);
-    cursor: pointer;
-}
-
-.google-login-btn:hover {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    transform: translateY(-2px);
-}
-
-.google-login-btn i {
-    font-size: 1.1rem;
-}
-
-/* أنماط حالة المستخدم بعد تسجيل الدخول */
-.user-logged-in {
-    background-color: var(--primary-blue);
-    color: var(--white);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    transition: var(--transition);
-    cursor: pointer;
-    position: relative;
-}
-
-.user-logged-in:hover {
-    background-color: var(--primary-dark);
-}
-
-.user-avatar {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--white);
-}
-
-.logout-icon {
-    margin-right: 0.5rem;
-    transition: var(--transition);
-}
-
-.logout-icon:hover {
-    color: var(--accent-red);
-    transform: scale(1.1);
-}
-
-/* إضافة مسافة للزر في القائمة */
-.nav-links {
-    gap: 1rem;
 }
