@@ -10,22 +10,21 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar">
-        <a href="#" class="logo" aria-label="Edumates الرئيسية">
-            <i class="fas fa-graduation-cap"></i>
-            Edumates
-        </a>
+        <a href="#" class="logo" aria-label="Edumates الرئيسية">Edumates</a>
         <div class="nav-links">
             <a href="#" class="nav-link active" aria-label="الرئيسية">الرئيسية</a>
             <a href="#" class="nav-link" aria-label="الكورسات">الكورسات</a>
             <a href="#" class="nav-link" aria-label="اتصل بنا">اتصل بنا</a>
-            <button class="btn google-login-btn" id="googleLoginBtn" aria-label="تسجيل الدخول عبر جوجل">
-                <i class="fab fa-google"></i>
-                تسجيل الدخول عبر جوجل
-            </button>
-            <button class="btn chat-btn" id="chatBtn" aria-label="فتح محادثة الطلاب">
-                <i class="fas fa-comments"></i>
-                محادثة الطلاب
-            </button>
+            <div class="auth-buttons">
+                <button class="btn google-login-btn" id="googleLoginBtn" aria-label="تسجيل الدخول عبر جوجل">
+                    <i class="fab fa-google"></i>
+                    تسجيل الدخول عبر جوجل
+                </button>
+                <button class="btn chat-btn" id="chatBtn" aria-label="فتح محادثة الطلاب">
+                    <i class="fas fa-comments"></i>
+                    محادثة الطلاب
+                </button>
+            </div>
         </div>
         <button class="mobile-menu-btn" aria-label="فتح القائمة">
             <i class="fas fa-bars"></i>
@@ -245,9 +244,9 @@
     </div>
 
     <!-- Roadmap Popup -->
-    <div class="roadmap-popup" role="dialog" aria-labelledby="roadmapTitle" aria-hidden="true">
+    <div class="roadmap-popup" id="roadmapPopup" role="dialog" aria-labelledby="roadmapTitle" aria-hidden="true">
         <div class="roadmap-content">
-            <span class="close-roadmap" aria-label="إغلاق خارطة الطريق" role="button">×</span>
+            <span class="close-roadmap" id="closeRoadmap" aria-label="إغلاق خارطة الطريق" role="button">×</span>
             <h2 id="roadmapTitle">خارطة طريق تطوير الواجهات الأمامية</h2>
             <div class="roadmap-item">
                 <h3>1. HTML</h3>
