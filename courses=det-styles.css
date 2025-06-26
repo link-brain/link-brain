@@ -68,14 +68,13 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-blue);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    text-decoration: none;
 }
 
 .nav-links {
     display: flex;
     gap: 1rem;
+    align-items: center;
 }
 
 .nav-link {
@@ -110,6 +109,12 @@ body {
 .nav-link:focus {
     outline: 2px solid var(--primary-blue);
     outline-offset: 2px;
+}
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .btn {
@@ -803,8 +808,7 @@ body {
 }
 
 @media (max-width: 768px) {
-    .nav-links,
-    .watch-courses-btn {
+    .nav-links {
         display: none;
         position: absolute;
         top: 100%;
@@ -817,11 +821,17 @@ body {
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         z-index: 999;
     }
-    .nav-links {
-        gap: 1rem;
+    .nav-links.active {
+        display: flex;
     }
-    .watch-courses-btn {
-        margin-top: 1rem;
+    .auth-buttons {
+        width: 100%;
+        align-items: center;
+    }
+    .google-login-btn,
+    .chat-btn {
+        width: 100%;
+        justify-content: center;
     }
     .mobile-menu-btn {
         display: block;
