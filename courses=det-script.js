@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', async function() {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
     const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
 
     // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
     const analytics = getAnalytics(app);
+    const db = getFirestore(app);
 
     // عناصر DOM
     const elements = {
@@ -31,13 +33,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         roadmapPopup: document.querySelector('.roadmap-popup'),
         closeRoadmap: document.querySelector('.close-roadmap'),
         toggleFeatures: document.querySelectorAll('.toggle-features'),
-        googleLoginBtn: document.getElementById('googleLoginBtn')
+        googleLoginBtn: document.getElementById('googleLoginBtn'),
+        chatBtn: document.getElementById('chatBtn'),
+        chatPopup: document.getElementById('chatPopup'),
+        closeChat: document.getElementById('closeChat'),
+        chatMessages: document.getElementById('chatMessages'),
+        messageInput: document.getElementById('messageInput'),
+        sendMessageBtn: document.getElementById('sendMessageBtn'),
+        chatLoading: document.getElementById('chatLoading'),
+        loadMoreBtn: document.getElementById('loadMoreBtn')
     };
 
     // تعيين السنة الحالية
     if (elements.currentYear) {
         elements.currentYear.textContent = new Date().getFullYear();
     }
+
+    // متغيرات لتتبع الصفحات
+    let lastVisible = null;
+    let unsubscribeMessages = null;
+    const messagesPerPage = 20;
+    let hasMoreMessages = true;
 
     // إعداد مستمعي الأحداث
     setupEventListeners();
@@ -65,7 +81,130 @@ document.addEventListener('DOMContentLoaded', async function() {
     function toggleRoadmapPopup() {
         if (elements.roadmapPopup) {
             elements.roadmapPopup.classList.toggle('active');
+            elements.roadmapPopup.setAttribute('aria-hidden', !elements.roadmapPopup.classList.contains('active'));
         }
+    }
+
+    // وظائف المحادثة
+    function toggleChatPopup() {
+        if (elements.chatPopup) {
+            const isActive = elements.chatPopup.classList.toggle('active');
+            elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            if (isActive) {
+                elements.messageInput.focus();
+                if (!elements.chatMessages.hasChildNodes()) {
+                    loadMessages();
+                }
+                scrollChatToBottom();
+            } else if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
+        }
+    }
+
+    function scrollChatToBottom() {
+        if (elements.chatMessages) {
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+        }
+    }
+
+    async function sendMessage() {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('يرجى تسجيل الدخول لإرسال الرسائل');
+            return;
+        }
+
+        const messageText = elements.messageInput.value.trim();
+        if (!messageText) {
+            alert('يرجى إدخال رسالة غير فارغة');
+            return;
+        }
+
+        if (messageText.length > 500) {
+            alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
+            return;
+        }
+
+        try {
+            elements.sendMessageBtn.disabled = true;
+            await addDoc(collection(db, 'messages'), {
+                text: messageText,
+                userId: user.uid,
+                userName: user.displayName || 'مستخدم',
+                userPhoto: user.photoURL || 'https://via.placeholder.com/30',
+                timestamp: serverTimestamp()
+            });
+            elements.messageInput.value = '';
+        } catch (error) {
+            console.error('خطأ في إرسال الرسالة:', error);
+            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+        } finally {
+            elements.sendMessageBtn.disabled = false;
+        }
+    }
+
+    function loadMessages() {
+        if (!hasMoreMessages) return;
+
+        elements.chatLoading.classList.add('active');
+        let messagesQuery = query(
+            collection(db, 'messages'),
+            orderBy('timestamp', 'desc'),
+            limit(messagesPerPage)
+        );
+
+        if (lastVisible) {
+            messagesQuery = query(messagesQuery, startAfter(lastVisible));
+        }
+
+        unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+            if (snapshot.empty) {
+                hasMoreMessages = false;
+                elements.loadMoreBtn.style.display = 'none';
+                elements.chatLoading.classList.remove('active');
+                return;
+            }
+
+            const messages = [];
+            snapshot.forEach((doc) => {
+                messages.push({ id: doc.id, ...doc.data() });
+            });
+
+            lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+            elements.chatLoading.classList.remove('active');
+
+            messages.reverse().forEach((message) => {
+                const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
+                        <span class="message-sender">${sanitizeHTML(message.userName)}</span>
+                        <span class="message-time">${
+                            message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
+                        }</span>
+                    </div>
+                    <p class="message-text">${sanitizeHTML(message.text)}</p>
+                `;
+                elements.chatMessages.insertBefore(messageElement, elements.chatMessages.firstChild);
+            });
+
+            scrollChatToBottom();
+        }, (error) => {
+            console.error('خطأ في تحميل الرسائل:', error);
+            elements.chatLoading.classList.remove('active');
+            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+        });
+    }
+
+    function sanitizeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str.replace(/[<>]/g, '');
+        return div.innerHTML;
     }
 
     // وظائف تبديل الميزات
@@ -74,7 +213,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         const featuresList = toggle.nextElementSibling;
         const isActive = featuresList.classList.contains('active');
 
-        // إغلاق جميع قوائم الميزات الأخرى
         document.querySelectorAll('.features-list').forEach(list => {
             list.classList.remove('active');
         });
@@ -82,7 +220,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             t.classList.remove('active');
         });
 
-        // تبديل قائمة الميزات الحالية
         if (!isActive) {
             featuresList.classList.add('active');
             toggle.classList.add('active');
@@ -92,12 +229,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     // تسجيل الدخول بجوجل
     async function handleGoogleLogin() {
         try {
+            elements.googleLoginBtn.disabled = true;
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             updateUIAfterLogin(user);
         } catch (error) {
             console.error('خطأ في تسجيل الدخول:', error);
             alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+        } finally {
+            elements.googleLoginBtn.disabled = false;
         }
     }
 
@@ -106,12 +246,11 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.googleLoginBtn) {
             elements.googleLoginBtn.innerHTML = `
                 <img src="${user.photoURL || 'https://via.placeholder.com/30'}" 
-                     alt="صورة المستخدم" class="user-avatar">
-                <span>${user.displayName || 'مستخدم'}</span>
-                <i class="fas fa-sign-out-alt logout-icon"></i>
+                     alt="صورة ${sanitizeHTML(user.displayName || 'مستخدم')}" class="user-avatar">
+                <span>${sanitizeHTML(user.displayName || 'مستخدم')}</span>
+                <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
             `;
             
-            // إضافة حدث تسجيل الخروج
             const logoutIcon = elements.googleLoginBtn.querySelector('.logout-icon');
             if (logoutIcon) {
                 logoutIcon.addEventListener('click', async (e) => {
@@ -129,17 +268,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // إعداد مستمعي الأحداث
     function setupEventListeners() {
-        // القائمة المتنقلة
         if (elements.mobileMenuBtn) {
             elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         }
 
-        // إغلاق القائمة عند النقر على رابط
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', closeMobileMenu);
         });
 
-        // خارطة الطريق
         if (elements.viewRoadmapBtn) {
             elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
         }
@@ -148,12 +284,35 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
         }
 
-        // ميزات التبديل
+        if (elements.chatBtn) {
+            elements.chatBtn.addEventListener('click', toggleChatPopup);
+        }
+
+        if (elements.closeChat) {
+            elements.closeChat.addEventListener('click', toggleChatPopup);
+        }
+
+        if (elements.sendMessageBtn) {
+            elements.sendMessageBtn.addEventListener('click', sendMessage);
+        }
+
+        if (elements.messageInput) {
+            elements.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        if (elements.loadMoreBtn) {
+            elements.loadMoreBtn.addEventListener('click', loadMessages);
+        }
+
         elements.toggleFeatures.forEach(toggle => {
             toggle.addEventListener('click', toggleFeatures);
         });
 
-        // تسجيل الدخول بجوجل
         if (elements.googleLoginBtn) {
             elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
         }
@@ -163,6 +322,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     auth.onAuthStateChanged(user => {
         if (user) {
             updateUIAfterLogin(user);
+            if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
+                loadMessages();
+            }
+        } else {
+            elements.chatMessages.innerHTML = '';
+            hasMoreMessages = true;
+            lastVisible = null;
+            elements.loadMoreBtn.style.display = 'none';
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
         }
     });
 });
