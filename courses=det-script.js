@@ -28,10 +28,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         currentYear: document.querySelector('.current-year'),
         mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
         navLinks: document.querySelector('.nav-links'),
-        watchCoursesBtn: document.querySelector('.watch-courses-btn'),
         viewRoadmapBtn: document.querySelector('.view-roadmap-btn'),
-        roadmapPopup: document.querySelector('.roadmap-popup'),
-        closeRoadmap: document.querySelector('.close-roadmap'),
+        roadmapPopup: document.querySelector('#roadmapPopup'),
+        closeRoadmap: document.querySelector('#closeRoadmap'),
         toggleFeatures: document.querySelectorAll('.toggle-features'),
         googleLoginBtn: document.getElementById('googleLoginBtn'),
         chatBtn: document.getElementById('chatBtn'),
@@ -60,19 +59,17 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // وظائف القائمة المتنقلة
     function toggleMobileMenu() {
-        if (!elements.navLinks || !elements.watchCoursesBtn) return;
-        const isOpen = elements.navLinks.style.display === 'flex';
-        elements.navLinks.style.display = isOpen ? 'none' : 'flex';
-        elements.watchCoursesBtn.style.display = isOpen ? 'none' : 'block';
+        if (!elements.navLinks) return;
+        const isOpen = elements.navLinks.classList.contains('active');
+        elements.navLinks.classList.toggle('active');
         elements.mobileMenuBtn.innerHTML = isOpen ?
             '<i class="fas fa-bars"></i>' :
             '<i class="fas fa-times"></i>';
     }
 
     function closeMobileMenu() {
-        if (window.innerWidth <= 768 && elements.navLinks && elements.watchCoursesBtn) {
-            elements.navLinks.style.display = 'none';
-            elements.watchCoursesBtn.style.display = 'none';
+        if (window.innerWidth <= 768 && elements.navLinks) {
+            elements.navLinks.classList.remove('active');
             elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
         }
     }
@@ -80,8 +77,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     // وظائف خارطة الطريق
     function toggleRoadmapPopup() {
         if (elements.roadmapPopup) {
-            elements.roadmapPopup.classList.toggle('active');
-            elements.roadmapPopup.setAttribute('aria-hidden', !elements.roadmapPopup.classList.contains('active'));
+            const isActive = elements.roadmapPopup.classList.toggle('active');
+            elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Roadmap popup toggled:', isActive ? 'Opened' : 'Closed');
+        } else {
+            console.error('Roadmap popup element not found');
         }
     }
 
@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.chatPopup) {
             const isActive = elements.chatPopup.classList.toggle('active');
             elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Chat popup toggled:', isActive ? 'Opened' : 'Closed');
             if (isActive) {
                 elements.messageInput.focus();
                 if (!elements.chatMessages.hasChildNodes()) {
@@ -100,6 +101,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 unsubscribeMessages();
                 unsubscribeMessages = null;
             }
+        } else {
+            console.error('Chat popup element not found');
         }
     }
 
@@ -269,7 +272,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     // إعداد مستمعي الأحداث
     function setupEventListeners() {
         if (elements.mobileMenuBtn) {
-            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            elements.mobileMenuBtn.addEventListener('click', () => {
+                console.log('Mobile menu button clicked');
+                toggleMobileMenu();
+            });
         }
 
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -277,19 +283,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         if (elements.viewRoadmapBtn) {
-            elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
+            elements.viewRoadmapBtn.addEventListener('click', () => {
+                console.log('View roadmap button clicked');
+                toggleRoadmapPopup();
+            });
         }
 
         if (elements.closeRoadmap) {
-            elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
+            elements.closeRoadmap.addEventListener('click', () => {
+                console.log('Close roadmap button clicked');
+                toggleRoadmapPopup();
+            });
         }
 
         if (elements.chatBtn) {
-            elements.chatBtn.addEventListener('click', toggleChatPopup);
+            elements.chatBtn.addEventListener('click', () => {
+                console.log('Chat button clicked');
+                toggleChatPopup();
+            });
         }
 
         if (elements.closeChat) {
-            elements.closeChat.addEventListener('click', toggleChatPopup);
+            elements.closeChat.addEventListener('click', () => {
+                console.log('Close chat button clicked');
+                toggleChatPopup();
+            });
         }
 
         if (elements.sendMessageBtn) {
