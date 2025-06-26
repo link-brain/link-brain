@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </div>
                     <p class="message-text">${sanitizeHTML(message.text)}</p>
                 `;
-                elements.chatMessages.insertBefore(messageElement, elements.chatMessages.firstChild);
+                elements.chatMessages.insertBefore(messageElement);
             });
 
             scrollChatToBottom();
