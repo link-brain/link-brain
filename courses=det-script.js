@@ -310,14 +310,18 @@ document.addEventListener('DOMContentLoaded', async function() {
         const stars = starsContainer.querySelectorAll('i');
         stars.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
-            // تلوين النجوم بناءً على تقييم المستخدم (إذا موجود) أو المتوسط
+            // تلوين النجوم بناءً على تقييم المستخدم إذا موجود
             if (userRating && starValue <= userRating) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            } else if (rating > 0 && starValue <= Math.floor(rating)) {
+            }
+            // تلوين النجوم بناءً على المتوسط فقط إذا كان هناك تقييمات
+            else if (rating > 0 && starValue <= Math.floor(rating)) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            } else {
+            }
+            // إذا لم يكن هناك تقييمات أو تقييم المستخدم، كل النجوم رمادية
+            else {
                 star.classList.remove('rated');
                 star.style.color = 'var(--text-light)';
             }
