@@ -1,333 +1,357 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edumates - تعلم frontend</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="courses=det-styles.css">
-</head>
-<body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <a href="index.html" class="logo" aria-label="Edumates الرئيسية">Edumates</a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link active" aria-label="الرئيسية">الرئيسية</a>
-            <a href="courses.html" class="nav-link" aria-label="الكورسات">الكورسات</a>
-            <a href="contact.html" class="nav-link" aria-label="اتصل بنا">اتصل بنا</a>
-            <div class="auth-buttons">
-                <button class="btn google-login-btn" id="googleLoginBtn" aria-label="تسجيل الدخول عبر جوجل">
-                    <i class="fab fa-google"></i>
-                    تسجيل الدخول عبر جوجل
-                </button>
-                <button class="btn chat-btn" id="chatBtn" aria-label="فتح محادثة الطلاب">
-                    <i class="fas fa-comments"></i>
-                    محادثة الطلاب
-                </button>
-            </div>
-        </div>
-        <button class="mobile-menu-btn" aria-label="فتح القائمة">
-            <i class="fas fa-bars"></i>
-        </button>
-    </nav>
+document.addEventListener('DOMContentLoaded', async function() {
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+        authDomain: "edumates-983dd.firebaseapp.com",
+        projectId: "edumates-983dd",
+        storageBucket: "edumates-983dd.firebasestorage.app",
+        messagingSenderId: "172548876353",
+        appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+        measurementId: "G-L1KCZTW8R9"
+    };
 
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
-        <a href="index.html" aria-label="الرئيسية">الرئيسية</a> > <a href="courses.html" aria-label="الكورسات">الكورسات</a> > <span>تعلم frontend</span>
-    </div>
+    // استيراد مكتبات Firebase
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
+    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
+    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
 
-    <!-- Course Details Section -->
-    <section class="course-details-section">
-        <div class="section-header">
-            <h2>تعلم frontend</h2>
-            <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية</p>
-            <button class="btn view-roadmap-btn" aria-label="عرض خارطة الطريق">View Roadmap</button>
-        </div>
+    // تهيئة التطبيق
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
 
-        <!-- HTML Section -->
-        <div class="language-section">
-            <h3>HTML</h3>
-            <div class="resources-container">
-                <div class="video-links">
-                    <h4>فيديوهات الشرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة HTML - Elzero Web School <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- افضل قناة عربيه</p>
-                                <p>- تغطية شاملة للأساسيات</p>
-                                <p>- تمارين عملية</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">دوره abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- محتوى مجاني بالكامل</p>
-                                <p>- شرح مبسط</p>
-                                <p>- تغطيه جميع الاساسيات</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">outcode <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- موجز ومركز</p>
-                                <p>- تفاصيل</p>
-                                <p>- فيديوهات قصيره</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="book-links">
-                    <h4>مواقع مهمه</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">جميع اكواد html <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- جميع الاكواد</p>
-                                <p>- تفصيل كامل للاكواد</p>
-                                <p>- موقع عربي</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع مهم لhtml <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- مرجع كامل</p>
-                                <p>- واضح جذاب</p>
-                                <p>- شرح مفصل</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn" aria-label="اختبار HTML">اختبار HTML</button>
-                </div>
-            </div>
-        </div>
+    // عناصر DOM
+    const elements = {
+        currentYear: document.querySelector('.current-year'),
+        mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
+        navLinks: document.querySelector('.nav-links'),
+        viewRoadmapBtn: document.querySelector('.view-roadmap-btn'),
+        roadmapPopup: document.querySelector('#roadmapPopup'),
+        closeRoadmap: document.querySelector('#closeRoadmap'),
+        toggleFeatures: document.querySelectorAll('.toggle-features'),
+        googleLoginBtn: document.getElementById('googleLoginBtn'),
+        chatBtn: document.getElementById('chatBtn'),
+        chatPopup: document.getElementById('chatPopup'),
+        closeChat: document.getElementById('closeChat'),
+        chatMessages: document.getElementById('chatMessages'),
+        messageInput: document.getElementById('messageInput'),
+        sendMessageBtn: document.getElementById('sendMessageBtn'),
+        chatLoading: document.getElementById('chatLoading'),
+        loadMoreBtn: document.getElementById('loadMoreBtn')
+    };
 
-        <!-- CSS Section -->
-        <div class="language-section">
-            <h3>CSS</h3>
-            <div class="resources-container">
-                <div class="video-links">
-                    <h4>فيديوهات الشرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة CSS - Elzero Web School <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- شرح عملي وتفاعلي</p>
-                                <p>- مشاريع تصميمية</p>
-                                <p>- شرح تفاعلي</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">تعلم CSS - abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- شرح تفصيلي</p>
-                                <p>- تحديات برمجية</p>
-                                <p>- شرح مسلي بالرسم</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">دورة codzella <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- شرح عملي</p>
-                                <p>- html+css</p>
-                                <p>- شرح الاساسيات</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="book-links">
-                    <h4>مواقع مهمه</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">شرح مبسط لcss <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- مرجع سريع</p>
-                                <p>- شرح وافي لكل الجوانب</p>
-                                <p>- تغطية شاملة</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع لcss <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- مرجع شامل</p>
-                                <p>- جميع الاكود</p>
-                                <p>- مرجع احترافي</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn" aria-label="اختبار CSS">اختبار CSS</button>
-                </div>
-            </div>
-        </div>
+    // تعيين السنة الحالية
+    if (elements.currentYear) {
+        elements.currentYear.textContent = new Date().getFullYear();
+    }
 
-        <!-- JavaScript Section -->
-        <div class="language-section">
-            <h3>JavaScript</h3>
-            <div class="resources-container">
-                <div class="video-links">
-                    <h4>فيديوهات شرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة JavaScript - Elzero Web School <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- شرح مفصل</p>
-                                <p>- شرح تفاعلي</p>
-                                <p>- مشاريع تفاعلية</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">تعلم JavaScript - abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- تعليم مجاني</p>
-                                <p>- تحديات برمجية</p>
-                                <p>- شرح ممتع</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">اكادمية ترميز <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- دروس موجزة</p>
-                                <p>- أمثلة عملية</p>
-                                <p>- جودة إنتاج عالية</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="book-links">
-                    <h4>مواقع ومراجع</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع لجميع اكواد اللغه <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- مرجع اساسي</p>
-                                <p>- أمثلة تفاعلية</p>
-                                <p>- مجاني أونلاين</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">نصائح للبدا في جافا اسكريبت <i class="fas fa-chevron-down"></i></a>
-                            <div class="features-list">
-                                <p>- تركيز على الأساسيات</p>
-                                <p>- نصائح متقدمة</p>
-                                <p>- أسلوب مختصر</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn" aria-label="اختبار JavaScript">اختبار JavaScript</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    // متغيرات لتتبع الصفحات
+    let lastVisible = null;
+    let unsubscribeMessages = null;
+    const messagesPerPage = 20;
+    let hasMoreMessages = true;
 
-    <!-- Chat Popup -->
-    <div class="chat-popup" id="chatPopup" role="dialog" aria-labelledby="chatTitle" aria-hidden="true">
-        <div class="chat-content">
-            <span class="close-chat" id="closeChat" aria-label="إغلاق المحادثة" role="button">×</span>
-            <h2 id="chatTitle">محادثة الطلاب</h2>
-            <div class="chat-loading" id="chatLoading">جارٍ التحميل...</div>
-            <button class="btn load-more-btn" id="loadMoreBtn" style="display: none;" aria-label="تحميل المزيد من الرسائل">تحميل المزيد</button>
-            <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
-            <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="اكتب رسالتك..." aria-label="اكتب رسالتك" maxlength="500">
-                <button class="btn send-message-btn" id="sendMessageBtn" aria-label="إرسال الرسالة">
-                    <i class="fas fa-paper-plane"></i>
-                    إرسال
-                </button>
-            </div>
-        </div>
-    </div>
+    // إعداد مستمعي الأحداث
+    setupEventListeners();
 
-    <!-- Roadmap Popup -->
-    <div class="roadmap-popup" id="roadmapPopup" role="dialog" aria-labelledby="roadmapTitle" aria-hidden="true">
-        <div class="roadmap-content">
-            <span class="close-roadmap" id="closeRoadmap" aria-label="إغلاق خارطة الطريق" role="button">×</span>
-            <h2 id="roadmapTitle">خارطة طريق تطوير الواجهات الأمامية</h2>
-            <div class="roadmap-item">
-                <h3>1. HTML</h3>
-                <p>تعلم HTML الدلالي، النماذج، إمكانية الوصول، وأساسيات تحسين محركات البحث. افهم هيكلية المستندات والبيانات الوصفية.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>2. CSS</h3>
-                <p>أتقن التخطيطات (Flexbox، Grid)، التصميم المتجاوب، الرسوم المتحركة، ومعالجات مثل SASS.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>3. JavaScript</h3>
-                <p>افهم ES6+، التلاعب بـ DOM، الأحداث، البرمجة غير المتزامنة، وواجهات برمجة التطبيقات. تعلم أساسيات البرمجة الوظيفية.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>4. التحكم في الإصدارات</h3>
-                <p>تعلم Git وGitHub للتحكم في الإصدارات، التعاون، والمساهمة في المشاريع مفتوحة المصدر.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>5. أطر عمل الواجهات الأمامية</h3>
-                <p>استكشف React، Vue، أو Angular. افهم المكونات، إدارة الحالة، والتوجيه.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>6. أدوات البناء</h3>
-                <p>تعلم Webpack، Vite، أو Parcel للتجميع، مع npm/yarn لإدارة الحزم.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>7. الاختبار</h3>
-                <p>افهم اختبار الوحدات (Jest)، اختبار التكامل، واختبار النهاية إلى النهاية (Cypress).</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>8. النشر</h3>
-                <p>تعلم نشر التطبيقات باستخدام Vercel، Netlify، أو AWS. افهم خطوط أنابيب CI/CD.</p>
-            </div>
-        </div>
-    </div>
+    // وظائف القائمة المتنقلة
+    function toggleMobileMenu() {
+        if (!elements.navLinks) return;
+        const isOpen = elements.navLinks.classList.contains('active');
+        elements.navLinks.classList.toggle('active');
+        elements.mobileMenuBtn.innerHTML = isOpen ?
+            '<i class="fas fa-bars"></i>' :
+            '<i class="fas fa-times"></i>';
+    }
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <h2 class="footer-logo">Edumates</h2>
-                <p class="footer-description">منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك</p>
-                <div class="social-links">
-                    <a href="#" class="social-link" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link" aria-label="إنستغرام"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-link" aria-label="لينكدإن"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3 class="footer-title">الكورسات</h3>
-                    <ul>
-                        <li><a href="#" class="footer-link">الكورسات الجديدة</a></li>
-                        <li><a href="#" class="footer-link">الكورسات الأكثر مشاهدة</a></li>
-                        <li><a href="#" class="footer-link">الكورسات المجانية</a></li>
-                        <li><a href="#" class="footer-link">الكورسات المدفوعة</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-title">المساعدة</h3>
-                    <ul>
-                        <li><a href="#" class="footer-link">سياسة الخصوصية</a></li>
-                        <li><a href="#" class="footer-link">شروط الاستخدام</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3 class="footer-title">تواصل معنا</h3>
-                    <ul>
-                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر القاهره</a></li>
-                        <li><a href="#" class="footer-link"><i class="fas fa-phone-alt"></i> 01116442939</a></li>
-                        <li><a href="#" class="footer-link"><i class="fas fa-envelope"></i> support@edumates.com</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p class="copyright">© <span class="current-year"></span> Edumates. جميع الحقوق محفوظة.</p>
-        </div>
-    </footer>
+    function closeMobileMenu() {
+        if (window.innerWidth <= 768 && elements.navLinks) {
+            elements.navLinks.classList.remove('active');
+            elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+    }
 
-    <script src="courses=det-script.js"></script>
-</body>
-</html>
+    // وظائف خارطة الطريق
+    function toggleRoadmapPopup() {
+        if (elements.roadmapPopup) {
+            const isActive = elements.roadmapPopup.classList.toggle('active');
+            elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Roadmap popup toggled:', isActive ? 'Opened' : 'Closed');
+        } else {
+            console.error('Roadmap popup element not found');
+        }
+    }
+
+    // وظائف المحادثة
+    function toggleChatPopup() {
+        if (elements.chatPopup) {
+            const isActive = elements.chatPopup.classList.toggle('active');
+            elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Chat popup toggled:', isActive ? 'Opened' : 'Closed');
+            if (isActive) {
+                elements.messageInput.focus();
+                if (!elements.chatMessages.hasChildNodes()) {
+                    loadMessages();
+                }
+                scrollChatToBottom();
+            } else if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
+        } else {
+            console.error('Chat popup element not found');
+        }
+    }
+
+    function scrollChatToBottom() {
+        if (elements.chatMessages) {
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+        }
+    }
+
+    async function sendMessage() {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('يرجى تسجيل الدخول لإرسال الرسائل');
+            return;
+        }
+
+        const messageText = elements.messageInput.value.trim();
+        if (!messageText) {
+            alert('يرجى إدخال رسالة غير فارغة');
+            return;
+        }
+
+        if (messageText.length > 500) {
+            alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
+            return;
+        }
+
+        try {
+            elements.sendMessageBtn.disabled = true;
+            await addDoc(collection(db, 'messages'), {
+                text: messageText,
+                userId: user.uid,
+                userName: user.displayName || 'مستخدم',
+                userPhoto: user.photoURL || 'https://via.placeholder.com/30',
+                timestamp: serverTimestamp()
+            });
+            elements.messageInput.value = '';
+        } catch (error) {
+            console.error('خطأ في إرسال الرسالة:', error);
+            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+        } finally {
+            elements.sendMessageBtn.disabled = false;
+        }
+    }
+
+    function loadMessages() {
+        if (!hasMoreMessages) return;
+
+        elements.chatLoading.classList.add('active');
+        let messagesQuery = query(
+            collection(db, 'messages'),
+            orderBy('timestamp', 'desc'),
+            limit(messagesPerPage)
+        );
+
+        if (lastVisible) {
+            messagesQuery = query(messagesQuery, startAfter(lastVisible));
+        }
+
+        unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+            if (snapshot.empty) {
+                hasMoreMessages = false;
+                elements.loadMoreBtn.style.display = 'none';
+                elements.chatLoading.classList.remove('active');
+                return;
+            }
+
+            const messages = [];
+            snapshot.forEach((doc) => {
+                messages.push({ id: doc.id, ...doc.data() });
+            });
+
+            lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+            elements.chatLoading.classList.remove('active');
+
+            .forEach((message) => {
+                const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
+                        <span class="message-sender">${sanitizeHTML(message.userName)}</span>
+                        <span class="message-time">${
+                            message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
+                        }</span>
+                    </div>
+                    <p class="message-text">${sanitizeHTML(message.text)}</p>
+                `;
+                elements.chatMessages.insertBefore(messageElement);
+            });
+
+            scrollChatToBottom();
+        }, (error) => {
+            console.error('خطأ في تحميل الرسائل:', error);
+            elements.chatLoading.classList.remove('active');
+            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+        });
+    }
+
+    function sanitizeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str.replace(/[<>]/g, '');
+        return div.innerHTML;
+    }
+
+    // وظائف تبديل الميزات
+    function toggleFeatures(event) {
+        const toggle = event.currentTarget;
+        const featuresList = toggle.nextElementSibling;
+        const isActive = featuresList.classList.contains('active');
+
+        document.querySelectorAll('.features-list').forEach(list => {
+            list.classList.remove('active');
+        });
+        document.querySelectorAll('.toggle-features').forEach(t => {
+            t.classList.remove('active');
+        });
+
+        if (!isActive) {
+            featuresList.classList.add('active');
+            toggle.classList.add('active');
+        }
+    }
+
+    // تسجيل الدخول بجوجل
+    async function handleGoogleLogin() {
+        try {
+            elements.googleLoginBtn.disabled = true;
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            updateUIAfterLogin(user);
+        } catch (error) {
+            console.error('خطأ في تسجيل الدخول:', error);
+            alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+        } finally {
+            elements.googleLoginBtn.disabled = false;
+        }
+    }
+
+    // تحديث واجهة المستخدم بعد التسجيل
+    function updateUIAfterLogin(user) {
+        if (elements.googleLoginBtn) {
+            elements.googleLoginBtn.innerHTML = `
+                <img src="${user.photoURL || 'https://via.placeholder.com/30'}" 
+                     alt="صورة ${sanitizeHTML(user.displayName || 'مستخدم')}" class="user-avatar">
+                <span>${sanitizeHTML(user.displayName || 'مستخدم')}</span>
+                <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
+            `;
+            
+            const logoutIcon = elements.googleLoginBtn.querySelector('.logout-icon');
+            if (logoutIcon) {
+                logoutIcon.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        await signOut(auth);
+                        location.reload();
+                    } catch (error) {
+                        console.error('خطأ في تسجيل الخروج:', error);
+                    }
+                });
+            }
+        }
+    }
+
+    // إعداد مستمعي الأحداث
+    function setupEventListeners() {
+        if (elements.mobileMenuBtn) {
+            elements.mobileMenuBtn.addEventListener('click', () => {
+                console.log('Mobile menu button clicked');
+                toggleMobileMenu();
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        if (elements.viewRoadmapBtn) {
+            elements.viewRoadmapBtn.addEventListener('click', () => {
+                console.log('View roadmap button clicked');
+                toggleRoadmapPopup();
+            });
+        }
+
+        if (elements.closeRoadmap) {
+            elements.closeRoadmap.addEventListener('click', () => {
+                console.log('Close roadmap button clicked');
+                toggleRoadmapPopup();
+            });
+        }
+
+        if (elements.chatBtn) {
+            elements.chatBtn.addEventListener('click', () => {
+                console.log('Chat button clicked');
+                toggleChatPopup();
+            });
+        }
+
+        if (elements.closeChat) {
+            elements.closeChat.addEventListener('click', () => {
+                console.log('Close chat button clicked');
+                toggleChatPopup();
+            });
+        }
+
+        if (elements.sendMessageBtn) {
+            elements.sendMessageBtn.addEventListener('click', sendMessage);
+        }
+
+        if (elements.messageInput) {
+            elements.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        if (elements.loadMoreBtn) {
+            elements.loadMoreBtn.addEventListener('click', loadMessages);
+        }
+
+        elements.toggleFeatures.forEach(toggle => {
+            toggle.addEventListener('click', toggleFeatures);
+        });
+
+        if (elements.googleLoginBtn) {
+            elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
+        }
+    }
+
+    // تتبع حالة المصادقة
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            updateUIAfterLogin(user);
+            if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
+                loadMessages();
+            }
+        } else {
+            elements.chatMessages.innerHTML = '';
+            hasMoreMessages = true;
+            lastVisible = null;
+            elements.loadMoreBtn.style.display = 'none';
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
+        }
+    });
+});
