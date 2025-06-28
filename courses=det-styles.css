@@ -436,7 +436,7 @@ body {
 }
 
 .rating-stars i {
-    font-size: 1rem;
+    font-size: 0.9rem; /* نجوم أصغر لشكل متجر التطبيقات */
     color: var(--text-light);
     cursor: pointer;
     transition: var(--transition);
@@ -451,6 +451,13 @@ body {
     font-size: 0.9rem;
     color: var(--text-dark);
     margin-right: 0.5rem;
+    font-weight: 600;
+}
+
+.rating-stars .rating-count {
+    font-size: 0.8rem;
+    color: var(--text-medium);
+    margin-right: 0.3rem;
 }
 
 /* Chat Popup */
