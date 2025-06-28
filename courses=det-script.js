@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
-    const ratingStars = document.querySelectorAll('.rating-stars i');
     let unsubscribeRatings = {};
 
     // إعداد مستمعي الأحداث
@@ -307,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    function updateStarDisplay(starsContainer, rating, userRating = null) {
+    function updateStarDisplay(starsContainer, rating, ratingCount, userRating = null) {
         const stars = starsContainer.querySelectorAll('i');
         stars.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
@@ -319,7 +318,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             star.style.color = starValue <= Math.round(rating) ? 'var(--accent-orange)' : 'var(--text-light)';
         });
         const averageRatingElement = starsContainer.querySelector('.average-rating');
+        const ratingCountElement = starsContainer.querySelector('.rating-count');
         averageRatingElement.textContent = rating ? rating.toFixed(1) : '0.0';
+        ratingCountElement.textContent = `(${ratingCount} تقييم)`;
     }
 
     async function loadRatings(linkId, starsContainer) {
@@ -352,9 +353,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             const averageRating = ratingCount > 0 ? totalRating / ratingCount : 0;
-            updateStarDisplay(starsContainer, averageRating, userRating);
+            updateStarDisplay(starsContainer, averageRating, ratingCount, userRating);
         }, (error) => {
             console.error('خطأ في تحميل التقييمات:', error);
+            updateStarDisplay(starsContainer, 0, 0);
         });
     }
 
@@ -446,7 +448,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 star.addEventListener('mouseout', () => {
                     const averageRating = parseFloat(starsContainer.querySelector('.average-rating').textContent) || 0;
-                    updateStarDisplay(starsContainer, averageRating);
+                    const ratingCount = parseInt(starsContainer.querySelector('.rating-count').textContent.match(/\d+/)?.[0]) || 0;
+                    updateStarDisplay(starsContainer, averageRating, ratingCount);
                 });
             });
         });
