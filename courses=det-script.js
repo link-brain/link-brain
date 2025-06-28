@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
-            .forEach((message) => {
+            messages.reverse().forEach((message) => {
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </div>
                     <p class="message-text">${sanitizeHTML(message.text)}</p>
                 `;
-                elements.chatMessages.insertBefore(messageElement);
+                elements.chatMessages.insertBefore(messageElement, elements.chatMessages.firstChild);
             });
 
             scrollChatToBottom();
