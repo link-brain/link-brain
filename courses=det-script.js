@@ -310,12 +310,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         const stars = starsContainer.querySelectorAll('i');
         stars.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
+            // تلوين النجوم بناءً على تقييم المستخدم (إذا موجود) أو المتوسط
             if (userRating && starValue <= userRating) {
                 star.classList.add('rated');
+                star.style.color = 'var(--accent-orange)';
+            } else if (rating > 0 && starValue <= Math.floor(rating)) {
+                star.classList.add('rated');
+                star.style.color = 'var(--accent-orange)';
             } else {
                 star.classList.remove('rated');
+                star.style.color = 'var(--text-light)';
             }
-            star.style.color = starValue <= Math.round(rating) ? 'var(--accent-orange)' : 'var(--text-light)';
         });
         const averageRatingElement = starsContainer.querySelector('.average-rating');
         const ratingCountElement = starsContainer.querySelector('.rating-count');
