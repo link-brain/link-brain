@@ -48,6 +48,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.currentYear.textContent = new Date().getFullYear();
     }
 
+    // تحديث روابط الاختبارات ديناميكيًا
+    function updateExamLinks() {
+        const examLinks = [
+            { text: 'اختبار HTML', href: 'exam-html.html' },
+            { text: 'اختبار CSS', href: 'exam-css.html' },
+            { text: 'اختبار JavaScript', href: 'exam-js.html' }
+        ];
+
+        document.querySelectorAll('.features-list a').forEach(link => {
+            examLinks.forEach(exam => {
+                if (link.textContent.trim() === exam.text) {
+                    link.setAttribute('href', exam.href);
+                    console.log(`تم تحديث رابط ${exam.text} إلى ${exam.href}`);
+                }
+            });
+        });
+    }
+
+    // استدعاء الدالة لتحديث الروابط عند تحميل الصفحة
+    updateExamLinks();
+
     // متغيرات لتتبع الصفحات
     let lastVisible = null;
     let unsubscribeMessages = null;
@@ -141,6 +162,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 timestamp: serverTimestamp()
             });
             elements.messageInput.value = '';
+            scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
         } catch (error) {
             console.error('خطأ في إرسال الرسالة:', error);
             alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
@@ -155,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.chatLoading.classList.add('active');
         let messagesQuery = query(
             collection(db, 'messages'),
-            orderBy('timestamp', 'desc'),
+            orderBy('timestamp', 'asc'), // ترتيب تصاعدي لعرض الرسائل القديمة أولاً
             limit(messagesPerPage)
         );
 
@@ -180,7 +202,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
-            messages.reverse().forEach((message) => {
+            // إضافة الرسائل في نهاية القائمة
+            messages.forEach((message) => {
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
@@ -194,7 +217,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </div>
                     <p class="message-text">${sanitizeHTML(message.text)}</p>
                 `;
-                elements.chatMessages.insertBefore(messageElement, elements.chatMessages.firstChild);
+                elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
             });
 
             scrollChatToBottom();
