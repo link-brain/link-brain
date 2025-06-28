@@ -445,21 +445,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const rating = parseInt(star.getAttribute('data-value'));
                     submitRating(linkId, rating);
                 });
-
-                star.addEventListener('mouseover', () => {
-                    const stars = starsContainer.querySelectorAll('i');
-                    const hoverValue = parseInt(star.getAttribute('data-value'));
-                    stars.forEach(s => {
-                        const starValue = parseInt(s.getAttribute('data-value'));
-                        s.style.color = starValue <= hoverValue ? 'var(--accent-orange)' : 'var(--text-light)';
-                    });
-                });
-
-                star.addEventListener('mouseout', () => {
-                    const averageRating = parseFloat(starsContainer.querySelector('.average-rating').textContent) || 0;
-                    const ratingCount = parseInt(starsContainer.querySelector('.rating-count').textContent.match(/\d+/)?.[0]) || 0;
-                    updateStarDisplay(starsContainer, averageRating, ratingCount);
-                });
             });
         });
     }
