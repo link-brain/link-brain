@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     function scrollChatToBottom() {
         if (elements.chatMessages) {
             elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+            console.log('Scrolled to bottom of chat');
         }
     }
 
@@ -163,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
             elements.messageInput.value = '';
             scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
+            console.log('Message sent and scrolled to bottom');
         } catch (error) {
             console.error('خطأ في إرسال الرسالة:', error);
             alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
@@ -190,6 +192,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 hasMoreMessages = false;
                 elements.loadMoreBtn.style.display = 'none';
                 elements.chatLoading.classList.remove('active');
+                console.log('No more messages to load');
                 return;
             }
 
@@ -202,8 +205,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
+            // تنظيف قائمة الرسائل فقط عند التحميل الأول
+            if (!elements.chatMessages.hasChildNodes()) {
+                elements.chatMessages.innerHTML = '';
+                console.log('Cleared chat messages on initial load');
+            }
+
             // إضافة الرسائل في نهاية القائمة
             messages.forEach((message) => {
+                if (!message.text || !message.timestamp) return; // تخطي الرسائل غير الصالحة
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
@@ -218,6 +228,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <p class="message-text">${sanitizeHTML(message.text)}</p>
                 `;
                 elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
+                console.log(`Added message from ${message.userName} at ${message.timestamp ? new Date(message.timestamp.toMillis()).toISOString() : 'now'}`);
             });
 
             scrollChatToBottom();
