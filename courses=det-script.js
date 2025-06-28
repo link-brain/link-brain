@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
     const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
-    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
 
     // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
@@ -53,6 +53,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
+    const ratingStars = document.querySelectorAll('.rating-stars i');
+    let unsubscribeRatings = {};
 
     // إعداد مستمعي الأحداث
     setupEventListeners();
@@ -204,6 +206,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
+    // وظيفة لتطهير النصوص
     function sanitizeHTML(str) {
         const div = document.createElement('div');
         div.textContent = str.replace(/[<>]/g, '');
@@ -213,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // وظائف تبديل الميزات
     function toggleFeatures(event) {
         const toggle = event.currentTarget;
-        const featuresList = toggle.nextElementSibling;
+        const featuresList = toggle.nextElementSibling.nextElementSibling; // تعديل لتخطي div التقييم
         const isActive = featuresList.classList.contains('active');
 
         document.querySelectorAll('.features-list').forEach(list => {
@@ -267,6 +270,92 @@ document.addEventListener('DOMContentLoaded', async function() {
                 });
             }
         }
+    }
+
+    // إدارة تقييم الروابط
+    async function submitRating(linkId, rating) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('يرجى تسجيل الدخول لتقييم الرابط');
+            return;
+        }
+
+        try {
+            // التحقق مما إذا كان المستخدم قد قيّم الرابط مسبقًا
+            const existingRatingQuery = query(
+                collection(db, 'ratings'),
+                where('linkId', '==', linkId),
+                where('userId', '==', user.uid)
+            );
+            const existingRatingSnapshot = await getDocs(existingRatingQuery);
+
+            if (!existingRatingSnapshot.empty) {
+                alert('لقد قيّمت هذا الرابط مسبقًا');
+                return;
+            }
+
+            await addDoc(collection(db, 'ratings'), {
+                linkId: linkId,
+                userId: user.uid,
+                rating: rating,
+                timestamp: serverTimestamp()
+            });
+            console.log(`تم تقييم الرابط ${linkId} بـ ${rating} نجوم`);
+        } catch (error) {
+            console.error('خطأ في إرسال التقييم:', error);
+            alert('حدث خطأ أثناء إرسال التقييم: ' + error.message);
+        }
+    }
+
+    function updateStarDisplay(starsContainer, rating, userRating = null) {
+        const stars = starsContainer.querySelectorAll('i');
+        stars.forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
+            if (userRating && starValue <= userRating) {
+                star.classList.add('rated');
+            } else {
+                star.classList.remove('rated');
+            }
+            star.style.color = starValue <= Math.round(rating) ? 'var(--accent-orange)' : 'var(--text-light)';
+        });
+        const averageRatingElement = starsContainer.querySelector('.average-rating');
+        averageRatingElement.textContent = rating ? rating.toFixed(1) : '0.0';
+    }
+
+    async function loadRatings(linkId, starsContainer) {
+        const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('linkId', '==', linkId)
+        );
+
+        unsubscribeRatings[linkId] = onSnapshot(ratingsQuery, async (snapshot) => {
+            let totalRating = 0;
+            let ratingCount = 0;
+            let userRating = null;
+
+            const user = auth.currentUser;
+            if (user) {
+                const userRatingQuery = query(
+                    collection(db, 'ratings'),
+                    where('linkId', '==', linkId),
+                    where('userId', '==', user.uid)
+                );
+                const userRatingSnapshot = await getDocs(userRatingQuery);
+                if (!userRatingSnapshot.empty) {
+                    userRating = userRatingSnapshot.docs[0].data().rating;
+                }
+            }
+
+            snapshot.forEach(doc => {
+                totalRating += doc.data().rating;
+                ratingCount++;
+            });
+
+            const averageRating = ratingCount > 0 ? totalRating / ratingCount : 0;
+            updateStarDisplay(starsContainer, averageRating, userRating);
+        }, (error) => {
+            console.error('خطأ في تحميل التقييمات:', error);
+        });
     }
 
     // إعداد مستمعي الأحداث
@@ -334,6 +423,33 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.googleLoginBtn) {
             elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
         }
+
+        // إضافة مستمعي الأحداث للنجوم
+        document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+            const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+            loadRatings(linkId, starsContainer);
+
+            starsContainer.querySelectorAll('i').forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.getAttribute('data-value'));
+                    submitRating(linkId, rating);
+                });
+
+                star.addEventListener('mouseover', () => {
+                    const stars = starsContainer.querySelectorAll('i');
+                    const hoverValue = parseInt(star.getAttribute('data-value'));
+                    stars.forEach(s => {
+                        const starValue = parseInt(s.getAttribute('data-value'));
+                        s.style.color = starValue <= hoverValue ? 'var(--accent-orange)' : 'var(--text-light)';
+                    });
+                });
+
+                star.addEventListener('mouseout', () => {
+                    const averageRating = parseFloat(starsContainer.querySelector('.average-rating').textContent) || 0;
+                    updateStarDisplay(starsContainer, averageRating);
+                });
+            });
+        });
     }
 
     // تتبع حالة المصادقة
@@ -343,6 +459,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
                 loadMessages();
             }
+            // تحديث تقييمات المستخدم
+            document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+                const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+                loadRatings(linkId, starsContainer);
+            });
         } else {
             elements.chatMessages.innerHTML = '';
             hasMoreMessages = true;
@@ -352,6 +473,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 unsubscribeMessages();
                 unsubscribeMessages = null;
             }
+            // إلغاء الاشتراك في تقييمات المستخدم
+            Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
+            unsubscribeRatings = {};
+            // إعادة تحميل التقييمات العامة
+            document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+                const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+                loadRatings(linkId, starsContainer);
+            });
         }
     });
 });
