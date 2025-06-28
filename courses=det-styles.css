@@ -426,6 +426,33 @@ body {
     justify-content: center;
 }
 
+/* Rating Stars */
+.rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+
+.rating-stars i {
+    font-size: 1rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.rating-stars i:hover,
+.rating-stars i.rated {
+    color: var(--accent-orange);
+}
+
+.rating-stars .average-rating {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-right: 0.5rem;
+}
+
 /* Chat Popup */
 .chat-popup {
     display: none;
