@@ -6,6 +6,7 @@
     <title>Edumates - تعلم Frontend</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="courses=det-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="courses=det-script.js" defer></script>
 </head>
 <body>
@@ -18,10 +19,10 @@
         </nav>
         <div class="auth-buttons">
             <button id="googleLoginBtn" class="google-login-btn" aria-label="تسجيل الدخول عبر جوجل">
-                <i class="fab fa-google"></i> تسجيل الدخول عبر جوجل
+                <i class="fab fa-google"></i> تسجيل الدخول
             </button>
             <button id="chatBtn" class="chat-btn" aria-label="فتح محادثة الطلاب">
-                <i class="fas fa-comments"></i> محادثة الطلاب
+                <i class="fas fa-comments"></i> المحادثة
             </button>
         </div>
         <button class="mobile-menu-btn" aria-label="فتح القائمة">
@@ -35,29 +36,27 @@
 
     <section class="course-details-section">
         <div class="section-header">
-            <h2>تعلم تطوير الواجهات الأمامية (Frontend)</h2>
-            <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات، مواقع، واختبارات تفاعلية لتعلم HTML، CSS، وJavaScript.</p>
-            <button class="view-roadmap-btn" aria-label="عرض خارطة الطريق">عرض خارطة الطريق</button>
+            <h2>تعلم تطوير الواجهات الأمامية</h2>
+            <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات، مواقع، واختبارات تفاعلية.</p>
+            <button class="view-roadmap-btn" aria-label="عرض خارطة الطريق">خارطة الطريق</button>
         </div>
 
         <div class="language-section">
             <h3>HTML</h3>
             <div class="tab-container">
-                <button class="tab active" data-tab="html-videos" aria-selected="true">فيديوهات الشرح</button>
-                <button class="tab" data-tab="html-links" aria-selected="false">مواقع مهمة</button>
+                <button class="tab active" data-tab="html-videos" aria-selected="true">فيديوهات</button>
+                <button class="tab" data-tab="html-links" aria-selected="false">مواقع</button>
                 <button class="tab" data-tab="html-quiz" aria-selected="false">اختبار</button>
             </div>
             <div class="resources-container">
                 <div id="html-videos" class="tab-content active">
-                    <div class="video-links">
-                        <h4>فيديوهات الشرح</h4>
-                        <ul>
-                            <li data-link-id="html-video-1">
-                                <a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAw_tn0O8OTV2NWpI4vF_5q_" target="_blank">دورة HTML - Elzero Web School</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="html-video-1">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة HTML" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAw_tn0O8OTV2NWpI4vF_5q_" target="_blank">دورة HTML - Elzero Web School</a></h4>
+                                <p>دورة شاملة تغطي أساسيات HTML مع تمارين عملية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -66,18 +65,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>أفضل قناة عربية</p>
-                                    <p>تغطية شاملة للأساسيات</p>
-                                    <p>تمارين عملية</p>
-                                </div>
-                            </li>
-                            <li data-link-id="html-video-2">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">دورة عبد الرحمن جمال</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="أفضل قناة عربية\nتغطية شاملة للأساسيات\nتمارين عملية"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="html-video-2">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة عبد الرحمن جمال" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">دورة عبد الرحمن جمال</a></h4>
+                                <p>شرح مبسط ومجاني يغطي جميع أساسيات HTML.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -86,18 +82,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>محتوى مجاني بالكامل</p>
-                                    <p>شرح مبسط</p>
-                                    <p>تغطية جميع الأساسيات</p>
-                                </div>
-                            </li>
-                            <li data-link-id="html-video-3">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">Outcode</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="محتوى مجاني بالكامل\nشرح مبسط\nتغطية جميع الأساسيات"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="html-video-3">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة Outcode" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">Outcode</a></h4>
+                                <p>دروس موجزة ومركزة مع أمثلة عملية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -106,25 +99,19 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>موجز ومركز</p>
-                                    <p>تفاصيل دقيقة</p>
-                                    <p>فيديوهات قصيرة</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="موجز ومركز\nتفاصيل دقيقة\nفيديوهات قصيرة"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="html-links" class="tab-content">
-                    <div class="book-links">
-                        <h4>مواقع مهمة</h4>
-                        <ul>
-                            <li data-link-id="html-link-1">
-                                <a href="https://www.w3schools.com/html/" target="_blank">جميع أكواد HTML</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="html-link-1">
+                            <img src="https://via.placeholder.com/150?text=W3Schools" alt="صورة مصغرة لموقع W3Schools" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.w3schools.com/html/" target="_blank">جميع أكواد HTML</a></h4>
+                                <p>مرجع شامل لجميع أكواد HTML مع أمثلة تفاعلية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -133,18 +120,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>جميع الأكواد</p>
-                                    <p>تفصيل كامل للأكواد</p>
-                                    <p>موقع عربي</p>
-                                </div>
-                            </li>
-                            <li data-link-id="html-link-2">
-                                <a href="https://developer.mozilla.org/ar/docs/Web/HTML" target="_blank">مرجع مهم لـ HTML</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="جميع الأكواد\nتفصيل كامل للأكواد\nموقع عربي"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="html-link-2">
+                            <img src="https://via.placeholder.com/150?text=MDN" alt="صورة مصغرة لموقع MDN" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://developer.mozilla.org/ar/docs/Web/HTML" target="_blank">مرجع مهم لـ HTML</a></h4>
+                                <p>مرجع احترافي لتطوير الويب مع شرح مفصل.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -153,13 +137,9 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>مرجع كامل</p>
-                                    <p>واضح وجذاب</p>
-                                    <p>شرح مفصل</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="مرجع كامل\nواضح وجذاب\nشرح مفصل"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="html-quiz" class="tab-content">
@@ -173,21 +153,19 @@
         <div class="language-section">
             <h3>CSS</h3>
             <div class="tab-container">
-                <button class="tab active" data-tab="css-videos" aria-selected="true">فيديوهات الشرح</button>
-                <button class="tab" data-tab="css-links" aria-selected="false">مواقع مهمة</button>
+                <button class="tab active" data-tab="css-videos" aria-selected="true">فيديوهات</button>
+                <button class="tab" data-tab="css-links" aria-selected="false">مواقع</button>
                 <button class="tab" data-tab="css-quiz" aria-selected="false">اختبار</button>
             </div>
             <div class="resources-container">
                 <div id="css-videos" class="tab-content active">
-                    <div class="video-links">
-                        <h4>فيديوهات الشرح</h4>
-                        <ul>
-                            <li data-link-id="css-video-1">
-                                <a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAzjsz06gkzlSr2s2as1L-4Y" target="_blank">دورة CSS - Elzero Web School</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="css-video-1">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة CSS" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAzjsz06gkzlSr2s2as1L-4Y" target="_blank">دورة CSS - Elzero Web School</a></h4>
+                                <p>دورة عملية تشمل مشاريع تصميمية وتخطيطات متجاوبة.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -196,18 +174,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>شرح عملي وتفاعلي</p>
-                                    <p>مشاريع تصميمية</p>
-                                    <p>شرح تفاعلي</p>
-                                </div>
-                            </li>
-                            <li data-link-id="css-video-2">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">تعلم CSS - عبد الرحمن جمال</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="شرح عملي وتفاعلي\nمشاريع تصميمية\nشرح تفاعلي"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="css-video-2">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة عبد الرحمن جمال" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">تعلم CSS - عبد الرحمن جمال</a></h4>
+                                <p>شرح تفصيلي مع تحديات برمجية ممتعة.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -216,18 +191,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>شرح تفصيلي</p>
-                                    <p>تحديات برمجية</p>
-                                    <p>شرح ممتع بالرسم</p>
-                                </div>
-                            </li>
-                            <li data-link-id="css-video-3">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">دورة Codzilla</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="شرح تفصيلي\nتحديات برمجية\nشرح ممتع بالرسم"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="css-video-3">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة Codzilla" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">دورة Codzilla</a></h4>
+                                <p>شرح عملي يدمج HTML وCSS مع أمثلة.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -236,25 +208,19 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>شرح عملي</p>
-                                    <p>HTML+CSS</p>
-                                    <p>شرح الأساسيات</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="شرح عملي\nHTML+CSS\nشرح الأساسيات"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="css-links" class="tab-content">
-                    <div class="book-links">
-                        <h4>مواقع مهمة</h4>
-                        <ul>
-                            <li data-link-id="css-link-1">
-                                <a href="https://www.w3schools.com/css/" target="_blank">شرح مبسط لـ CSS</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="css-link-1">
+                            <img src="https://via.placeholder.com/150?text=W3Schools" alt="صورة مصغرة لموقع W3Schools" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.w3schools.com/css/" target="_blank">شرح مبسط لـ CSS</a></h4>
+                                <p>مرجع سريع لتطوير CSS مع أمثلة عملية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -263,18 +229,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>مرجع سريع</p>
-                                    <p>شرح وافي لكل الجوانب</p>
-                                    <p>تغطية شاملة</p>
-                                </div>
-                            </li>
-                            <li data-link-id="css-link-2">
-                                <a href="https://developer.mozilla.org/ar/docs/Web/CSS" target="_blank">مرجع لـ CSS</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="مرجع سريع\nشرح وافي لكل الجوانب\nتغطية شاملة"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="css-link-2">
+                            <img src="https://via.placeholder.com/150?text=MDN" alt="صورة مصغرة لموقع MDN" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://developer.mozilla.org/ar/docs/Web/CSS" target="_blank">مرجع لـ CSS</a></h4>
+                                <p>مرجع احترافي لتطوير CSS مع تغطية شاملة.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -283,13 +246,9 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>مرجع شامل</p>
-                                    <p>جميع الأكواد</p>
-                                    <p>مرجع احترافي</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="مرجع شامل\nجميع الأكواد\nمرجع احترافي"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="css-quiz" class="tab-content">
@@ -303,21 +262,19 @@
         <div class="language-section">
             <h3>JavaScript</h3>
             <div class="tab-container">
-                <button class="tab active" data-tab="js-videos" aria-selected="true">فيديوهات الشرح</button>
-                <button class="tab" data-tab="js-links" aria-selected="false">مواقع ومراجع</button>
+                <button class="tab active" data-tab="js-videos" aria-selected="true">فيديوهات</button>
+                <button class="tab" data-tab="js-links" aria-selected="false">مواقع</button>
                 <button class="tab" data-tab="js-quiz" aria-selected="false">اختبار</button>
             </div>
             <div class="resources-container">
                 <div id="js-videos" class="tab-content active">
-                    <div class="video-links">
-                        <h4>فيديوهات الشرح</h4>
-                        <ul>
-                            <li data-link-id="js-video-1">
-                                <a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUD7yN_" target="_blank">دورة JavaScript - Elzero Web School</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="js-video-1">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة JavaScript" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUD7yN_" target="_blank">دورة JavaScript - Elzero Web School</a></h4>
+                                <p>دورة شاملة مع مشاريع تفاعلية لتعلم JavaScript.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -326,18 +283,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>شرح مفصل</p>
-                                    <p>شرح تفاعلي</p>
-                                    <p>مشاريع تفاعلية</p>
-                                </div>
-                            </li>
-                            <li data-link-id="js-video-2">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">تعلم JavaScript - عبد الرحمن جمال</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="شرح مفصل\nشرح تفاعلي\nمشاريع تفاعلية"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="js-video-2">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لدورة عبد الرحمن جمال" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">تعلم JavaScript - عبد الرحمن جمال</a></h4>
+                                <p>شرح ممتع مع تحديات برمجية مجانية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -346,18 +300,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>تعليم مجاني</p>
-                                    <p>تحديات برمجية</p>
-                                    <p>شرح ممتع</p>
-                                </div>
-                            </li>
-                            <li data-link-id="js-video-3">
-                                <a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">أكاديمية ترميز</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الدورة">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="تعليم مجاني\nتحديات برمجية\nشرح ممتع"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="js-video-3">
+                            <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="صورة مصغرة لأكاديمية ترميز" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.youtube.com/playlist?list=PL3YdZ3Feku5zV7U2I7pD0F3f4g" target="_blank">أكاديمية ترميز</a></h4>
+                                <p>دروس موجزة بجودة إنتاج عالية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الدورة">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -366,25 +317,19 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>دروس موجزة</p>
-                                    <p>أمثلة عملية</p>
-                                    <p>جودة إنتاج عالية</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="دروس موجزة\nأمثلة عملية\nجودة إنتاج عالية"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="js-links" class="tab-content">
-                    <div class="book-links">
-                        <h4>مواقع ومراجع</h4>
-                        <ul>
-                            <li data-link-id="js-link-1">
-                                <a href="https://www.w3schools.com/js/" target="_blank">مرجع لجميع أكواد اللغة</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                    <div class="resource-grid">
+                        <div class="resource-card" data-link-id="js-link-1">
+                            <img src="https://via.placeholder.com/150?text=W3Schools" alt="صورة مصغرة لموقع W3Schools" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://www.w3schools.com/js/" target="_blank">مرجع لجميع أكواد JavaScript</a></h4>
+                                <p>مرجع أساسي مع أمثلة تفاعلية مجانية.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -393,18 +338,15 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>مرجع أساسي</p>
-                                    <p>أمثلة تفاعلية</p>
-                                    <p>مجاني أونلاين</p>
-                                </div>
-                            </li>
-                            <li data-link-id="js-link-2">
-                                <a href="https://developer.mozilla.org/ar/docs/Web/JavaScript" target="_blank">نصائح للبدء في جافا سكريبت</a>
-                                <button class="toggle-features" aria-expanded="false" aria-label="إظهار ميزات الموقع">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                                <div class="rating-stars">
+                                <div class="features-tooltip" data-tooltip="مرجع أساسي\nأمثلة تفاعلية\nمجاني أونلاين"></div>
+                            </div>
+                        </div>
+                        <div class="resource-card" data-link-id="js-link-2">
+                            <img src="https://via.placeholder.com/150?text=MDN" alt="صورة مصغرة لموقع MDN" class="resource-thumbnail">
+                            <div class="resource-content">
+                                <h4><a href="https://developer.mozilla.org/ar/docs/Web/JavaScript" target="_blank">نصائح للبدء في JavaScript</a></h4>
+                                <p>مرجع متقدم مع نصائح للمبتدئين والمحترفين.</p>
+                                <div class="rating-stars" role="group" aria-label="تقييم الموقع">
                                     <i class="fas fa-star" data-value="1" aria-label="تقييم 1 نجمة"></i>
                                     <i class="fas fa-star" data-value="2" aria-label="تقييم 2 نجمة"></i>
                                     <i class="fas fa-star" data-value="3" aria-label="تقييم 3 نجوم"></i>
@@ -413,13 +355,9 @@
                                     <span class="average-rating">0.0</span>
                                     <span class="rating-count">(0 تقييم)</span>
                                 </div>
-                                <div class="features-list">
-                                    <p>تركيز على الأساسيات</p>
-                                    <p>نصائح متقدمة</p>
-                                    <p>أسلوب مختصر</p>
-                                </div>
-                            </li>
-                        </ul>
+                                <div class="features-tooltip" data-tooltip="تركيز على الأساسيات\nنصائح متقدمة\nأسلوب مختصر"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="js-quiz" class="tab-content">
@@ -453,43 +391,35 @@
             <h2>خارطة طريق تطوير الواجهات الأمامية</h2>
             <div class="roadmap-item">
                 <h3>1. HTML</h3>
-                <p>تعلم HTML الدلالي، النماذج، إمكانية الوصول، وأساسيات تحسين محركات البحث. افهم هيكلية المستندات والبيانات الوصفية.</p>
+                <p>تعلم HTML الدلالي، النماذج، إمكانية الوصول، وأساسيات تحسين محركات البحث.</p>
             </div>
             <div class="roadmap-item">
                 <h3>2. CSS</h3>
-                <p>أتقن التخطيطات (Flexbox، Grid)، التصميم المتجاوب، الرسوم المتحركة، ومعالجات مثل SASS.</p>
+                <p>أتقن التخطيطات (Flexbox، Grid)، التصميم المتجاوب، والرسوم المتحركة.</p>
             </div>
             <div class="roadmap-item">
                 <h3>3. JavaScript</h3>
-                <p>افهم ES6+، التلاعب بـ DOM، الأحداث، البرمجة غير المتزامنة، وواجهات برمجة التطبيقات. تعلم أساسيات البرمجة الوظيفية.</p>
+                <p>افهم ES6+، التلاعب بـ DOM، الأحداث، والبرمجة غير المتزامنة.</p>
             </div>
             <div class="roadmap-item">
                 <h3>4. التحكم في الإصدارات</h3>
-                <p>تعلم Git وGitHub للتحكم في الإصدارات، التعاون، والمساهمة في المشاريع مفتوحة المصدر.</p>
+                <p>تعلم Git وGitHub للتحكم في الإصدارات والتعاون.</p>
             </div>
             <div class="roadmap-item">
-                <h3>5. أطر عمل الواجهات الأمامية</h3>
-                <p>استكشف React، Vue، أو Angular. افهم المكونات، إدارة الحالة، والتوجيه.</p>
+                <h3>5. أطر عمل الواجهات</h3>
+                <p>استكشف React، Vue، أو Angular مع إدارة الحالة.</p>
             </div>
             <div class="roadmap-item">
                 <h3>6. أدوات البناء</h3>
-                <p>تعلم Webpack، Vite، أو Parcel للتجميع، مع npm/yarn لإدارة الحزم.</p>
+                <p>تعلم Webpack، Vite، أو Parcel لإدارة الحزم.</p>
             </div>
             <div class="roadmap-item">
                 <h3>7. الاختبار</h3>
-                <p>افهم اختبار الوحدات (Jest)، اختبار التكامل، واختبار النهاية إلى النهاية (Cypress).</p>
+                <p>افهم اختبار الوحدات (Jest) واختبار النهاية إلى النهاية (Cypress).</p>
             </div>
             <div class="roadmap-item">
                 <h3>8. النشر</h3>
-                <p>تعلم كيفية نشر المواقع باستخدام Netlify، Vercel، أو Firebase Hosting. افهم أساسيات CI/CD.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>9. تحسين الأداء</h3>
-                <p>تعلم تقنيات تحسين الأداء مثل التحميل الكسول (Lazy Loading)، تحسين الصور، وتقليل طلبات الشبكة.</p>
-            </div>
-            <div class="roadmap-item">
-                <h3>10. المشاريع العملية</h3>
-                <p>قم ببناء مشاريع مثل تطبيقات ويب تفاعلية، مواقع تجارة إلكترونية، أو لوحات تحكم لتطبيق ما تعلمته.</p>
+                <p>تعلم النشر باستخدام Netlify، Vercel، أو Firebase Hosting.</p>
             </div>
         </div>
     </div>
@@ -498,22 +428,12 @@
         <div class="footer-container">
             <div class="footer-brand">
                 <a href="#" class="footer-logo">Edumates</a>
-                <p class="footer-description">
-                    Edumates هي منصة تعليمية تهدف إلى تمكين الطلاب من تعلم تطوير الواجهات الأمامية من خلال موارد تعليمية شاملة ومجتمع تفاعلي.
-                </p>
+                <p class="footer-description">منصة تعليمية لتطوير الواجهات الأمامية بموارد شاملة ومجتمع تفاعلي.</p>
                 <div class="social-links">
-                    <a href="https://facebook.com" class="social-link" aria-label="فيسبوك">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://twitter.com" class="social-link" aria-label="تويتر">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://linkedin.com" class="social-link" aria-label="لينكدإن">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://youtube.com" class="social-link" aria-label="يوتيوب">
-                        <i class="fab fa-youtube"></i>
-                    </a>
+                    <a href="https://facebook.com" class="social-link" aria-label="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://twitter.com" class="social-link" aria-label="تويتر"><i class="fab fa-twitter"></i></a>
+                    <a href="https://linkedin.com" class="social-link" aria-label="لينكدإن"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://youtube.com" class="social-link" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -544,7 +464,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p class="copyright">جميع الحقوق محفوظة &copy; <span class="current-year">2025</span> Edumates</p>
+            <p class="copyright">جميع الحقوق محفوظة © <span class="current-year">2025</span> Edumates</p>
         </div>
     </footer>
 </body>
