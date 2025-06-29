@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
     const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+    // استيراد DOMPurify لتطهير النصوص
+    const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
 
     // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
@@ -40,7 +42,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         messageInput: document.getElementById('messageInput'),
         sendMessageBtn: document.getElementById('sendMessageBtn'),
         chatLoading: document.getElementById('chatLoading'),
-        loadMoreBtn: document.getElementById('loadMoreBtn')
+        loadMoreBtn: document.getElementById('loadMoreBtn'),
+        tabs: document.querySelectorAll('.tab'),
+        tabContents: document.querySelectorAll('.tab-content')
     };
 
     // تعيين السنة الحالية
@@ -60,14 +64,31 @@ document.addEventListener('DOMContentLoaded', async function() {
             examLinks.forEach(exam => {
                 if (link.textContent.trim() === exam.text) {
                     link.setAttribute('href', exam.href);
-                    console.log(`تم تحديث رابط ${exam.text} إلى ${exam.href}`);
                 }
             });
         });
     }
 
-    // استدعاء الدالة لتحديث الروابط عند تحميل الصفحة
     updateExamLinks();
+
+    // إدارة علامات التبويب
+    function setupTabs() {
+        elements.tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                elements.tabs.forEach(t => t.classList.remove('active'));
+                elements.tabContents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                const contentId = tab.getAttribute('data-tab');
+                document.getElementById(contentId).classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
+                elements.tabs.forEach(t => {
+                    if (t !== tab) t.setAttribute('aria-selected', 'false');
+                });
+            });
+        });
+    }
+
+    setupTabs();
 
     // متغيرات لتتبع الصفحات
     let lastVisible = null;
@@ -85,14 +106,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         const isOpen = elements.navLinks.classList.contains('active');
         elements.navLinks.classList.toggle('active');
         elements.mobileMenuBtn.innerHTML = isOpen ?
-            '<i class="fas fa-bars"></i>' :
-            '<i class="fas fa-times"></i>';
+            '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
+            '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
     }
 
     function closeMobileMenu() {
         if (window.innerWidth <= 768 && elements.navLinks) {
             elements.navLinks.classList.remove('active');
-            elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
         }
     }
 
@@ -101,9 +122,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.roadmapPopup) {
             const isActive = elements.roadmapPopup.classList.toggle('active');
             elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
-            console.log('Roadmap popup toggled:', isActive ? 'Opened' : 'Closed');
-        } else {
-            console.error('Roadmap popup element not found');
         }
     }
 
@@ -112,7 +130,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.chatPopup) {
             const isActive = elements.chatPopup.classList.toggle('active');
             elements.chatPopup.setAttribute('aria-hidden', !isActive);
-            console.log('Chat popup toggled:', isActive ? 'Opened' : 'Closed');
             if (isActive) {
                 elements.messageInput.focus();
                 if (!elements.chatMessages.hasChildNodes()) {
@@ -123,15 +140,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 unsubscribeMessages();
                 unsubscribeMessages = null;
             }
-        } else {
-            console.error('Chat popup element not found');
         }
     }
 
     function scrollChatToBottom() {
         if (elements.chatMessages) {
             elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
-            console.log('Scrolled to bottom of chat');
         }
     }
 
@@ -156,18 +170,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         try {
             elements.sendMessageBtn.disabled = true;
             await addDoc(collection(db, 'messages'), {
-                text: messageText,
+                text: DOMPurify.sanitize(messageText),
                 userId: user.uid,
                 userName: user.displayName || 'مستخدم',
                 userPhoto: user.photoURL || 'https://via.placeholder.com/30',
                 timestamp: serverTimestamp()
             });
             elements.messageInput.value = '';
-            scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
-            console.log('Message sent and scrolled to bottom');
+            scrollChatToBottom();
         } catch (error) {
             console.error('خطأ في إرسال الرسالة:', error);
-            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+            alert('حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.');
         } finally {
             elements.sendMessageBtn.disabled = false;
         }
@@ -179,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.chatLoading.classList.add('active');
         let messagesQuery = query(
             collection(db, 'messages'),
-            orderBy('timestamp', 'asc'), // ترتيب تصاعدي لعرض الرسائل القديمة أولاً
+            orderBy('timestamp', 'asc'),
             limit(messagesPerPage)
         );
 
@@ -192,7 +205,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 hasMoreMessages = false;
                 elements.loadMoreBtn.style.display = 'none';
                 elements.chatLoading.classList.remove('active');
-                console.log('No more messages to load');
                 return;
             }
 
@@ -205,51 +217,40 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
-            // تنظيف قائمة الرسائل فقط عند التحميل الأول
             if (!elements.chatMessages.hasChildNodes()) {
                 elements.chatMessages.innerHTML = '';
-                console.log('Cleared chat messages on initial load');
             }
 
-            // إضافة الرسائل في نهاية القائمة
             messages.forEach((message) => {
-                if (!message.text || !message.timestamp) return; // تخطي الرسائل غير الصالحة
+                if (!message.text || !message.timestamp) return;
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
                 const messageElement = document.createElement('div');
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
                 messageElement.innerHTML = `
                     <div class="message-header">
-                        <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
-                        <span class="message-sender">${sanitizeHTML(message.userName)}</span>
+                        <img src="${message.userPhoto}" alt="صورة ${DOMPurify.sanitize(message.userName)}" class="message-avatar">
+                        <span class="message-sender">${DOMPurify.sanitize(message.userName)}</span>
                         <span class="message-time">${
                             message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
                         }</span>
                     </div>
-                    <p class="message-text">${sanitizeHTML(message.text)}</p>
+                    <p class="message-text">${DOMPurify.sanitize(message.text)}</p>
                 `;
-                elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
-                console.log(`Added message from ${message.userName} at ${message.timestamp ? new Date(message.timestamp.toMillis()).toISOString() : 'now'}`);
+                elements.chatMessages.appendChild(messageElement);
             });
 
             scrollChatToBottom();
         }, (error) => {
             console.error('خطأ في تحميل الرسائل:', error);
             elements.chatLoading.classList.remove('active');
-            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+            alert('حدث خطأ أثناء تحميل الرسائل. حاول مرة أخرى.');
         });
-    }
-
-    // وظيفة لتطهير النصوص
-    function sanitizeHTML(str) {
-        const div = document.createElement('div');
-        div.textContent = str.replace(/[<>]/g, '');
-        return div.innerHTML;
     }
 
     // وظائف تبديل الميزات
     function toggleFeatures(event) {
         const toggle = event.currentTarget;
-        const featuresList = toggle.nextElementSibling.nextElementSibling; // تعديل لتخطي div التقييم
+        const featuresList = toggle.nextElementSibling.nextElementSibling;
         const isActive = featuresList.classList.contains('active');
 
         document.querySelectorAll('.features-list').forEach(list => {
@@ -262,6 +263,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (!isActive) {
             featuresList.classList.add('active');
             toggle.classList.add('active');
+            toggle.setAttribute('aria-expanded', 'true');
+        } else {
+            toggle.setAttribute('aria-expanded', 'false');
         }
     }
 
@@ -274,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             updateUIAfterLogin(user);
         } catch (error) {
             console.error('خطأ في تسجيل الدخول:', error);
-            alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+            alert('حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.');
         } finally {
             elements.googleLoginBtn.disabled = false;
         }
@@ -285,8 +289,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.googleLoginBtn) {
             elements.googleLoginBtn.innerHTML = `
                 <img src="${user.photoURL || 'https://via.placeholder.com/30'}" 
-                     alt="صورة ${sanitizeHTML(user.displayName || 'مستخدم')}" class="user-avatar">
-                <span>${sanitizeHTML(user.displayName || 'مستخدم')}</span>
+                     alt="صورة ${DOMPurify.sanitize(user.displayName || 'مستخدم')}" class="user-avatar">
+                <span>${DOMPurify.sanitize(user.displayName || 'مستخدم')}</span>
                 <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
             `;
             
@@ -299,6 +303,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         location.reload();
                     } catch (error) {
                         console.error('خطأ في تسجيل الخروج:', error);
+                        alert('حدث خطأ أثناء تسجيل الخروج. حاول مرة أخرى.');
                     }
                 });
             }
@@ -314,7 +319,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         try {
-            // التحقق مما إذا كان المستخدم قد قيّم الرابط مسبقًا
             const existingRatingQuery = query(
                 collection(db, 'ratings'),
                 where('linkId', '==', linkId),
@@ -333,10 +337,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 rating: rating,
                 timestamp: serverTimestamp()
             });
-            console.log(`تم تقييم الرابط ${linkId} بـ ${rating} نجوم`);
         } catch (error) {
             console.error('خطأ في إرسال التقييم:', error);
-            alert('حدث خطأ أثناء إرسال التقييم: ' + error.message);
+            alert('حدث خطأ أثناء إرسال التقييم. حاول مرة أخرى.');
         }
     }
 
@@ -344,18 +347,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         const stars = starsContainer.querySelectorAll('i');
         stars.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
-            // تلوين النجوم بناءً على تقييم المستخدم إذا موجود
             if (userRating && starValue <= userRating) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            }
-            // تلوين النجوم بناءً على المتوسط فقط إذا كان هناك تقييمات
-            else if (rating > 0 && starValue <= Math.floor(rating)) {
+            } else if (rating > 0 && starValue <= Math.floor(rating)) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            }
-            // إذا لم يكن هناك تقييمات أو تقييم المستخدم، كل النجوم رمادية
-            else {
+            } else {
                 star.classList.remove('rated');
                 star.style.color = 'var(--text-light)';
             }
@@ -406,10 +404,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // إعداد مستمعي الأحداث
     function setupEventListeners() {
         if (elements.mobileMenuBtn) {
-            elements.mobileMenuBtn.addEventListener('click', () => {
-                console.log('Mobile menu button clicked');
-                toggleMobileMenu();
-            });
+            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
         }
 
         document.querySelectorAll('.nav-link').forEach(link => {
@@ -417,31 +412,19 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         if (elements.viewRoadmapBtn) {
-            elements.viewRoadmapBtn.addEventListener('click', () => {
-                console.log('View roadmap button clicked');
-                toggleRoadmapPopup();
-            });
+            elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
         }
 
         if (elements.closeRoadmap) {
-            elements.closeRoadmap.addEventListener('click', () => {
-                console.log('Close roadmap button clicked');
-                toggleRoadmapPopup();
-            });
+            elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
         }
 
         if (elements.chatBtn) {
-            elements.chatBtn.addEventListener('click', () => {
-                console.log('Chat button clicked');
-                toggleChatPopup();
-            });
+            elements.chatBtn.addEventListener('click', toggleChatPopup);
         }
 
         if (elements.closeChat) {
-            elements.closeChat.addEventListener('click', () => {
-                console.log('Close chat button clicked');
-                toggleChatPopup();
-            });
+            elements.closeChat.addEventListener('click', toggleChatPopup);
         }
 
         if (elements.sendMessageBtn) {
@@ -469,7 +452,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
         }
 
-        // إضافة مستمعي الأحداث للنجوم
         document.querySelectorAll('.rating-stars').forEach(starsContainer => {
             const linkId = starsContainer.parentElement.getAttribute('data-link-id');
             loadRatings(linkId, starsContainer);
@@ -490,7 +472,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
                 loadMessages();
             }
-            // تحديث تقييمات المستخدم
             document.querySelectorAll('.rating-stars').forEach(starsContainer => {
                 const linkId = starsContainer.parentElement.getAttribute('data-link-id');
                 loadRatings(linkId, starsContainer);
@@ -504,10 +485,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 unsubscribeMessages();
                 unsubscribeMessages = null;
             }
-            // إلغاء الاشتراك في تقييمات المستخدم
             Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
             unsubscribeRatings = {};
-            // إعادة تحميل التقييمات العامة
             document.querySelectorAll('.rating-stars').forEach(starsContainer => {
                 const linkId = starsContainer.parentElement.getAttribute('data-link-id');
                 loadRatings(linkId, starsContainer);
