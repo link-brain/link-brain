@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -6,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edumates</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="courses=det-styles.css">
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="courses=det-script.js" defer></script>
@@ -32,14 +32,14 @@
     </header>
 
     <nav class="breadcrumbs">
-        <a href="#">الرئيسية</a> &gt; <a href="#">الكورسات</a> &gt; <span>تعلم Frontend</span>
+        <a href="#">الرئيسية</a> > <a href="#">الكورسات</a> > <span>تعلم Frontend</span>
     </nav>
 
     <section class="course-details-section">
         <div class="section-header">
             <h2>تعلم تطوير الواجهات الأمامية</h2>
             <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات، مواقع، واختبارات تفاعلية.</p>
-            <button class="view-roadmap-btn">خارطة الطريق</button>
+            <button class="view-roadmap-btn pulse">خارطة الطريق</button>
         </div>
 
         <div class="language-section">
@@ -65,9 +65,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="تشمل الدورة دروسًا تفاعلية ومشاريع عملية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="دروس تفاعلية\nتمارين عملية\nمشاريع واقعية">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="html-video-2">
@@ -83,9 +81,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="مجانية مع تحديات برمجية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="شرح مبسط\nمجانية\nتحديات برمجية">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="html-video-3">
@@ -101,9 +97,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="مناسبة للمبتدئين">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="دروس موجزة\nأمثلة عملية\nمناسبة للمبتدئين">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -124,9 +118,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="مرجع تفاعلي مع أمثلة">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="مرجع شامل\nأمثلة تفاعلية\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="html-website-2">
@@ -142,9 +134,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="شرح مفصل للمحترفين">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="شرح مفصل\nمناسب للمحترفين\nتغطية شاملة">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -165,9 +155,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="اختبار تفاعلي">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="اختبار تفاعلي\nتقييم المهارات\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -197,9 +185,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="تشمل مشاريع تصميمية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="مشاريع تصميمية\nتخطيطات متجاوبة\nتدريب عملي">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="css-video-2">
@@ -215,9 +201,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="تحديات برمجية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="شرح تفصيلي\nتحديات برمجية\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="css-video-3">
@@ -233,9 +217,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="دمج HTML وCSS">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="دمج HTML وCSS\nأمثلة عملية\nتدريب شامل">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -256,9 +238,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="مرجع سريع">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="مرجع سريع\nأمثلة عملية\nسهل الاستخدام">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="css-website-2">
@@ -274,9 +254,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="تغطية شاملة">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="تغطية شاملة\nمناسب للمحترفين\nمرجع متقدم">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -297,9 +275,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="اختبار تفاعلي">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="اختبار تفاعلي\nتقييم المهارات\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -329,9 +305,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="مشاريع تفاعلية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="مشاريع تفاعلية\nدروس شاملة\nتدريب عملي">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="js-video-2">
@@ -347,9 +321,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="تحديات برمجية مجانية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="شرح ممتع\nتحديات برمجية\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="js-video-3">
@@ -365,9 +337,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="جودة إنتاج عالية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="جودة إنتاج عالية\nدروس موجزة\nمناسب للمبتدئين">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -388,9 +358,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="أمثلة تفاعلية">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="أمثلة تفاعلية\nمرجع أساسي\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                     <div class="resource-card" data-link-id="js-website-2">
@@ -406,9 +374,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="نصائح متقدمة">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="نصائح متقدمة\nمناسب للمبتدئين\nمرجع شامل">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -429,9 +395,7 @@
                                 <span class="average-rating">0.0</span>
                                 <span class="rating-count">(0 تقييم)</span>
                             </div>
-                            <div class="features-tooltip" data-tooltip="اختبار تفاعلي">
-                                <i class="fas fa-info-circle"></i>
-                            </div>
+                            <button class="features-btn" data-features="اختبار تفاعلي\nتقييم المهارات\nمجاني">عرض الميزات</button>
                         </div>
                     </div>
                 </div>
@@ -441,7 +405,7 @@
 
     <div class="chat-popup" id="chatPopup" aria-hidden="true">
         <div class="chat-content">
-            <span class="close-chat" id="closeChat">&times;</span>
+            <span class="close-chat" id="closeChat">×</span>
             <h2>محادثة الطلاب</h2>
             <div class="chat-loading" id="chatLoading">جاري التحميل...</div>
             <div class="chat-messages" id="chatMessages"></div>
@@ -457,7 +421,7 @@
 
     <div class="roadmap-popup" id="roadmapPopup" aria-hidden="true">
         <div class="roadmap-content">
-            <span class="close-roadmap" id="closeRoadmap">&times;</span>
+            <span class="close-roadmap" id="closeRoadmap">×</span>
             <h2>خارطة طريق تطوير الواجهات الأمامية</h2>
             <div class="roadmap-item">
                 <h3>1. HTML</h3>
@@ -491,6 +455,14 @@
                 <h3>8. النشر</h3>
                 <p>تعلم النشر باستخدام Netlify، Vercel، أو Firebase Hosting.</p>
             </div>
+        </div>
+    </div>
+
+    <div class="features-popup" id="featuresPopup" aria-hidden="true">
+        <div class="features-content">
+            <span class="close-features" id="closeFeatures">×</span>
+            <h2>ميزات الكورس</h2>
+            <ul class="features-list" id="featuresList"></ul>
         </div>
     </div>
 
@@ -539,4 +511,3 @@
     </footer>
 </body>
 </html>
-```
