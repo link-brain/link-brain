@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة Firebase
     const firebaseConfig = {
@@ -55,8 +54,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         };
 
         // التحقق من وجود العناصر
-        if (!elements.googleLoginBtn || !elements.chatBtn || !elements.featuresPopup) {
-            console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn, featuresPopup: !!elements.featuresPopup });
+        if (!elements.googleLoginBtn || !elements.chatBtn || !elements.featuresPopup || !elements.chatPopup) {
+            console.error('عناصر DOM مفقودة:', {
+                googleLoginBtn: !!elements.googleLoginBtn,
+                chatBtn: !!elements.chatBtn,
+                featuresPopup: !!elements.featuresPopup,
+                chatPopup: !!elements.chatPopup
+            });
             showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة', 'error');
             return;
         }
@@ -65,30 +69,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.currentYear) {
             elements.currentYear.textContent = new Date().getFullYear();
         }
-
-        // إعداد علامات التبويب
-        function setupTabs() {
-            elements.tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    elements.tabs.forEach(t => t.classList.remove('active'));
-                    elements.tabContents.forEach(c => c.classList.remove('active'));
-                    tab.classList.add('active');
-                    const contentId = tab.getAttribute('data-tab');
-                    const contentElement = document.getElementById(contentId);
-                    if (contentElement) {
-                        contentElement.classList.add('active');
-                        tab.setAttribute('aria-selected', 'true');
-                        elements.tabs.forEach(t => {
-                            if (t !== tab) t.setAttribute('aria-selected', 'false');
-                        });
-                    } else {
-                        console.error('عنصر المحتوى مفقود:', contentId);
-                    }
-                });
-            });
-        }
-
-        setupTabs();
 
         // إظهار رسالة تأكيد عائمة
         function showToast(message, type = 'info') {
@@ -113,6 +93,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         const messagesPerPage = 20;
         let hasMoreMessages = true;
         let unsubscribeRatings = {};
+
+        // إعداد علامات التبويب
+        function setupTabs() {
+            elements.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    elements.tabs.forEach(t => t.classList.remove('active'));
+                    elements.tabContents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    const contentId = tab.getAttribute('data-tab');
+                    const contentElement = document.getElementById(contentId);
+                    if (contentElement) {
+                        contentElement.classList.add('active');
+                        tab.setAttribute('aria-selected', 'true');
+                        elements.tabs.forEach(t => {
+                            if (t !== tab) t.setAttribute('aria-selected', 'false');
+                        });
+                    } else {
+                        console.error('عنصر المحتوى مفقود:', contentId);
+                        showToast('خطأ في تحميل المحتوى', 'error');
+                    }
+                });
+            });
+        }
 
         // إعداد مستمعي الأحداث
         function setupEventListeners() {
@@ -191,12 +194,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (elements.roadmapPopup) {
                 const isActive = elements.roadmapPopup.classList.toggle('active');
                 elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+            } else {
+                console.error('نافذة خارطة الطريق مفقودة');
+                showToast('خطأ في تحميل خارطة الطريق', 'error');
             }
         }
 
         // وظائف الميزات
         function showFeaturesPopup(event) {
-            const features = event.target.getAttribute('data-features').split('\n');
+            const features = event.target.getAttribute('data-features')?.split('\n') || [];
+            if (features.length === 0) {
+                showToast('لا توجد ميزات متاحة', 'error');
+                return;
+            }
             elements.featuresList.innerHTML = features.map(feature => `<li>${DOMPurify.sanitize(feature)}</li>`).join('');
             toggleFeaturesPopup();
         }
@@ -205,6 +215,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (elements.featuresPopup) {
                 const isActive = elements.featuresPopup.classList.toggle('active');
                 elements.featuresPopup.setAttribute('aria-hidden', !isActive);
+            } else {
+                console.error('نافذة الميزات مفقودة');
+                showToast('خطأ في تحميل الميزات', 'error');
             }
         }
 
@@ -250,10 +263,187 @@ document.addEventListener('DOMContentLoaded', async function() {
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
                     initializeRatings();
+                    initializeChat();
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
                     `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
                     clearRatingsUI();
+                    if (unsubscribeMessages) {
+                        unsubscribeMessages();
+                        unsubscribeMessages = null;
+                    }
                 }
+            } catch (error) {
+                console.error('خطأ في معالجة حالة المصادقة:', error);
+                showToast('خطأ في تحديث حالة تسجيل الدخول', 'error');
+            }
+        }
+
+        // وظائف التقييم
+        function initializeRatings() {
+            elements.ratingStars.forEach(star => {
+                const resourceId = star.closest('.resource-card')?.dataset.resourceId;
+                if (resourceId && auth.currentUser) {
+                    const ratingRef = doc(db, 'ratings', `${auth.currentUser.uid}_${resourceId}`);
+                    unsubscribeRatings[resourceId] = onSnapshot(ratingRef, (doc) => {
+                        if (doc.exists()) {
+                            const rating = doc.data().rating;
+                            star.closest('.rating-stars').querySelectorAll('i').forEach(s => {
+                                s.classList.toggle('rated', s.dataset.value <= rating);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function clearRatingsUI() {
+            elements.ratingStars.forEach(star => {
+                star.classList.remove('rated');
+            });
+            Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
+            unsubscribeRatings = {};
+        }
+
+        async function handleRating(event) {
+            if (!auth.currentUser) {
+                showToast('يرجى تسجيل الدخول لتقييم المورد', 'error');
+                return;
+            }
+            const star = event.target;
+            const resourceId = star.closest('.resource-card')?.dataset.resourceId;
+            const ratingValue = parseInt(star.dataset.value);
+            if (!resourceId || !ratingValue) {
+                showToast('خطأ في تحديد المورد أو التقييم', 'error');
+                return;
+            }
+            try {
+                await setDoc(doc(db, 'ratings', `${auth.currentUser.uid}_${resourceId}`), {
+                    rating: ratingValue,
+                    userId: auth.currentUser.uid,
+                    resourceId: resourceId,
+                    timestamp: serverTimestamp()
+                });
+                showToast('تم تسجيل التقييم بنجاح', 'success');
+            } catch (error) {
+                console.error('خطأ في تسجيل التقييم:', error);
+                showToast('فشل في تسجيل التقييم', 'error');
+            }
+        }
+
+        // وظائف المحادثة
+        function initializeChat() {
+            if (!auth.currentUser || !elements.chatMessages) return;
+            const messagesQuery = query(
+                collection(db, 'messages'),
+                orderBy('timestamp', 'desc'),
+                limit(messagesPerPage)
+            );
+            unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+                elements.chatMessages.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+                    if (message.userId === auth.currentUser.uid) {
+                        messageElement.classList.add('user-message');
+                    }
+                    messageElement.innerHTML = `
+                        <div class="message-header">
+                            <img src="${message.userPhoto || 'https://via.placeholder.com/30'}" alt="صورة المستخدم" class="message-avatar">
+                            <span class="message-sender">${DOMPurify.sanitize(message.userName || 'مستخدم')}</span>
+                            <span class="message-time">${new Date(message.timestamp?.toMillis() || Date.now()).toLocaleTimeString('ar-EG')}</span>
+                        </div>
+                        <p class="message-text">${DOMPurify.sanitize(message.text)}</p>
+                    `;
+                    elements.chatMessages.prepend(messageElement);
+                });
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+                hasMoreMessages = snapshot.docs.length === messagesPerPage;
+                elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+                elements.chatLoading.classList.remove('active');
+            }, (error) => {
+                console.error('خطأ في تحميل الرسائل:', error);
+                showToast('فشل في تحميل الرسائل', 'error');
+                elements.chatLoading.classList.remove('active');
+            });
+        }
+
+        async function sendMessage() {
+            if (!auth.currentUser) {
+                showToast('يرجى تسجيل الدخول لإرسال رسالة', 'error');
+                return;
+            }
+            const messageText = elements.messageInput.value.trim();
+            if (!messageText) {
+                showToast('يرجى كتابة رسالة', 'error');
+                return;
+            }
+            try {
+                elements.sendMessageBtn.disabled = true;
+                await addDoc(collection(db, 'messages'), {
+                    text: messageText,
+                    userId: auth.currentUser.uid,
+                    userName: auth.currentUser.displayName || 'مستخدم',
+                    userPhoto: auth.currentUser.photoURL || null,
+                    timestamp: serverTimestamp()
+                });
+                elements.messageInput.value = '';
+                showToast('تم إرسال الرسالة بنجاح', 'success');
+            } catch (error) {
+                console.error('خطأ في إرسال الرسالة:', error);
+                showToast('فشل في إرسال الرسالة', 'error');
+            } finally {
+                elements.sendMessageBtn.disabled = false;
+            }
+        }
+
+        async function loadMessages() {
+            if (!auth.currentUser || !hasMoreMessages) return;
+            elements.chatLoading.classList.add('active');
+            const nextQuery = query(
+                collection(db, 'messages'),
+                orderBy('timestamp', 'desc'),
+                startAfter(lastVisible),
+                limit(messagesPerPage)
+            );
+            try {
+                const snapshot = await getDocs(nextQuery);
+                snapshot.forEach(doc => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+                    if (message.userId === auth.currentUser.uid) {
+                        messageElement.classList.add('user-message');
+                    }
+                    messageElement.innerHTML = `
+                        <div class="message-header">
+                            <img src="${message.userPhoto || 'https://via.placeholder.com/30'}" alt="صورة المستخدم" class="message-avatar">
+                            <span class="message-sender">${DOMPurify.sanitize(message.userName || 'مستخدم')}</span>
+                            <span class="message-time">${new Date(message.timestamp?.toMillis() || Date.now()).toLocaleTimeString('ar-EG')}</span>
+                        </div>
+                        <p class="message-text">${DOMPurify.sanitize(message.text)}</p>
+                    `;
+                    elements.chatMessages.appendChild(messageElement);
+                });
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+                hasMoreMessages = snapshot.docs.length === messagesPerPage;
+                elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+            } catch (error) {
+                console.error('خطأ في تحميل المزيد من الرسائل:', error);
+                showToast('فشل في تحميل المزيد من الرسائل', 'error');
+            } finally {
+                elements.chatLoading.classList.remove('active');
+            }
+        }
+
+        // بدء التطبيق
+        setupTabs();
+        setupEventListeners();
+    } catch (error) {
+        console.error('خطأ في تهيئة التطبيق:', error);
+        showToast('خطأ في تحميل التطبيق، يرجى إعادة تحميل الصفحة', 'error');
+    }
+});
