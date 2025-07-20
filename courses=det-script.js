@@ -1260,3 +1260,105 @@ body {
         padding: 1.8rem;
     }
 }
+// إضافة هذا الكود إلى ملف courses=det-script.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    // عناصر واجهة المستخدم
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    const loginModal = document.getElementById('loginModal');
+    const registerModal = document.getElementById('registerModal');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    const chatToggleBtn = document.getElementById('chatToggleBtn');
+    const chatContainer = document.getElementById('chatContainer');
+    const closeChatBtn = document.querySelector('.close-chat');
+    const messageInput = document.getElementById('messageInput');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+    const chatMessages = document.getElementById('chatMessages');
+
+    // فتح نافذة تسجيل الدخول
+    loginBtn.addEventListener('click', function() {
+        loginModal.style.display = 'block';
+    });
+
+    // فتح نافذة إنشاء حساب
+    registerBtn.addEventListener('click', function() {
+        registerModal.style.display = 'block';
+    });
+
+    // إغلاق النوافذ المنبثقة
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'none';
+        });
+    });
+
+    // إغلاق النافذة عند النقر خارجها
+    window.addEventListener('click', function(event) {
+        if (event.target === loginModal) {
+            loginModal.style.display = 'none';
+        }
+        if (event.target === registerModal) {
+            registerModal.style.display = 'none';
+        }
+    });
+
+    // تبديل نافذة المحادثة
+    chatToggleBtn.addEventListener('click', function() {
+        chatContainer.style.display = chatContainer.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // إغلاق نافذة المحادثة
+    closeChatBtn.addEventListener('click', function() {
+        chatContainer.style.display = 'none';
+    });
+
+    // إرسال رسالة في المحادثة
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (message) {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+
+    sendMessageBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // معالجة تسجيل الدخول
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // هنا يمكنك إضافة كود الاتصال بالخادم لتسجيل الدخول
+        console.log('تسجيل الدخول:', email, password);
+        loginModal.style.display = 'none';
+    });
+
+    // معالجة إنشاء حساب
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('newEmail').value;
+        const password = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+            alert('كلمة المرور غير متطابقة');
+            return;
+        }
+        
+        // هنا يمكنك إضافة كود الاتصال بالخادم لإنشاء حساب
+        console.log('إنشاء حساب:', name, email, password);
+        registerModal.style.display = 'none';
+    });
+});
