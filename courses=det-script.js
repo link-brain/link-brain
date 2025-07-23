@@ -10,20 +10,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         measurementId: "G-L1KCZTW8R9"
     };
 
-    // متغيرات عالمية
-    let unsubscribeMessages = null;
-    let unsubscribeRatings = {};
-    let hasMoreMessages = true;
-    let lastVisible = null;
-    const messagesPerPage = 10;
-
     // استيراد مكتبات Firebase
     let firebaseInitialized = false;
     try {
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
         const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
-        const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+        const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
         const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
 
         // تهيئة التطبيق
@@ -59,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // التحقق من وجود العناصر
         if (!elements.googleLoginBtn || !elements.chatBtn) {
             console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-            showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة', 'error');
+            showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة');
             return;
         }
 
@@ -161,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             } catch (error) {
                 console.error('خطأ في عملية المصادقة:', error.code, error.message);
-                showToast(`خطأ في تسجيل الدخول/الخروج: ${error.message}`, 'error');
+                showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
             }
         }
 
@@ -175,10 +168,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
+
+                    // 🔥 تأثير بصري بعد تسجيل الدخول
                     elements.googleLoginBtn.classList.add('login-success-animation');
                     setTimeout(() => {
                         elements.googleLoginBtn.classList.remove('login-success-animation');
                     }, 2000);
+
                     initializeRatings();
                 } else {
                     elements.googleLoginBtn.innerHTML = `<i class="fab fa-google"></i> تسجيل الدخول`;
@@ -187,12 +183,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
+                showToast('حدث خطأ أثناء عرض معلومات المستخدم', 'error');
+            }
+        }
+                console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
                 showToast('خطأ في تحديث واجهة تسجيل الدخول', 'error');
             }
         }
-
-        // إعداد مستمع حالة المصادقة
-        onAuthStateChanged(auth, handleAuthStateChanged);
 
         // وظائف المحادثة
         function toggleChatPopup() {
@@ -224,7 +221,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         async function sendMessage() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                console.error('Firebase غير مهيأ');
                 return;
             }
 
@@ -259,13 +255,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('تم إرسال الرسالة بنجاح', 'success');
             } catch (error) {
                 console.error('خطأ في إرسال الرسالة:', error.code, error.message);
-                showToast(`خطأ في إرسال الرسالة: ${error.message}`, 'error');
+                showToast('حدث خطأ أثناء إرسال الرسالة', 'error');
             } finally {
                 elements.sendMessageBtn.disabled = false;
             }
         }
 
-        async牢 loadMessages() {
+        async function loadMessages() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
@@ -369,34 +365,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             const linkId = resourceCard.dataset.linkId;
 
             try {
-                // التحقق من وجود تقييم سابق
                 const ratingRef = doc(db, 'ratings', `${linkId}_${user.uid}`);
-                const ratingDoc = await getDoc(ratingRef);
-                if (ratingDoc.exists()) {
-                    showToast('لقد قمت بتقييم هذا المورد مسبقًا', 'info');
-                    return;
-                }
-
-                // تسجيل التقييم
                 await setDoc(ratingRef, {
                     userId: user.uid,
                     linkId: linkId,
                     rating: ratingValue,
                     timestamp: serverTimestamp()
                 });
-
-                // تعطيل نجوم التقييم بعد التقييم
-                const stars = resourceCard.querySelectorAll('.rating-stars i');
-                stars.forEach(s => {
-                    s.classList.add('disabled');
-                    s.style.pointerEvents = 'none';
-                });
-
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
                 await updateRatingUI(linkId);
             } catch (error) {
-                console.error('خطأ في تسجيل التقييم:', error.code, error.message);
-                showToast(`خطأ في تسجيل التقييم: ${error.message}`, 'error');
+                showToast('حدث خطأ أثناء تسجيل التقييم', 'error');
             }
         }
 
@@ -427,15 +406,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             stars.forEach(star => {
                 const value = parseInt(star.dataset.value);
                 star.classList.toggle('rated', value <= Math.round(averageRating));
-                // التحقق من وجود تقييم سابق للمستخدم الحالي
-                if (auth.currentUser) {
-                    getDoc(doc(db, 'ratings', `${linkId}_${auth.currentUser.uid}`)).then(ratingDoc => {
-                        if (ratingDoc.exists()) {
-                            star.classList.add('disabled');
-                            star.style.pointerEvents = 'none';
-                        }
-                    });
-                }
             });
         }
 
@@ -447,10 +417,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (ratingElement && countElement) {
                     ratingElement.textContent = '0.0';
                     countElement.textContent = '(0 تقييم)';
-                    stars.forEach(star => {
-                        star.classList.remove('rated', 'disabled');
-                        star.style.pointerEvents = 'auto';
-                    });
+                    stars.forEach(star => star.classList.remove('rated'));
                 }
             });
         }
@@ -464,67 +431,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         () => updateRatingUI(linkId)
                     );
                 }
-                // التحقق من التقييمات السابقة للمستخدم
-                if (auth.currentUser) {
-                    getDoc(doc(db, 'ratings', `${linkId}_${auth.currentUser.uid}`)).then(ratingDoc => {
-                        if (ratingDoc.exists()) {
-                            const stars = card.querySelectorAll('.rating-stars i');
-                            stars.forEach(star => {
-                                star.classList.add('disabled');
-                                star.style.pointerEvents = 'none';
-                            });
-                        }
-                    });
-                }
             });
-
-            // إضافة مستمع الأحداث للنجوم
-            elements.ratingStars.forEach(star => {
-                star.addEventListener('click', handleRating);
-            });
-        }
-
-        // إعداد مستمعات الأحداث
-        function setupEventListeners() {
-            if (elements.googleLoginBtn) {
-                elements.googleLoginBtn.addEventListener('click', handleAuth);
-            }
-            if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.closeChat) {
-                elements.closeChat.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.sendMessageBtn) {
-                elements.sendMessageBtn.addEventListener('click', sendMessage);
-            }
-            if (elements.messageInput) {
-                elements.messageInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
-            if (elements.viewRoadmapBtn) {
-                elements.viewRoadmapBtn.addEventListener('click', () => {
-                    if (elements.roadmapPopup) {
-                        elements.roadmapPopup.classList.toggle('active');
-                        elements.roadmapPopup.setAttribute('aria-hidden', !elements.roadmapPopup.classList.contains('active'));
-                    }
-                });
-            }
-            if (elements.closeRoadmap) {
-                elements.closeRoadmap.addEventListener('click', () => {
-                    if (elements.roadmapPopup) {
-                        elements.roadmapPopup.classList.remove('active');
-                        elements.roadmapPopup.setAttribute('aria-hidden', 'true');
-                    }
-                });
-            }
-            if (elements.loadMoreBtn) {
-                elements.loadMoreBtn.addEventListener('click', loadMessages);
-            }
         }
 
         // بدء التطبيق
@@ -534,18 +441,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                 initializeRatings();
             }
         } catch (error) {
-            console.error('خطأ في تهيئة التطبيق:', error);
             showToast('حدث خطأ أثناء تهيئة التطبيق', 'error');
         }
 
-        // تنظيف المستمعات عند إغلاق الصفحة
         window.addEventListener('unload', () => {
             if (unsubscribeMessages) unsubscribeMessages();
             Object.values(unsubscribeRatings).forEach(unsub => unsub());
         });
 
     } catch (error) {
-        console.error('خطأ في تحميل Firebase أو المكتبات الأساسية:', error);
         showToast('خطأ في تحميل Firebase أو المكتبات الأساسية', 'error');
     }
 });
