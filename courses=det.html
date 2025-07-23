@@ -3,34 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edumates</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Edumates - تعلم Frontend</title>
     <link rel="stylesheet" href="courses=det-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edumates - تعلم Frontend</title>
+    <link rel="stylesheet" href="courses=det-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-L6LJJZ6S57"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-L6LJJZ6S57');
+</script>
+   
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+    authDomain: "edumates-983dd.firebaseapp.com",
+    projectId: "edumates-983dd",
+    storageBucket: "edumates-983dd.firebasestorage.app",
+    messagingSenderId: "172548876353",
+    appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+    measurementId: "G-L1KCZTW8R9"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+    
+    
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" class="logo">Edumates</a>
+        <a href="index.html" class="logo">Edumates</a>
         <div class="nav-links">
-            <a href="/" class="nav-link">الرئيسية</a>
-            <a href="/courses" class="nav-link active">الكورسات</a>
-            <a href="/contact" class="nav-link">اتصل بنا</a>
-            <a href="/login" class="nav-link login-link">تسجيل الدخول</a>
-            <a href="/chat" class="nav-link chat-link">المحادثة</a>
+            <a href="index.html" class="nav-link active">الرئيسية</a>
+            <a href="courses.html" class="nav-link">الكورسات</a>
+            <a href="#footer" class="nav-link">اتصل بنا</a>
+            <form id="loginForm">
+                <button id="googleLoginBtn">تسجيل الدخول عبر جوجل</button>
         </div>
-        <button class="watch-courses-btn">شاهد الكورسات</button>
-        <button class="mobile-menu-btn"><i class="fas fa-bars"></i></button>
+        </form><a href="courses.html"><button class="btn watch-courses-btn">العوده</button></a>
+        <span class="mobile-menu-btn"><i class="fas fa-bars"></i></span>
     </nav>
 
     <div class="breadcrumbs">
-        <a href="/">الرئيسية</a> &gt; <a href="/courses">الكورسات</a> &gt; <span>تعلم frontend</span>
+        <a href="index.html">الرئيسية</a> > <a href="courses.html">الكورسات</a> > <span>تعلم frontend</span>
     </div>
 
     <section class="course-details-section">
         <div class="section-header">
             <h2>تعلم frontend</h2>
             <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية</p>
-            <button class="view-roadmap-btn">عرض خارطة الطريق</button>
+            <button class="btn view-roadmap-btn">View Roadmap</button>
         </div>
 
         <div class="language-section">
@@ -39,50 +82,50 @@
                 <div class="video-links">
                     <h4>فيديوهات الشرح</h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">دورة HTML - Elzero Web School <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtu.be/qfPUMV9J5yw?si=TyXLq9L2rW4-L_er">دورة HTML - Elzero Web School</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
-                                <p>- أفضل قناة عربية</p>
+                                <p>-افضل قناة عربيه</p>
                                 <p>- تغطية شاملة للأساسيات</p>
                                 <p>- تمارين عملية</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">دورة abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij">دوره abdalrhman Gamal</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- محتوى مجاني بالكامل</p>
-                                <p>- شرح مبسط</p>
-                                <p>- تغطية جميع الأساسيات</p>
+                                <p>- شرح مبسط  </p>
+                                <p>- تغطيه جميع الاساسيات</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">outcode <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtube.com/playlist?list=PLoP3S2S1qTfCVIETOGwaK3lyaL3UKu403&si=k0Kv8uZjjk59DmOD">outcode</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- موجز ومركز</p>
                                 <p>- تفاصيل</p>
-                                <p>- فيديوهات قصيرة</p>
+                                <p>- فيديوهات قصيره</p>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع مهمة</h4>
+                    <h4>مواقع مهمه</h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">جميع أكواد html <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://harmash.com/tutorials/html/tags">جميع اكواد html</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
-                                <p>- جميع الأكواد</p>
-                                <p>- تفصيل كامل للأكواد</p>
+                                <p>- جميع الاكواد</p>
+                                <p>- تفصيل كامل للاكواد</p>
                                 <p>- موقع عربي</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">مرجع مهم لhtml <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://www.w3schools.com/tags/">مرجع مهم لhtml</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- مرجع كامل</p>
                                 <p>- واضح جذاب</p>
                                 <p>- شرح مفصل</p>
                             </div>
                         </li>
-                    </ul>
+                        
                 </div>
-                <div class="quiz-button">
-                    <button class="quiz-btn">اختبار HTML</button>
+                </ul><div class="quiz-button">
+                    <a href="exam-html.html"><button class="btn quiz-btn">اختبار HTML</button></a>
                 </div>
             </div>
         </div>
@@ -93,50 +136,48 @@
                 <div class="video-links">
                     <h4>فيديوهات الشرح</h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">دورة CSS - Elzero Web School <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtu.be/qyVkLebgfzY?si=Nd6xuhOCTs7FFo6C">دورة CSS - Elzero Web School</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- شرح عملي وتفاعلي</p>
                                 <p>- مشاريع تصميمية</p>
                                 <p>- شرح تفاعلي</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">تعلم CSS - abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtu.be/h1mNPEjva8U?si=WPhpq97NBmpxvUJA">تعلم CSS - abdalrhman Gamal</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- شرح تفصيلي</p>
                                 <p>- تحديات برمجية</p>
                                 <p>- شرح مسلي بالرسم</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">دورة codzella <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtu.be/aHzw_8wWl48?si=dK7nOeedAe0eTaQt">دورة codzella</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- شرح عملي</p>
                                 <p>- html+css</p>
-                                <p>- شرح الأساسيات</p>
+                                <p>- شرح الاساسيات </p>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع مهمة</h4>
+                    <h4> مواقع مهمه</h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">شرح مبسط لcss <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://wiki.hsoub.com/CSS">شرح مبسط لcss</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- مرجع سريع</p>
                                 <p>- شرح وافي لكل الجوانب</p>
                                 <p>- تغطية شاملة</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">مرجع لcss <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://www.w3schools.com/CSSref/index.php">مرجع لcss</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- مرجع شامل</p>
-                                <p>- جميع الأكواد</p>
+                                <p>- جميع الاكود</p>
                                 <p>- مرجع احترافي</p>
                             </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="quiz-button">
-                    <button class="quiz-btn">اختبار CSS</button>
+                                     </div>
+                </ul><div class="quiz-button">
+                    <a href="exam-css.html"><button class="btn quiz-btn">اختبار CSS</button></a>
                 </div>
             </div>
         </div>
@@ -147,21 +188,21 @@
                 <div class="video-links">
                     <h4>فيديوهات شرح</h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">دورة JavaScript - Elzero Web School <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtube.com/playlist?list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv&si=5isL1ffb5hcbA-e3">دورة JavaScript - Elzero Web School</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- شرح مفصل</p>
                                 <p>- شرح تفاعلي</p>
                                 <p>- مشاريع تفاعلية</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">تعلم JavaScript - abdalrhman Gamal <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtube.com/playlist?list=PLknwEmKsW8OuTqUDaFRBiAViDZ5uI3VcE&si=2knV9iIJJtl9H5mJ">تعلم JavaScript - abdalrhman Gamal</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- تعليم مجاني</p>
                                 <p>- تحديات برمجية</p>
                                 <p>- شرح ممتع</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">أكاديمية ترميز <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://youtube.com/playlist?list=PLYyqC4bNbCIeLEjcSPO61bsGPKEvYceb0&si=--4OZo-IxIZoZVkE">اكادمية ترميز</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- دروس موجزة</p>
                                 <p>- أمثلة عملية</p>
@@ -171,26 +212,28 @@
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع ومراجع</h4>
+                    <h4> مواقع ومراجع </h4>
                     <ul>
-                        <li><a href="#" class="toggle-features">مرجع لجميع أكواد اللغة <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://www.w3schools.com/jsrEF/default.asp">مرجع لجميع اكواد اللغه</a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
-                                <p>- مرجع أساسي</p>
+                                <p>- مرجع اساسي</p>
                                 <p>- أمثلة تفاعلية</p>
                                 <p>- مجاني أونلاين</p>
                             </div>
                         </li>
-                        <li><a href="#" class="toggle-features">نصائح للبدء في جافا سكريبت <i class="fas fa-chevron-down"></i></a>
+                        <li><a href="https://elzero.org/question-learn-javascript/">نصائح للبدا في جافا اسكريبت </a><span class="toggle-features"><i class="fas fa-caret-down"></i></span>
                             <div class="features-list">
                                 <p>- تركيز على الأساسيات</p>
                                 <p>- نصائح متقدمة</p>
                                 <p>- أسلوب مختصر</p>
                             </div>
                         </li>
+                            </div>
+                        </li>
                     </ul>
                 </div>
-                <div class="quiz-button">
-                    <button class="quiz-btn">اختبار JavaScript</button>
+                </ul><div class="quiz-button">
+                    <a href="exam-js.html"><button class="btn quiz-btn">اختبار JavaScript</button></a>
                 </div>
             </div>
         </div>
@@ -202,19 +245,19 @@
                 <h3 class="footer-logo">Edumates</h3>
                 <p class="footer-description">منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك</p>
                 <div class="social-links">
-                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                                       <a href="https://www.facebook.com/profile.php?id=100091389987617" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://x.com/AHMed_Alshaab?t=TUIaCyRqTfiQXCtgn29aGQ&s=09" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/in/ahmed-abdulkarem-5a8ab3286?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
             <div class="footer-links">
                 <div class="footer-column">
                     <h4 class="footer-title">الكورسات</h4>
                     <ul>
-                        <li><a href="#" class="footer-link">الكورسات الجديدة</a></li>
-                        <li><a href="#" class="footer-link">الكورسات الأكثر مشاهدة</a></li>
-                        <li><a href="#" class="footer-link">الكورسات المجانية</a></li>
-                        <li><a href="#" class="footer-link">الكورسات المدفوعة</a></li>
+                        <li><a href="courses.html" class="footer-link">الكورسات الجديدة</a></li>
+                        <li><a href="courses.html" class="footer-link">الكورسات الأكثر مشاهدة</a></li>
+                        <li><a href="courses.html" class="footer-link">الكورسات المجانية</a></li>
+                        <li><a href="courses.html" class="footer-link">الكورسات المدفوعة</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -227,7 +270,7 @@
                 <div class="footer-column">
                     <h4 class="footer-title">تواصل معنا</h4>
                     <ul>
-                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر القاهرة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر القاهره</a></li>
                         <li><a href="#" class="footer-link"><i class="fas fa-phone"></i> 01116442939</a></li>
                         <li><a href="#" class="footer-link"><i class="fas fa-envelope"></i> m41940147@gmail.com</a></li>
                     </ul>
@@ -241,7 +284,7 @@
 
     <div class="roadmap-popup">
         <div class="roadmap-content">
-            <i class="fas fa-times close-roadmap"></i>
+            <span class="close-roadmap"><i class="fas fa-times"></i></span>
             <h2>خارطة طريق تطوير الواجهات الأمامية</h2>
             <div class="roadmap-item">
                 <h3>1. HTML</h3>
@@ -278,31 +321,6 @@
         </div>
     </div>
 
-    <div class="login-popup">
-        <div class="login-content">
-            <i class="fas fa-times close-login"></i>
-            <h2>تسجيل الدخول</h2>
-            <div class="login-form">
-                <input type="email" placeholder="البريد الإلكتروني" required>
-                <input type="password" placeholder="كلمة المرور" required>
-                <button class="login-btn">تسجيل الدخول</button>
-                <p class="error-message"></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="chat-popup">
-        <div class="chat-content">
-            <i class="fas fa-times close-chat"></i>
-            <h2>المحادثة</h2>
-            <div class="chat-messages">
-                <p>مرحبًا! كيف يمكننا مساعدتك؟</p>
-            </div>
-            <input type="text" placeholder="اكتب رسالتك..." class="chat-input">
-            <button class="chat-send-btn">إرسال</button>
-        </div>
-    </div>
-
-    <script src="courses-det-script.js"></script>
+    <script src="courses=det-script.js"></script>
 </body>
 </html>
