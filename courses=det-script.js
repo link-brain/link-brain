@@ -10,8 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
         closeRoadmap: document.querySelector('.close-roadmap'),
         toggleFeatures: document.querySelectorAll('.toggle-features'),
         quizButtons: document.querySelectorAll('.quiz-btn'),
-        loginLink: document.querySelector('.nav-link[href="/login"]'),
-        chatLink: document.querySelector('.nav-link[href="/chat"]')
+        loginLink: document.querySelector('.login-link'),
+        chatLink: document.querySelector('.chat-link'),
+        loginPopup: document.querySelector('.login-popup'),
+        closeLogin: document.querySelector('.close-login'),
+        chatPopup: document.querySelector('.chat-popup'),
+        closeChat: document.querySelector('.close-chat'),
+        loginBtn: document.querySelector('.login-btn'),
+        chatSendBtn: document.querySelector('.chat-send-btn'),
+        chatInput: document.querySelector('.chat-input'),
+        errorMessage: document.querySelector('.error-message')
     };
 
     // App Logic
@@ -49,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Quiz Buttons
             elements.quizButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    const language = button.parentElement.parentElement.previousElementSibling.textContent;
+                    const language = button.parentElement.parentElement.previousElementSibling.textContent.trim();
                     window.location.href = `/quiz/${language.toLowerCase()}`;
                 });
             });
@@ -61,20 +69,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            // Login and Chat Links (Placeholder Alerts for Demo)
+            // Login Popup
             if (elements.loginLink) {
                 elements.loginLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    alert('Redirecting to Login Page');
-                    window.location.href = '/login';
+                    this.toggleLoginPopup();
                 });
             }
 
+            if (elements.closeLogin) {
+                elements.closeLogin.addEventListener('click', this.toggleLoginPopup);
+            }
+
+            if (elements.loginBtn) {
+                elements.loginBtn.addEventListener('click', this.handleLogin);
+            }
+
+            // Chat Popup
             if (elements.chatLink) {
                 elements.chatLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    alert('Opening Chat Interface');
-                    window.location.href = '/chat';
+                    this.toggleChatPopup();
+                });
+            }
+
+            if (elements.closeChat) {
+                elements.closeChat.addEventListener('click', this.toggleChatPopup);
+            }
+
+            if (elements.chatSendBtn && elements.chatInput) {
+                elements.chatSendBtn.addEventListener('click', this.handleChatMessage);
+                elements.chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleChatMessage();
                 });
             }
         },
@@ -90,9 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const isOpen = elements.navLinks.style.display === 'flex';
             elements.navLinks.style.display = isOpen ? 'none' : 'flex';
             elements.watchCoursesBtn.style.display = isOpen ? 'none' : 'block';
-            elements.mobileMenuBtn.innerHTML = isOpen ?
-                '<i class="fas fa-bars"></i>' :
-                '<i class="fas fa-times"></i>';
+            elements.mobileMenuBtn.innerHTML = isOpen ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
         },
 
         closeMobileMenu() {
@@ -107,6 +131,50 @@ document.addEventListener('DOMContentLoaded', function() {
             if (elements.roadmapPopup) {
                 elements.roadmapPopup.classList.toggle('active');
             }
+        },
+
+        toggleLoginPopup() {
+            if (elements.loginPopup) {
+                elements.loginPopup.classList.toggle('active');
+                elements.errorMessage.textContent = '';
+            }
+        },
+
+        toggleChatPopup() {
+            if (elements.chatPopup) {
+                elements.chatPopup.classList.toggle('active');
+                elements.chatInput.value = '';
+            }
+        },
+
+        handleLogin() {
+            const email = document.querySelector('.login-form input[type="email"]').value;
+            const password = document.querySelector('.login-form input[type="password"]').value;
+            if (!email || !password) {
+                elements.errorMessage.textContent = 'يرجى ملء جميع الحقول';
+                return;
+            }
+            // Simulate login (replace with actual API call in production)
+            alert('تم تسجيل الدخول بنجاح!');
+            elements.loginPopup.classList.remove('active');
+        },
+
+        handleChatMessage() {
+            const message = elements.chatInput.value.trim();
+            if (!message) return;
+            const messagesDiv = document.querySelector('.chat-messages');
+            const messageP = document.createElement('p');
+            messageP.textContent = `أنت: ${message}`;
+            messagesDiv.appendChild(messageP);
+            elements.chatInput.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Simulate bot response (replace with actual chat API in production)
+            setTimeout(() => {
+                const botMessage = document.createElement('p');
+                botMessage.textContent = 'البوت: شكرًا على رسالتك! كيف يمكنني مساعدتك أكثر؟';
+                messagesDiv.appendChild(botMessage);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
         },
 
         toggleFeatures(event) {
