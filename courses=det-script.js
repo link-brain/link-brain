@@ -1,244 +1,300 @@
-// تهيئة Firebase
+// ===== التهيئة الأساسية =====
 const firebaseConfig = {
-    apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
-    authDomain: "edumates-983dd.firebaseapp.com",
-    projectId: "edumates-983dd",
-    storageBucket: "edumates-983dd.appspot.com",
-    messagingSenderId: "172548876353",
-    appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
-    measurementId: "G-L1KCZTW8R9"
+  apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+  authDomain: "edumates-983dd.firebaseapp.com",
+  projectId: "edumates-983dd",
+  storageBucket: "edumates-983dd.appspot.com",
+  messagingSenderId: "172548876353",
+  appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+  measurementId: "G-L1KCZTW8R9"
 };
 
-// Initialize Firebase
+// تهيئة Firebase
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-// عناصر DOM
-const DOM = {
-    googleLoginBtn: document.getElementById('googleLoginBtn'),
-    chatBtn: document.getElementById('chatBtn'),
-    chatPopup: document.getElementById('chatPopup'),
-    chatMessages: document.getElementById('chatMessages'),
-    messageInput: document.getElementById('messageInput'),
-    sendMessageBtn: document.getElementById('sendMessageBtn'),
-    ratingStars: document.querySelectorAll('.rating-stars i'),
-    resourceCards: document.querySelectorAll('.resource-card')
+// ===== حالة التطبيق =====
+const state = {
+  currentUser: null,
+  chat: {
+    lastVisible: null,
+    unsubscribe: null
+  },
+  ratings: {}
 };
 
-// متغيرات الحالة
-let currentUser = null;
-let lastMessageDoc = null;
-const MESSAGES_LIMIT = 20;
+// ===== عناصر DOM =====
+const elements = {
+  // المصادقة
+  authBtn: document.getElementById('googleLoginBtn'),
+  
+  // المحادثة
+  chatBtn: document.getElementById('chatBtn'),
+  chatPopup: document.getElementById('chatPopup'),
+  chatMessages: document.getElementById('chatMessages'),
+  messageInput: document.getElementById('messageInput'),
+  sendBtn: document.getElementById('sendMessageBtn'),
+  closeChatBtn: document.getElementById('closeChat'),
+  
+  // التقييمات
+  ratingStars: document.querySelectorAll('.rating-stars i'),
+  resourceCards: document.querySelectorAll('.resource-card')
+};
 
-// ============== نظام المصادقة ==============
+// ===== نظام المصادقة =====
 async function handleAuth() {
-    try {
-        if (currentUser) {
-            await auth.signOut();
-            showToast('تم تسجيل الخروج بنجاح', 'success');
-        } else {
-            await auth.signInWithPopup(provider);
-            showToast('مرحباً! تم تسجيل الدخول', 'success');
-        }
-    } catch (error) {
-        console.error('Auth error:', error);
-        showToast('حدث خطأ في المصادقة', 'error');
+  try {
+    if (state.currentUser) {
+      await auth.signOut();
+      showToast('تم تسجيل الخروج بنجاح', 'success');
+    } else {
+      const result = await auth.signInWithPopup(provider);
+      if (result.user) {
+        showToast(`مرحباً ${result.user.displayName || 'بالضيف'}`, 'success');
+      }
     }
+  } catch (error) {
+    console.error('Auth Error:', error);
+    showToast('حدث خطأ في المصادقة', 'error');
+  }
 }
 
+// متابعة حالة المستخدم
 auth.onAuthStateChanged(user => {
-    currentUser = user;
-    updateAuthUI();
-    if (user) initRatings();
+  state.currentUser = user;
+  updateAuthUI();
+  
+  if (user) {
+    initRatings();
+  } else {
+    clearRatings();
+  }
 });
 
 function updateAuthUI() {
-    if (currentUser) {
-        DOM.googleLoginBtn.innerHTML = `
-            <img src="${currentUser.photoURL || 'https://via.placeholder.com/30'}" 
-                 alt="صورة المستخدم" class="user-avatar">
-            <span>${currentUser.displayName || 'مستخدم'}</span>
-            <i class="fas fa-sign-out-alt"></i>
-        `;
-        DOM.googleLoginBtn.classList.add('user-logged-in');
-    } else {
-        DOM.googleLoginBtn.innerHTML = `<i class="fab fa-google"></i> تسجيل الدخول`;
-        DOM.googleLoginBtn.classList.remove('user-logged-in');
-    }
+  if (state.currentUser) {
+    elements.authBtn.innerHTML = `
+      <img src="${state.currentUser.photoURL || 'https://via.placeholder.com/30'}" 
+           class="user-avatar">
+      <span>${state.currentUser.displayName || 'مستخدم'}</span>
+      <i class="fas fa-sign-out-alt"></i>
+    `;
+    elements.authBtn.classList.add('logged-in');
+  } else {
+    elements.authBtn.innerHTML = `<i class="fab fa-google"></i> تسجيل الدخول`;
+    elements.authBtn.classList.remove('logged-in');
+  }
 }
 
-// ============== نظام التقييمات ==============
-async function initRatings() {
-    DOM.resourceCards.forEach(card => {
-        const linkId = card.dataset.linkId;
-        listenToRatings(linkId);
+// ===== نظام التقييمات =====
+function initRatings() {
+  elements.resourceCards.forEach(card => {
+    const resourceId = card.dataset.linkId;
+    setupRatingListener(resourceId);
+  });
+}
+
+function setupRatingListener(resourceId) {
+  state.ratings[resourceId] = db.collection('ratings')
+    .where('resourceId', '==', resourceId)
+    .onSnapshot(snapshot => {
+      updateRatingUI(resourceId, snapshot.docs);
     });
-}
-
-async function listenToRatings(linkId) {
-    db.collection('ratings')
-        .where('linkId', '==', linkId)
-        .onSnapshot(snapshot => {
-            updateRatingUI(linkId, snapshot.docs);
-        });
 }
 
 async function handleRating(e) {
-    if (!currentUser) {
-        showToast('يجب تسجيل الدخول أولاً', 'error');
-        return;
+  if (!state.currentUser) {
+    showToast('يجب تسجيل الدخول أولاً', 'error');
+    return;
+  }
+
+  const star = e.target.closest('i');
+  const ratingValue = parseInt(star.dataset.value);
+  const card = star.closest('.resource-card');
+  const resourceId = card.dataset.linkId;
+
+  try {
+    // التحقق من التقييم السابق
+    const query = await db.collection('ratings')
+      .where('userId', '==', state.currentUser.uid)
+      .where('resourceId', '==', resourceId)
+      .get();
+
+    if (!query.empty) {
+      showToast('لقد قيمت هذا المورد مسبقاً', 'warning');
+      return;
     }
 
-    const star = e.target.closest('i');
-    const ratingValue = parseInt(star.dataset.value);
-    const card = star.closest('.resource-card');
-    const linkId = card.dataset.linkId;
-
-    try {
-        // تحقق من التقييم السابق
-        const existingRating = await db.collection('ratings')
-            .where('userId', '==', currentUser.uid)
-            .where('linkId', '==', linkId)
-            .get();
-
-        if (!existingRating.empty) {
-            showToast('لقد قيمت هذا المورد مسبقاً', 'warning');
-            return;
-        }
-
-        // إضافة التقييم الجديد
-        await db.collection('ratings').add({
-            userId: currentUser.uid,
-            linkId: linkId,
-            rating: ratingValue,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-
-        showToast('تم تسجيل تقييمك بنجاح', 'success');
-    } catch (error) {
-        console.error('Rating error:', error);
-        showToast('حدث خطأ في التقييم', 'error');
-    }
-}
-
-function updateRatingUI(linkId, ratings) {
-    const card = document.querySelector(`[data-link-id="${linkId}"]`);
-    if (!card) return;
-
-    const total = ratings.reduce((sum, doc) => sum + doc.data().rating, 0);
-    const average = (total / ratings.length).toFixed(1);
-    const count = ratings.length;
-
-    card.querySelector('.average-rating').textContent = average;
-    card.querySelector('.rating-count').textContent = `(${count} تقييمات)`;
-
-    // تحديث النجوم
-    const stars = card.querySelectorAll('.rating-stars i');
-    stars.forEach(star => {
-        star.classList.toggle('rated', parseInt(star.dataset.value) <= Math.round(average));
+    // إضافة التقييم الجديد
+    await db.collection('ratings').add({
+      userId: state.currentUser.uid,
+      resourceId: resourceId,
+      rating: ratingValue,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
+
+  } catch (error) {
+    console.error('Rating Error:', error);
+    showToast('حدث خطأ في التقييم', 'error');
+  }
 }
 
-// ============== نظام المحادثة ==============
-async function loadMessages() {
-    let query = db.collection('messages')
-                 .orderBy('timestamp', 'desc')
-                 .limit(MESSAGES_LIMIT);
+function updateRatingUI(resourceId, ratings) {
+  const card = document.querySelector(`[data-link-id="${resourceId}"]`);
+  if (!card) return;
 
-    if (lastMessageDoc) {
-        query = query.startAfter(lastMessageDoc);
+  // حساب المتوسط
+  const total = ratings.reduce((sum, doc) => sum + doc.data().rating, 0);
+  const avg = ratings.length > 0 ? (total / ratings.length).toFixed(1) : '0.0';
+  const count = ratings.length;
+
+  // تحديث الواجهة
+  card.querySelector('.average-rating').textContent = avg;
+  card.querySelector('.rating-count').textContent = `(${count})`;
+
+  // تحديث النجوم
+  const stars = card.querySelectorAll('.rating-stars i');
+  stars.forEach(star => {
+    const value = parseInt(star.dataset.value);
+    star.classList.toggle('rated', value <= Math.round(avg));
+  });
+}
+
+function clearRatings() {
+  elements.resourceCards.forEach(card => {
+    card.querySelector('.average-rating').textContent = '0.0';
+    card.querySelector('.rating-count').textContent = '(0)';
+    card.querySelectorAll('.rating-stars i').forEach(star => {
+      star.classList.remove('rated');
+    });
+  });
+}
+
+// ===== نظام المحادثة =====
+function setupChat() {
+  elements.chatBtn.addEventListener('click', toggleChat);
+  elements.closeChatBtn.addEventListener('click', toggleChat);
+  elements.sendBtn.addEventListener('click', sendMessage);
+  elements.messageInput.addEventListener('keypress', e => {
+    if (e.key === 'Enter') sendMessage();
+  });
+}
+
+function toggleChat() {
+  const isOpen = elements.chatPopup.classList.toggle('active');
+  
+  if (isOpen) {
+    loadMessages();
+    elements.messageInput.focus();
+  } else {
+    if (state.chat.unsubscribe) {
+      state.chat.unsubscribe();
+      state.chat.unsubscribe = null;
     }
+  }
+}
 
-    const snapshot = await query.get();
-    if (snapshot.empty) return;
-
-    lastMessageDoc = snapshot.docs[snapshot.docs.length - 1];
-    
-    snapshot.forEach(doc => {
+function loadMessages() {
+  state.chat.unsubscribe = db.collection('messages')
+    .orderBy('timestamp', 'asc')
+    .limit(25)
+    .onSnapshot(snapshot => {
+      elements.chatMessages.innerHTML = '';
+      
+      snapshot.forEach(doc => {
         addMessageToDOM(doc.data());
+      });
+      
+      scrollChatToBottom();
+      state.chat.lastVisible = snapshot.docs[snapshot.docs.length - 1];
     });
 }
 
-function addMessageToDOM(msg) {
-    const messageEl = document.createElement('div');
-    messageEl.className = `message ${msg.userId === currentUser?.uid ? 'user-message' : ''}`;
-    messageEl.innerHTML = `
-        <div class="message-header">
-            <img src="${msg.userPhoto}" alt="صورة المستخدم" class="message-avatar">
-            <span class="message-sender">${msg.userName}</span>
-            <span class="message-time">${formatTime(msg.timestamp)}</span>
-        </div>
-        <p class="message-text">${msg.text}</p>
-    `;
-    DOM.chatMessages.prepend(messageEl);
+function addMessageToDOM(message) {
+  const msgElement = document.createElement('div');
+  msgElement.className = `message ${message.userId === state.currentUser?.uid ? 'user' : ''}`;
+  
+  msgElement.innerHTML = `
+    <div class="message-header">
+      <img src="${message.userPhoto || 'https://via.placeholder.com/30'}" 
+           class="avatar">
+      <span class="sender">${message.userName}</span>
+      <span class="time">${formatTime(message.timestamp)}</span>
+    </div>
+    <p class="text">${message.text}</p>
+  `;
+  
+  elements.chatMessages.appendChild(msgElement);
 }
 
 async function sendMessage() {
-    const text = DOM.messageInput.value.trim();
-    if (!text || !currentUser) return;
+  const text = elements.messageInput.value.trim();
+  
+  if (!text || !state.currentUser) {
+    showToast('لا يمكن إرسال رسالة فارغة', 'error');
+    return;
+  }
 
-    try {
-        await db.collection('messages').add({
-            text: DOMPurify.sanitize(text),
-            userId: currentUser.uid,
-            userName: currentUser.displayName || 'مستخدم',
-            userPhoto: currentUser.photoURL || 'https://via.placeholder.com/30',
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        DOM.messageInput.value = '';
-    } catch (error) {
-        console.error('Message error:', error);
-        showToast('فشل إرسال الرسالة', 'error');
-    }
-}
-
-// ============== أدوات مساعدة ==============
-function formatTime(timestamp) {
-    if (!timestamp) return 'الآن';
-    const date = timestamp.toDate();
-    return date.toLocaleString('ar-EG', {
-        hour: '2-digit',
-        minute: '2-digit'
+  try {
+    await db.collection('messages').add({
+      text: text,
+      userId: state.currentUser.uid,
+      userName: state.currentUser.displayName || 'مستخدم',
+      userPhoto: state.currentUser.photoURL || '',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     });
-}
-
-function showToast(message, type) {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-}
-
-// ============== إعداد مستمعي الأحداث ==============
-DOM.googleLoginBtn.addEventListener('click', handleAuth);
-DOM.chatBtn.addEventListener('click', toggleChatPopup);
-DOM.sendMessageBtn.addEventListener('click', sendMessage);
-DOM.messageInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-DOM.ratingStars.forEach(star => {
-    star.addEventListener('click', handleRating);
-});
-
-// ============== التهيئة الأولية ==============
-function init() {
-    // تحديث السنة في الفوتر
-    document.querySelector('.current-year').textContent = new Date().getFullYear();
     
-    // تهيئة علامات التبويب
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.dataset.tab;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            tab.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        });
-    });
+    elements.messageInput.value = '';
+    scrollChatToBottom();
+    
+  } catch (error) {
+    console.error('Message Error:', error);
+    showToast('فشل إرسال الرسالة', 'error');
+  }
 }
 
+function scrollChatToBottom() {
+  elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+}
+
+// ===== أدوات مساعدة =====
+function showToast(message, type) {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+function formatTime(timestamp) {
+  if (!timestamp) return 'الآن';
+  
+  const date = timestamp.toDate();
+  return date.toLocaleTimeString('ar-EG', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+// ===== تهيئة التطبيق =====
+function init() {
+  // إعداد مستمعي الأحداث
+  elements.authBtn.addEventListener('click', handleAuth);
+  
+  elements.ratingStars.forEach(star => {
+    star.addEventListener('click', handleRating);
+  });
+  
+  setupChat();
+  
+  // تحديث السنة في الفوتر
+  document.querySelector('.current-year').textContent = new Date().getFullYear();
+}
+
+// بدء التطبيق
 document.addEventListener('DOMContentLoaded', init);
