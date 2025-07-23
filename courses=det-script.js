@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة Firebase
     const firebaseConfig = {
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
         const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
         const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
-        const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
+        const DOMPurify = (await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js")).default;
 
         // تهيئة التطبيق
         const app = initializeApp(firebaseConfig);
@@ -174,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.navLinks.classList.toggle('active');
             elements.mobileMenuBtn.innerHTML = isOpen ?
                 '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
-                '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
+               i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
         }
 
         function closeMobileMenu() {
@@ -191,6 +190,33 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (elements.roadmapPopup) {
                 const isActive = elements.roadmapPopup.classList.toggle('active');
                 elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+                if (isActive) {
+                    loadRoadmapContent();
+                }
+            }
+        }
+
+        // تحميل محتوى خارطة الطريق
+        async function loadRoadmapContent() {
+            const roadmapContent = document.querySelector('.roadmap-content');
+            if (!roadmapContent) return;
+
+            try {
+                const roadmapQuery = query(collection(db, 'roadmap'), orderBy('order'));
+                const roadmapSnapshot = await getDocs(roadmapQuery);
+                roadmapContent.innerHTML = '<h2>خارطة طريق تطوير الواجهات الأمامية</h2>';
+                roadmapSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    roadmapContent.innerHTML += `
+                        <div class="roadmap-item">
+                            <h3>${DOMPurify.sanitize(data.title)}</h3>
+                            <p>${DOMPurify.sanitize(data.description)}</p>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('خطأ في تحميل خارطة الطريق:', error);
+                showToast('فشل تحميل خارطة الطريق', 'error');
             }
         }
 
@@ -249,11 +275,241 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
+                    elements.chatBtn.disabled = false;
                     initializeRatings();
+                    loadMessages();
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
                     `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
+                    elements.chatBtn.disabled = true;
                     clearRatingsUI();
+                    if (unsubscribeMessages) unsubscribeMessages();
                 }
+            } catch (error) {
+                console.error('خطأ في معالجة حالة المصادقة:', error);
+                showToast('خطأ في تحديث حالة تسجيل الدخول', 'error');
+            }
+        }
+
+        // وظائف التقييم
+        async function handleRating(event) {
+            if (!auth.currentUser) {
+                showToast('يرجى تسجيل الدخول لتقييم الموارد', 'error');
+                return;
+            }
+
+            const star = event.target;
+            const ratingValue = parseInt(star.dataset.rating);
+            const resourceId = star.closest('.resource-card').dataset.resourceId;
+
+            try {
+                await setDoc(doc(db, 'ratings', `${auth.currentUser.uid}_${resourceId}`), {
+                    userId: auth.currentUser.uid,
+                    resourceId,
+                    rating: ratingValue,
+                    timestamp: serverTimestamp()
+                });
+
+                showToast('تم تسجيل تقييمك بنجاح', 'success');
+                updateRatingUI(resourceId);
+            } catch (error) {
+                console.error('خطأ في تسجيل التقييم:', error);
+                showToast('فشل تسجيل التقييم', 'error');
+            }
+        }
+
+        async function initializeRatings() {
+            const resources = document.querySelectorAll('.resource-card');
+            resources.forEach(async resource => {
+                const resourceId = resource.dataset.resourceId;
+                if (!resourceId) return;
+
+                // إلغاء الاشتراك السابق إن وجد
+                if (unsubscribeRatings[resourceId]) {
+                    unsubscribeRatings[resourceId]();
+                }
+
+                // الاشتراك في تحديثات التقييم
+                const ratingsQuery = query(collection(db, 'ratings'), where('resourceId', '==', resourceId));
+                unsubscribeRatings[resourceId] = onSnapshot(ratingsQuery, snapshot => {
+                    updateRatingUI(resourceId);
+                });
+            });
+        }
+
+        async function updateRatingUI(resourceId) {
+            const resourceCard = document.querySelector(`.resource-card[data-resource-id="${resourceId}"]`);
+            if (!resourceCard) return;
+
+            const stars = resourceCard.querySelectorAll('.rating-stars i');
+            const averageRatingElement = resourceCard.querySelector('.average-rating');
+            const ratingCountElement = resourceCard.querySelector('.rating-count');
+
+            try {
+                const ratingsQuery = query(collection(db, 'ratings'), where('resourceId', '==', resourceId));
+                const ratingsSnapshot = await getDocs(ratingsQuery);
+                const ratings = ratingsSnapshot.docs.map(doc => doc.data().rating);
+                const averageRating = ratings.length > 0 ? (ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length).toFixed(1) : '0.0';
+                const ratingCount = ratings.length;
+
+                averageRatingElement.textContent = averageRating;
+                ratingCountElement.textContent = `(${ratingCount} تقييم)`;
+
+                // تحديث نجوم المستخدم
+                if (auth.currentUser) {
+                    const userRatingDoc = await getDocs(query(collection(db, 'ratings'), where('userId', '==', auth.currentUser.uid), where('resourceId', '==', resourceId)));
+                    const userRating = userRatingDoc.docs[0]?.data().rating || 0;
+
+                    stars.forEach(star => {
+                        const starValue = parseInt(star.dataset.rating);
+                        star.classList.toggle('rated', starValue <= userRating);
+                        star.classList.toggle('disabled', !auth.currentUser);
+                    });
+                }
+            } catch (error) {
+                console.error('خطأ في تحديث واجهة التقييم:', error);
+                showToast('فشل تحديث التقييمات', 'error');
+            }
+        }
+
+        function clearRatingsUI() {
+            const resources = document.querySelectorAll('.resource-card');
+            resources.forEach(resource => {
+                const stars = resource.querySelectorAll('.rating-stars i');
+                const averageRatingElement = resource.querySelector('.average-rating');
+                const ratingCountElement = resource.querySelector('.rating-count');
+
+                stars.forEach(star => {
+                    star.classList.remove('rated');
+                    star.classList.add('disabled');
+                });
+                averageRatingElement.textContent = '0.0';
+                ratingCountElement.textContent = '(0 تقييم)';
+            });
+        }
+
+        // وظائف المحادثة
+        async function sendMessage() {
+            if (!auth.currentUser) {
+                showToast('يرجى تسجيل الدخول لإرسال رسالة', 'error');
+                return;
+            }
+
+            const messageText = elements.messageInput.value.trim();
+            if (!messageText) {
+                showToast('يرجى إدخال رسالة', 'error');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, 'messages'), {
+                    text: DOMPurify.sanitize(messageText),
+                    userId: auth.currentUser.uid,
+                    userName: DOMPurify.sanitize(auth.currentUser.displayName || 'مستخدم'),
+                    userPhoto: auth.currentUser.photoURL || 'https://via.placeholder.com/30',
+                    timestamp: serverTimestamp()
+                });
+                elements.messageInput.value = '';
+                showToast('تم إرسال الرسالة بنجاح', 'success');
+            } catch (error) {
+                console.error('خطأ في إرسال الرسالة:', error);
+                showToast('فشل إرسال الرسالة', 'error');
+            }
+        }
+
+        function toggleChatPopup() {
+            if (!auth.currentUser) {
+                showToast('يرجى تسجيل الدخول لاستخدام المحادثة', 'error');
+                return;
+            }
+
+            const isActive = elements.chatPopup.classList.toggle('active');
+            elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            if (isActive) {
+                loadMessages();
+            } else if (unsubscribeMessages) {
+                unsubscribeMessages();
+            }
+        }
+
+        async function loadMessages() {
+            if (!auth.currentUser) return;
+
+            if (unsubscribeMessages) unsubscribeMessages();
+
+            elements.chatLoading.classList.add('active');
+            const messagesQuery = query(
+                collection(db, 'messages'),
+                orderBy('timestamp', 'desc'),
+                limit(messagesPerPage)
+            );
+
+            unsubscribeMessages = onSnapshot(messagesQuery, snapshot => {
+                elements.chatMessages.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `message ${message.userId === auth.currentUser.uid ? 'user-message' : ''}`;
+                    messageElement.innerHTML = `
+                        <div class="message-header">
+                            <img src="${message.userPhoto}" alt="صورة المستخدم" class="message-avatar">
+                            <span class="message-sender">${DOMPurify.sanitize(message.userName)}</span>
+                            <span class="message-time">${new Date(message.timestamp?.toDate()).toLocaleTimeString('ar-EG')}</span>
+                        </div>
+                        <p class="message-text">${DOMPurify.sanitize(message.text)}</p>
+                    `;
+                    elements.chatMessages.prepend(messageElement);
+                });
+                elements.chatLoading.classList.remove('active');
+                elements.loadMoreBtn.style.display = snapshot.size >= messagesPerPage ? 'block' : 'none';
+                hasMoreMessages = snapshot.size >= messagesPerPage;
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            }, error => {
+                console.error('خطأ في تحميل الرسائل:', error);
+                showToast('فشل تحميل الرسائل', 'error');
+                elements.chatLoading.classList.remove('active');
+            });
+        }
+
+        async function loadMoreMessages() {
+            if (!hasMoreMessages || !auth.currentUser) return;
+
+            elements.chatLoading.classList.add('active');
+            const messagesQuery = query(
+                collection(db, 'messages'),
+                orderBy('timestamp', 'desc'),
+                startAfter(lastVisible),
+                limit(messagesPerPage)
+            );
+
+            const snapshot = await getDocs(messagesQuery);
+            snapshot.forEach(doc => {
+                const message = doc.data();
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${message.userId === auth.currentUser.uid ? 'user-message' : ''}`;
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <img src="${message.userPhoto}" alt="صورة المستخدم" class="message-avatar">
+                        <span class="message-sender">${DOMPurify.sanitize(message.userName)}</span>
+                        <span class="message-time">${new Date(message.timestamp?.toDate()).toLocaleTimeString('ar-EG')}</span>
+                    </div>
+                    <p class="message-text">${DOMPurify.sanitize(message.text)}</p>
+                `;
+                elements.chatMessages.appendChild(messageElement);
+            });
+
+            elements.chatLoading.classList.remove('active');
+            hasMoreMessages = snapshot.size >= messagesPerPage;
+            lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+        }
+
+        // تهيئة مستمعي الأحداث
+        setupEventListeners();
+    } catch (error) {
+        console.error('خطأ في تهيئة التطبيق:', error);
+        showToast('خطأ في تهيئة التطبيق، يرجى إعادة تحميل الصفحة', 'error');
+    }
+});
