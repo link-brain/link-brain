@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // إظهار رسالة تأكيد عائمة
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
+            toast.className = `toast ${type}`; // إضافة نوع لتخصيص الألوان (info, error, success)
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => {
@@ -133,6 +133,87 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }, 300);
                 }, 3000);
             }, 100);
+        }
+
+        // متغيرات لتتبع الصفحات والتقييمات
+        let lastVisible = null;
+        let unsubscribeMessages = null;
+        const messagesPerPage = 20;
+        let hasMoreMessages = true;
+        let unsubscribeRatings = {};
+
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            if (elements.mobileMenuBtn) {
+                elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            }
+            if (elements.viewRoadmapBtn) {
+                elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
+            }
+            if (elements.closeRoadmap) {
+                elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
+            }
+            if (elements.googleLoginBtn) {
+                elements.googleLoginBtn.addEventListener('click', handleAuth);
+            }
+            if (elements.chatBtn) {
+                elements.chatBtn.addEventListener('click', toggleChatPopup);
+            }
+            if (elements.closeChat) {
+                elements.closeChat.addEventListener('click', toggleChatPopup);
+            }
+            if (elements.sendMessageBtn) {
+                elements.sendMessageBtn.addEventListener('click', sendMessage);
+            }
+            if (elements.messageInput) {
+                elements.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+            if (elements.loadMoreBtn) {
+                elements.loadMoreBtn.addEventListener('click', loadMessages);
+            }
+            elements.ratingStars.forEach(star => {
+                star.addEventListener('click', handleRating);
+                star.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleRating(e);
+                    }
+                });
+            });
+            onAuthStateChanged(auth, handleAuthStateChanged);
+            window.addEventListener('resize', closeMobileMenu);
+        }
+
+        // وظائف القائمة المتنقلة
+        function toggleMobileMenu() {
+            if (!elements.navLinks) return;
+            const isOpen = elements.navLinks.classList.contains('active');
+            elements.navLinks.classList.toggle('active');
+            elements.mobileMenuBtn.innerHTML = isOpen ?
+                '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
+                '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
+        }
+
+        function closeMobileMenu() {
+            if (window.innerWidth <= 768 && elements.navLinks) {
+                elements.navLinks.classList.remove('active');
+                if (elements.mobileMenuBtn) {
+                    elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
+                }
+            }
+        }
+
+        // وظائف خارطة الطريق
+        function toggleRoadmapPopup() {
+            if (elements.roadmapPopup) {
+                const isActive = elements.roadmapPopup.classList.toggle('active');
+                elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+            }
         }
 
         // وظائف المصادقة
@@ -154,7 +235,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             } catch (error) {
                 console.error('خطأ في عملية المصادقة:', error.code, error.message);
-                showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
+                if (error.code === 'auth/network-request-failed') {
+                    showToast('فشل الاتصال بالشبكة، يرجى التحقق من الإنترنت', 'error');
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    showToast('تم إغلاق نافذة تسجيل الدخول', 'error');
+                } else {
+                    showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
+                }
             }
         }
 
@@ -168,24 +255,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
-
-                    // 🔥 تأثير بصري بعد تسجيل الدخول
-                    elements.googleLoginBtn.classList.add('login-success-animation');
-                    setTimeout(() => {
-                        elements.googleLoginBtn.classList.remove('login-success-animation');
-                    }, 2000);
-
-                    initializeRatings();
+                    initializeRatings(); // إعادة تحميل التقييمات عند تسجيل الدخول
                 } else {
-                    elements.googleLoginBtn.innerHTML = `<i class="fab fa-google"></i> تسجيل الدخول`;
+                    elements.googleLoginBtn.innerHTML = `
+                        <i class="fab fa-google"></i> تسجيل الدخول
+                    `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
-                    clearRatingsUI();
+                    clearRatingsUI(); // إعادة تعيين واجهة التقييمات عند تسجيل الخروج
                 }
             } catch (error) {
-                console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
-                showToast('حدث خطأ أثناء عرض معلومات المستخدم', 'error');
-            }
-        }
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
                 showToast('خطأ في تحديث واجهة تسجيل الدخول', 'error');
             }
@@ -358,10 +436,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             const ratingValue = parseInt(star.dataset.value);
             const resourceCard = star.closest('.resource-card');
             if (!resourceCard) {
+                console.error('بطاقة المورد مفقودة');
                 showToast('خطأ في تحديد المورد', 'error');
                 return;
             }
-
             const linkId = resourceCard.dataset.linkId;
 
             try {
@@ -375,29 +453,46 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
                 await updateRatingUI(linkId);
             } catch (error) {
-                showToast('حدث خطأ أثناء تسجيل التقييم', 'error');
+                console.error('خطأ في تسجيل التقييم:', error.code, error.message);
+                if (error.code === 'permission-denied') {
+                    showToast('ليس لديك إذن لتسجيل التقييم', 'error');
+                } else {
+                    showToast('حدث خطأ أثناء تسجيل التقييم', 'error');
+                }
             }
         }
 
         async function updateRatingUI(linkId) {
-            const ratingsQuery = query(collection(db, 'ratings'), where('linkId', '==', linkId));
-            const snapshot = await getDocs(ratingsQuery);
-            let total = 0;
-            let count = 0;
+            if (!firebaseInitialized) {
+                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
+                return;
+            }
 
-            snapshot.forEach(doc => {
-                total += doc.data().rating;
-                count++;
-            });
+            try {
+                const ratingsQuery = query(collection(db, 'ratings'), where('linkId', '==', linkId));
+                const ratingsSnapshot = await getDocs(ratingsQuery);
+                let totalRating = 0;
+                let ratingCount = 0;
 
-            const avg = count > 0 ? (total / count).toFixed(1) : '0.0';
-            const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
-            const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
+                ratingsSnapshot.forEach(doc => {
+                    totalRating += doc.data().rating;
+                    ratingCount++;
+                });
 
-            if (ratingElement && countElement) {
-                ratingElement.textContent = avg;
-                countElement.textContent = `(${count} تقييم)`;
-                updateStarUI(linkId, parseFloat(avg));
+                const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
+                const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
+                const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
+
+                if (ratingElement && countElement) {
+                    ratingElement.textContent = averageRating;
+                    countElement.textContent = `(${ratingCount} تقييم)`;
+                    updateStarUI(linkId, parseFloat(averageRating));
+                } else {
+                    console.error('عناصر التقييم مفقودة:', { ratingElement, countElement });
+                }
+            } catch (error) {
+                console.error('خطأ في تحديث واجهة التقييم:', error.code, error.message);
+                showToast('حدث خطأ أثناء تحديث التقييم', 'error');
             }
         }
 
@@ -411,6 +506,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         function clearRatingsUI() {
             document.querySelectorAll('.resource-card').forEach(card => {
+                const linkId = card.dataset.linkId;
                 const ratingElement = card.querySelector('.average-rating');
                 const countElement = card.querySelector('.rating-count');
                 const stars = card.querySelectorAll('.rating-stars i');
@@ -422,34 +518,46 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
+        // تهيئة التقييمات لجميع الموارد
         function initializeRatings() {
+            if (!firebaseInitialized) {
+                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
+                return;
+            }
+
             document.querySelectorAll('.resource-card').forEach(card => {
                 const linkId = card.dataset.linkId;
                 if (!unsubscribeRatings[linkId]) {
                     unsubscribeRatings[linkId] = onSnapshot(
                         query(collection(db, 'ratings'), where('linkId', '==', linkId)),
-                        () => updateRatingUI(linkId)
+                        () => updateRatingUI(linkId),
+                        (error) => {
+                            console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
+                            showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
+                        }
                     );
                 }
             });
         }
 
-        // بدء التطبيق
+        // تهيئة التطبيق
         try {
             setupEventListeners();
             if (auth.currentUser) {
                 initializeRatings();
             }
         } catch (error) {
+            console.error('خطأ في تهيئة التطبيق:', error);
             showToast('حدث خطأ أثناء تهيئة التطبيق', 'error');
         }
 
+        // تنظيف مستمعي الأحداث عند إغلاق الصفحة
         window.addEventListener('unload', () => {
             if (unsubscribeMessages) unsubscribeMessages();
-            Object.values(unsubscribeRatings).forEach(unsub => unsub());
+            Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
         });
-
     } catch (error) {
-        showToast('خطأ في تحميل Firebase أو المكتبات الأساسية', 'error');
+        console.error('خطأ في استيراد مكتبات Firebase أو DOMPurify:', error);
+        showToast('خطأ في تحميل المكتبات الأساسية، يرجى إعادة تحميل الصفحة', 'error');
     }
 });
