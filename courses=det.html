@@ -1,224 +1,260 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edumates - تعلم frontend</title>
+    <title>Edumates - تعلم تطوير الواجهات الأمامية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="courses=det-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
+    <!-- شريط التنقل المحسن -->
     <nav class="navbar">
-        <div class="logo">Edumates</div>
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Edumates</span>
+        </div>
         <div class="mobile-menu-btn"><i class="fas fa-bars"></i></div>
         <div class="nav-links">
             <a href="#" class="nav-link active">الرئيسية</a>
             <a href="#" class="nav-link">الكورسات</a>
+            <a href="#" class="nav-link">المجتمع</a>
             <a href="#" class="nav-link">اتصل بنا</a>
-            <a href="/login" class="nav-link">تسجيل الدخول</a>
-            <a href="/chat" class="nav-link">المحادثة</a>
+            <a href="#login" class="nav-link">تسجيل الدخول</a>
+            <a href="#chat" class="nav-link">الدردشة</a>
         </div>
-        <button class="btn watch-courses-btn">العودة</button>
+        <button class="btn btn-primary">العودة للكورسات</button>
     </nav>
 
+    <!-- مسار التنقل -->
     <div class="breadcrumbs">
-        <a href="#">الرئيسية</a> > <a href="#">الكورسات</a> > <span>تعلم frontend</span>
+        <a href="#">الرئيسية</a> > <a href="#">الكورسات</a> > <span>تطوير الواجهات الأمامية</span>
     </div>
 
+    <!-- قسم تفاصيل الدورة -->
     <section class="course-details-section">
         <div class="section-header">
-            <h2>تعلم frontend</h2>
-            <p>اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية</p>
-            <button class="btn view-roadmap-btn">View Roadmap</button>
+            <h2>دورة تطوير الواجهات الأمامية الشاملة</h2>
+            <p>احترف تطوير الويب من الصفر إلى الاحتراف مع أفضل المصادر التعليمية العربية والعالمية</p>
+            <button class="btn btn-primary view-roadmap-btn">
+                <i class="fas fa-map-marked-alt"></i> عرض خارطة الطريق
+            </button>
         </div>
 
+        <!-- قسم HTML -->
         <div class="language-section">
             <h3>HTML</h3>
             <div class="resources-container">
                 <div class="video-links">
-                    <h4>فيديوهات الشرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة HTML - Elzero Web School</a>
-                            <div class="features-list">
-                                <p>- أفضل قناة عربية</p>
-                                <p>- تغطية شاملة للأساسيات</p>
-                                <p>- تمارين عملية</p>
-                            </div>
+                    <h4><i class="fas fa-video"></i> فيديوهات تعليمية</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">دورة HTML - Elzero Web School</a>
+                            <ul class="resource-features">
+                                <li>أفضل قناة عربية</li>
+                                <li>تغطية شاملة للأساسيات</li>
+                                <li>تمارين عملية</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">دورة abdalrhman Gamal</a>
-                            <div class="features-list">
-                                <p>- محتوى مجاني بالكامل</p>
-                                <p>- شرح مبسط</p>
-                                <p>- تغطية جميع الأساسيات</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">outcode</a>
-                            <div class="features-list">
-                                <p>- موجز ومركز</p>
-                                <p>- تفاصيل</p>
-                                <p>- فيديوهات قصيرة</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">دورة عبدالرحمن جمال</a>
+                            <ul class="resource-features">
+                                <li>محتوى مجاني بالكامل</li>
+                                <li>شرح مبسط</li>
+                                <li>تغطية جميع الأساسيات</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع مهمة</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">جميع أكواد html</a>
-                            <div class="features-list">
-                                <p>- جميع الأكواد</p>
-                                <p>- تفصيل كامل للأكواد</p>
-                                <p>- موقع عربي</p>
-                            </div>
+                    <h4><i class="fas fa-book-open"></i> مراجع ومواقع</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">جميع أكواد HTML</a>
+                            <ul class="resource-features">
+                                <li>جميع الأكواد</li>
+                                <li>تفصيل كامل للأكواد</li>
+                                <li>موقع عربي</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع مهم لhtml</a>
-                            <div class="features-list">
-                                <p>- مرجع كامل</p>
-                                <p>- واضح جذاب</p>
-                                <p>- شرح مفصل</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">مرجع HTML الشامل</a>
+                            <ul class="resource-features">
+                                <li>مرجع كامل</li>
+                                <li>واضح وجذاب</li>
+                                <li>شرح مفصل</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn">اختبار HTML</button>
-                </div>
+            </div>
+            <div class="quiz-container">
+                <button class="btn btn-success quiz-btn">
+                    <i class="fas fa-question-circle"></i> اختبر معرفتك في HTML
+                </button>
             </div>
         </div>
 
+        <!-- قسم CSS -->
         <div class="language-section">
             <h3>CSS</h3>
             <div class="resources-container">
                 <div class="video-links">
-                    <h4>فيديوهات الشرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة CSS - Elzero Web School</a>
-                            <div class="features-list">
-                                <p>- شرح عملي وتفاعلي</p>
-                                <p>- مشاريع تصميمية</p>
-                                <p>- شرح تفاعلي</p>
-                            </div>
+                    <h4><i class="fas fa-video"></i> فيديوهات تعليمية</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">دورة CSS - Elzero Web School</a>
+                            <ul class="resource-features">
+                                <li>شرح عملي وتفاعلي</li>
+                                <li>مشاريع تصميمية</li>
+                                <li>شرح تفاعلي</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">تعلم CSS - abdalrhman Gamal</a>
-                            <div class="features-list">
-                                <p>- شرح تفصيلي</p>
-                                <p>- تحديات برمجية</p>
-                                <p>- شرح مسلي بالرسم</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">دورة codzella</a>
-                            <div class="features-list">
-                                <p>- شرح عملي</p>
-                                <p>- html+css</p>
-                                <p>- شرح الأساسيات</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">تعلم CSS - عبدالرحمن جمال</a>
+                            <ul class="resource-features">
+                                <li>شرح تفصيلي</li>
+                                <li>تحديات برمجية</li>
+                                <li>شرح مسلي بالرسم</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع مهمة</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">شرح مبسط لcss</a>
-                            <div class="features-list">
-                                <p>- مرجع سريع</p>
-                                <p>- شرح وافي لكل الجوانب</p>
-                                <p>- تغطية شاملة</p>
-                            </div>
+                    <h4><i class="fas fa-book-open"></i> مراجع ومواقع</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">شرح مبسط لـ CSS</a>
+                            <ul class="resource-features">
+                                <li>مرجع سريع</li>
+                                <li>شرح وافي لكل الجوانب</li>
+                                <li>تغطية شاملة</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع لcss</a>
-                            <div class="features-list">
-                                <p>- مرجع شامل</p>
-                                <p>- جميع الأكواد</p>
-                                <p>- مرجع احترافي</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">مرجع CSS الاحترافي</a>
+                            <ul class="resource-features">
+                                <li>مرجع شامل</li>
+                                <li>جميع الأكواد</li>
+                                <li>مرجع احترافي</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn">اختبار CSS</button>
-                </div>
+            </div>
+            <div class="quiz-container">
+                <button class="btn btn-success quiz-btn">
+                    <i class="fas fa-question-circle"></i> اختبر معرفتك في CSS
+                </button>
             </div>
         </div>
 
+        <!-- قسم JavaScript -->
         <div class="language-section">
             <h3>JavaScript</h3>
             <div class="resources-container">
                 <div class="video-links">
-                    <h4>فيديوهات شرح</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">دورة JavaScript - Elzero Web School</a>
-                            <div class="features-list">
-                                <p>- شرح مفصل</p>
-                                <p>- شرح تفاعلي</p>
-                                <p>- مشاريع تفاعلية</p>
-                            </div>
+                    <h4><i class="fas fa-video"></i> فيديوهات تعليمية</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">دورة JavaScript - Elzero</a>
+                            <ul class="resource-features">
+                                <li>شرح مفصل</li>
+                                <li>شرح تفاعلي</li>
+                                <li>مشاريع تفاعلية</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">تعلم JavaScript - abdalrhman Gamal</a>
-                            <div class="features-list">
-                                <p>- تعليم مجاني</p>
-                                <p>- تحديات برمجية</p>
-                                <p>- شرح ممتع</p>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#" class="toggle-features">أكاديمية ترميز</a>
-                            <div class="features-list">
-                                <p>- دروس موجزة</p>
-                                <p>- أمثلة عملية</p>
-                                <p>- جودة إنتاج عالية</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">تعلم JavaScript - عبدالرحمن جمال</a>
+                            <ul class="resource-features">
+                                <li>تعليم مجاني</li>
+                                <li>تحديات برمجية</li>
+                                <li>شرح ممتع</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="book-links">
-                    <h4>مواقع ومراجع</h4>
-                    <ul>
-                        <li>
-                            <a href="#" class="toggle-features">مرجع لجميع أكواد اللغة</a>
-                            <div class="features-list">
-                                <p>- مرجع أساسي</p>
-                                <p>- أمثلة تفاعلية</p>
-                                <p>- مجاني أونلاين</p>
-                            </div>
+                    <h4><i class="fas fa-book-open"></i> مراجع ومواقع</h4>
+                    <ul class="resource-list">
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">مرجع JavaScript الشامل</a>
+                            <ul class="resource-features">
+                                <li>مرجع أساسي</li>
+                                <li>أمثلة تفاعلية</li>
+                                <li>مجاني أونلاين</li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="#" class="toggle-features">نصائح للبدء في جافا سكريبت</a>
-                            <div class="features-list">
-                                <p>- تركيز على الأساسيات</p>
-                                <p>- نصائح متقدمة</p>
-                                <p>- أسلوب مختصر</p>
-                            </div>
+                        <li class="resource-item">
+                            <a href="#" class="resource-link">نصائح للبدء في JavaScript</a>
+                            <ul class="resource-features">
+                                <li>تركيز على الأساسيات</li>
+                                <li>نصائح متقدمة</li>
+                                <li>أسلوب مختصر</li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
-                <div class="quiz-button">
-                    <button class="btn quiz-btn">اختبار JavaScript</button>
-                </div>
+            </div>
+            <div class="quiz-container">
+                <button class="btn btn-success quiz-btn">
+                    <i class="fas fa-question-circle"></i> اختبر معرفتك في JavaScript
+                </button>
             </div>
         </div>
     </section>
 
+    <!-- قسم تسجيل الدخول المحسن -->
+    <section id="login" class="login-section">
+        <div class="login-form">
+            <h2 class="form-title">تسجيل الدخول</h2>
+            <form>
+                <div class="form-group">
+                    <label for="email" class="form-label">البريد الإلكتروني</label>
+                    <input type="email" id="email" class="form-input" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="form-label">كلمة المرور</label>
+                    <input type="password" id="password" class="form-input" placeholder="أدخل كلمة المرور" required>
+                </div>
+                <button type="submit" class="btn btn-primary form-submit">تسجيل الدخول</button>
+                <div class="form-footer">
+                    ليس لديك حساب؟ <a href="#" class="form-link">سجل الآن</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- قسم الدردشة المحسن -->
+    <section id="chat" class="chat-section">
+        <div class="chat-container">
+            <h2 class="form-title">الدردشة مع الخبراء</h2>
+            <div class="chat-messages">
+                <!-- سيتم عرض الرسائل هنا عبر JavaScript -->
+            </div>
+            <div class="chat-input">
+                <input type="text" class="form-input" placeholder="اكتب رسالتك هنا...">
+                <button class="btn btn-primary"><i class="fas fa-paper-plane"></i> إرسال</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- تذييل الصفحة المحسن -->
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-brand">
-                <h3 class="footer-logo">Edumates</h3>
-                <p class="footer-description">منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك</p>
+                <h3 class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i> Edumates
+                </h3>
+                <p class="footer-description">
+                    منصة التعليم التفاعلي الأولى في الوطن العربي التي تساعدك على تطوير مهاراتك البرمجية وتحقيق أهدافك المهنية
+                </p>
                 <div class="social-links">
                     <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
                     <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -226,7 +262,7 @@
                     <h4 class="footer-title">الكورسات</h4>
                     <ul>
                         <li><a href="#" class="footer-link">الكورسات الجديدة</a></li>
-                        <liчная href="#" class="footer-link">الكورسات الأكثر مشاهدة</a></li>
+                        <li><a href="#" class="footer-link">الكورسات الأكثر مشاهدة</a></li>
                         <li><a href="#" class="footer-link">الكورسات المجانية</a></li>
                         <li><a href="#" class="footer-link">الكورسات المدفوعة</a></li>
                     </ul>
@@ -234,14 +270,16 @@
                 <div class="footer-column">
                     <h4 class="footer-title">المساعدة</h4>
                     <ul>
+                        <li><a href="#" class="footer-link">الأسئلة الشائعة</a></li>
                         <li><a href="#" class="footer-link">سياسة الخصوصية</a></li>
                         <li><a href="#" class="footer-link">شروط الاستخدام</a></li>
+                        <li><a href="#" class="footer-link">الدعم الفني</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h4 class="footer-title">تواصل معنا</h4>
                     <ul>
-                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر القاهرة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر، القاهرة</a></li>
                         <li><a href="tel:01116442939" class="footer-link"><i class="fas fa-phone"></i> 01116442939</a></li>
                         <li><a href="mailto:m41940147@gmail.com" class="footer-link"><i class="fas fa-envelope"></i> m41940147@gmail.com</a></li>
                     </ul>
@@ -253,6 +291,7 @@
         </div>
     </footer>
 
+    <!-- نافذة خارطة الطريق -->
     <div class="roadmap-popup">
         <div class="roadmap-content">
             <span class="close-roadmap"><i class="fas fa-times"></i></span>
