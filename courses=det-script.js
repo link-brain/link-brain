@@ -1,4 +1,4 @@
-```javascript
+
 document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة Firebase
     const firebaseConfig = {
@@ -663,4 +663,3 @@ document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة مستمعي الأحداث
     setupEventListeners();
 });
-```
