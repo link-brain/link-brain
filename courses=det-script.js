@@ -1,6 +1,29 @@
 document.addEventListener('DOMContentLoaded', async function() {
+    // تهيئة Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+        authDomain: "edumates-983dd.firebaseapp.com",
+        projectId: "edumates-983dd",
+        storageBucket: "edumates-983dd.firebasestorage.app",
+        messagingSenderId: "172548876353",
+        appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+        measurementId: "G-L1KCZTW8R9"
+    };
 
-    // --- 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً) ---
+    // استيراد مكتبات Firebase
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
+    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
+    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+
+    // تهيئة التطبيق
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // عناصر DOM
     const elements = {
         currentYear: document.querySelector('.current-year'),
         mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
@@ -8,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         viewRoadmapBtn: document.querySelector('.view-roadmap-btn'),
         roadmapPopup: document.querySelector('#roadmapPopup'),
         closeRoadmap: document.querySelector('#closeRoadmap'),
+        toggleFeatures: document.querySelectorAll('.toggle-features'),
         googleLoginBtn: document.getElementById('googleLoginBtn'),
         chatBtn: document.getElementById('chatBtn'),
         chatPopup: document.getElementById('chatPopup'),
@@ -16,602 +40,478 @@ document.addEventListener('DOMContentLoaded', async function() {
         messageInput: document.getElementById('messageInput'),
         sendMessageBtn: document.getElementById('sendMessageBtn'),
         chatLoading: document.getElementById('chatLoading'),
-        loadMoreBtn: document.getElementById('loadMoreBtn'),
-        tabs: document.querySelectorAll('.tab'),
-        tabContents: document.querySelectorAll('.tab-content'),
-        ratingStars: document.querySelectorAll('.rating-stars i'),
-        featuresBtns: document.querySelectorAll('.features-btn'),
-        featuresPopup: document.getElementById('featuresPopup'),
-        closeFeatures: document.getElementById('closeFeatures'),
-        featuresList: document.getElementById('featuresList')
+        loadMoreBtn: document.getElementById('loadMoreBtn')
     };
 
-    // التحقق من وجود العناصر الأساسية جدًا مبكرًا
-    if (!elements.googleLoginBtn || !elements.chatBtn) {
-        console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-        return; // توقف التنفيذ إذا كانت العناصر الأساسية مفقودة
-    }
-
-    // تعيين السنة الحالية (لا يعتمد على Firebase)
+    // تعيين السنة الحالية
     if (elements.currentYear) {
         elements.currentYear.textContent = new Date().getFullYear();
     }
 
-    // متغيرات Firebase ستُعرّف لاحقاً وتُمرّر كمعاملات
-    let firebaseInitialized = false;
+    // تحديث روابط الاختبارات ديناميكيًا
+    function updateExamLinks() {
+        const examLinks = [
+            { text: 'اختبار HTML', href: 'exam-html.html' },
+            { text: 'اختبار CSS', href: 'exam-css.html' },
+            { text: 'اختبار JavaScript', href: 'exam-js.html' }
+        ];
 
-    // متغيرات لتتبع الصفحات والتقييمات الخاصة بـ Firebase
+        document.querySelectorAll('.features-list a').forEach(link => {
+            examLinks.forEach(exam => {
+                if (link.textContent.trim() === exam.text) {
+                    link.setAttribute('href', exam.href);
+                    console.log(`تم تحديث رابط ${exam.text} إلى ${exam.href}`);
+                }
+            });
+        });
+    }
+
+    // استدعاء الدالة لتحديث الروابط عند تحميل الصفحة
+    updateExamLinks();
+
+    // متغيرات لتتبع الصفحات
     let lastVisible = null;
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
-    let unsubscribeRatings = {}; // تعريفها في النطاق الخارجي
+    let unsubscribeRatings = {};
 
-    // --- 2. استيراد مكتبة DOMPurify ومعالجتها بشكل مستقل ---
-    let DOMPurify; // تعريف DOMPurify هنا ليكون متاحاً عالمياً في هذا النطاق
-    try {
-        const domPurifyModule = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
-        DOMPurify = domPurifyModule.default; // تعيين DOMPurify هنا
-        console.log('DOMPurify loaded successfully.');
-    } catch (error) {
-        console.error('خطأ في تحميل مكتبة DOMPurify:', error);
-        showToast('خطأ في تحميل مكتبة الأمان (DOMPurify)، يرجى إعادة تحميل الصفحة', 'error');
-        // توفير دالة وهمية لتجنب الأخطاء إذا فشل DOMPurify
-        DOMPurify = { sanitize: (text) => {
-            console.warn('DOMPurify غير متاح، استخدام تعقيم بسيط. قد يكون هناك خطر XSS.');
-            return text.replace(/[<>]/g, ''); // تعقيم بدائي جداً
-        }};
-    }
+    // إعداد مستمعي الأحداث
+    setupEventListeners();
 
-
-    // --- 3. تعريف جميع الدوال المساعدة للواجهة (معرفة قبل أي استدعاء لها) ---
-    // هذه الدوال لا تعتمد على Firebase لذا يمكن تعريفها هنا.
-
-    function showToast(message, type = 'info') {
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => {
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 3000);
-        }, 100);
-    }
-
+    // وظائف القائمة المتنقلة
     function toggleMobileMenu() {
         if (!elements.navLinks) return;
         const isOpen = elements.navLinks.classList.contains('active');
         elements.navLinks.classList.toggle('active');
         elements.mobileMenuBtn.innerHTML = isOpen ?
-            '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
-            '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
+            '<i class="fas fa-bars"></i>' :
+            '<i class="fas fa-times"></i>';
     }
 
     function closeMobileMenu() {
         if (window.innerWidth <= 768 && elements.navLinks) {
             elements.navLinks.classList.remove('active');
-            if (elements.mobileMenuBtn) {
-                elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
-            }
+            elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
         }
     }
 
+    // وظائف خارطة الطريق
     function toggleRoadmapPopup() {
         if (elements.roadmapPopup) {
             const isActive = elements.roadmapPopup.classList.toggle('active');
             elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Roadmap popup toggled:', isActive ? 'Opened' : 'Closed');
+        } else {
+            console.error('Roadmap popup element not found');
         }
     }
 
-    // ملاحظة: toggleChatPopup ستستخدم loadMessages التي تعتمد على Firebase،
-    // لذلك يجب أن تكون loadMessages معرفة وجاهزة قبل استدعائها.
-    // في هذا الهيكل الجديد، سيتم تعريف loadMessages داخل try...catch،
-    // ولهذا سنمرر لها db و auth
+    // وظائف المحادثة
     function toggleChatPopup() {
-        if (!elements.chatPopup) return;
-        const isActive = elements.chatPopup.classList.toggle('active');
-        elements.chatPopup.setAttribute('aria-hidden', !isActive);
-        if (isActive) {
-            if (elements.messageInput) elements.messageInput.focus();
-            // استدعي loadMessages فقط إذا كانت Firebase مهيأة
-            if (!elements.chatMessages.hasChildNodes() && firebaseInitialized) {
-                // يجب تمرير db و auth إلى loadMessages
-                loadMessages(db, auth);
+        if (elements.chatPopup) {
+            const isActive = elements.chatPopup.classList.toggle('active');
+            elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            console.log('Chat popup toggled:', isActive ? 'Opened' : 'Closed');
+            if (isActive) {
+                elements.messageInput.focus();
+                if (!elements.chatMessages.hasChildNodes()) {
+                    loadMessages();
+                }
+                scrollChatToBottom();
+            } else if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
             }
+        } else {
+            console.error('Chat popup element not found');
+        }
+    }
+
+    function scrollChatToBottom() {
+        if (elements.chatMessages) {
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+            console.log('Scrolled to bottom of chat');
+        }
+    }
+
+    async function sendMessage() {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('يرجى تسجيل الدخول لإرسال الرسائل');
+            return;
+        }
+
+        const messageText = elements.messageInput.value.trim();
+        if (!messageText) {
+            alert('يرجى إدخال رسالة غير فارغة');
+            return;
+        }
+
+        if (messageText.length > 500) {
+            alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
+            return;
+        }
+
+        try {
+            elements.sendMessageBtn.disabled = true;
+            await addDoc(collection(db, 'messages'), {
+                text: messageText,
+                userId: user.uid,
+                userName: user.displayName || 'مستخدم',
+                userPhoto: user.photoURL || 'https://via.placeholder.com/30',
+                timestamp: serverTimestamp()
+            });
+            elements.messageInput.value = '';
+            scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
+            console.log('Message sent and scrolled to bottom');
+        } catch (error) {
+            console.error('خطأ في إرسال الرسالة:', error);
+            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+        } finally {
+            elements.sendMessageBtn.disabled = false;
+        }
+    }
+
+    function loadMessages() {
+        if (!hasMoreMessages) return;
+
+        elements.chatLoading.classList.add('active');
+        let messagesQuery = query(
+            collection(db, 'messages'),
+            orderBy('timestamp', 'asc'), // ترتيب تصاعدي لعرض الرسائل القديمة أولاً
+            limit(messagesPerPage)
+        );
+
+        if (lastVisible) {
+            messagesQuery = query(messagesQuery, startAfter(lastVisible));
+        }
+
+        unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+            if (snapshot.empty) {
+                hasMoreMessages = false;
+                elements.loadMoreBtn.style.display = 'none';
+                elements.chatLoading.classList.remove('active');
+                console.log('No more messages to load');
+                return;
+            }
+
+            const messages = [];
+            snapshot.forEach((doc) => {
+                messages.push({ id: doc.id, ...doc.data() });
+            });
+
+            lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
+            elements.chatLoading.classList.remove('active');
+
+            // تنظيف قائمة الرسائل فقط عند التحميل الأول
+            if (!elements.chatMessages.hasChildNodes()) {
+                elements.chatMessages.innerHTML = '';
+                console.log('Cleared chat messages on initial load');
+            }
+
+            // إضافة الرسائل في نهاية القائمة
+            messages.forEach((message) => {
+                if (!message.text || !message.timestamp) return; // تخطي الرسائل غير الصالحة
+                const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
+                messageElement.innerHTML = `
+                    <div class="message-header">
+                        <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
+                        <span class="message-sender">${sanitizeHTML(message.userName)}</span>
+                        <span class="message-time">${
+                            message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
+                        }</span>
+                    </div>
+                    <p class="message-text">${sanitizeHTML(message.text)}</p>
+                `;
+                elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
+                console.log(`Added message from ${message.userName} at ${message.timestamp ? new Date(message.timestamp.toMillis()).toISOString() : 'now'}`);
+            });
+
             scrollChatToBottom();
-        } else if (unsubscribeMessages) {
-            unsubscribeMessages();
-            unsubscribeMessages = null;
+        }, (error) => {
+            console.error('خطأ في تحميل الرسائل:', error);
+            elements.chatLoading.classList.remove('active');
+            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+        });
+    }
+
+    // وظيفة لتطهير النصوص
+    function sanitizeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str.replace(/[<>]/g, '');
+        return div.innerHTML;
+    }
+
+    // وظائف تبديل الميزات
+    function toggleFeatures(event) {
+        const toggle = event.currentTarget;
+        const featuresList = toggle.nextElementSibling.nextElementSibling; // تعديل لتخطي div التقييم
+        const isActive = featuresList.classList.contains('active');
+
+        document.querySelectorAll('.features-list').forEach(list => {
+            list.classList.remove('active');
+        });
+        document.querySelectorAll('.toggle-features').forEach(t => {
+            t.classList.remove('active');
+        });
+
+        if (!isActive) {
+            featuresList.classList.add('active');
+            toggle.classList.add('active');
+        }
+    }
+
+    // تسجيل الدخول بجوجل
+    async function handleGoogleLogin() {
+        try {
+            elements.googleLoginBtn.disabled = true;
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            updateUIAfterLogin(user);
+        } catch (error) {
+            console.error('خطأ في تسجيل الدخول:', error);
+            alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+        } finally {
+            elements.googleLoginBtn.disabled = false;
+        }
+    }
+
+    // تحديث واجهة المستخدم بعد التسجيل
+    function updateUIAfterLogin(user) {
+        if (elements.googleLoginBtn) {
+            elements.googleLoginBtn.innerHTML = `
+                <img src="${user.photoURL || 'https://via.placeholder.com/30'}" 
+                     alt="صورة ${sanitizeHTML(user.displayName || 'مستخدم')}" class="user-avatar">
+                <span>${sanitizeHTML(user.displayName || 'مستخدم')}</span>
+                <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
+            `;
+            
+            const logoutIcon = elements.googleLoginBtn.querySelector('.logout-icon');
+            if (logoutIcon) {
+                logoutIcon.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    try {
+                        await signOut(auth);
+                        location.reload();
+                    } catch (error) {
+                        console.error('خطأ في تسجيل الخروج:', error);
+                    }
+                });
+            }
+        }
+    }
+
+    // إدارة تقييم الروابط
+    async function submitRating(linkId, rating) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('يرجى تسجيل الدخول لتقييم الرابط');
+            return;
+        }
+
+        try {
+            // التحقق مما إذا كان المستخدم قد قيّم الرابط مسبقًا
+            const existingRatingQuery = query(
+                collection(db, 'ratings'),
+                where('linkId', '==', linkId),
+                where('userId', '==', user.uid)
+            );
+            const existingRatingSnapshot = await getDocs(existingRatingQuery);
+
+            if (!existingRatingSnapshot.empty) {
+                alert('لقد قيّمت هذا الرابط مسبقًا');
+                return;
+            }
+
+            await addDoc(collection(db, 'ratings'), {
+                linkId: linkId,
+                userId: user.uid,
+                rating: rating,
+                timestamp: serverTimestamp()
+            });
+            console.log(`تم تقييم الرابط ${linkId} بـ ${rating} نجوم`);
+        } catch (error) {
+            console.error('خطأ في إرسال التقييم:', error);
+            alert('حدث خطأ أثناء إرسال التقييم: ' + error.message);
+        }
+    }
+
+    function updateStarDisplay(starsContainer, rating, ratingCount, userRating = null) {
+        const stars = starsContainer.querySelectorAll('i');
+        stars.forEach(star => {
+            const starValue = parseInt(star.getAttribute('data-value'));
+            // تلوين النجوم بناءً على تقييم المستخدم إذا موجود
+            if (userRating && starValue <= userRating) {
+                star.classList.add('rated');
+                star.style.color = 'var(--accent-orange)';
+            }
+            // تلوين النجوم بناءً على المتوسط فقط إذا كان هناك تقييمات
+            else if (rating > 0 && starValue <= Math.floor(rating)) {
+                star.classList.add('rated');
+                star.style.color = 'var(--accent-orange)';
+            }
+            // إذا لم يكن هناك تقييمات أو تقييم المستخدم، كل النجوم رمادية
+            else {
+                star.classList.remove('rated');
+                star.style.color = 'var(--text-light)';
+            }
+        });
+        const averageRatingElement = starsContainer.querySelector('.average-rating');
+        const ratingCountElement = starsContainer.querySelector('.rating-count');
+        averageRatingElement.textContent = rating ? rating.toFixed(1) : '0.0';
+        ratingCountElement.textContent = `(${ratingCount} تقييم)`;
+    }
+
+    async function loadRatings(linkId, starsContainer) {
+        const ratingsQuery = query(
+            collection(db, 'ratings'),
+            where('linkId', '==', linkId)
+        );
+
+        unsubscribeRatings[linkId] = onSnapshot(ratingsQuery, async (snapshot) => {
+            let totalRating = 0;
+            let ratingCount = 0;
+            let userRating = null;
+
+            const user = auth.currentUser;
+            if (user) {
+                const userRatingQuery = query(
+                    collection(db, 'ratings'),
+                    where('linkId', '==', linkId),
+                    where('userId', '==', user.uid)
+                );
+                const userRatingSnapshot = await getDocs(userRatingQuery);
+                if (!userRatingSnapshot.empty) {
+                    userRating = userRatingSnapshot.docs[0].data().rating;
+                }
+            }
+
+            snapshot.forEach(doc => {
+                totalRating += doc.data().rating;
+                ratingCount++;
+            });
+
+            const averageRating = ratingCount > 0 ? totalRating / ratingCount : 0;
+            updateStarDisplay(starsContainer, averageRating, ratingCount, userRating);
+        }, (error) => {
+            console.error('خطأ في تحميل التقييمات:', error);
+            updateStarDisplay(starsContainer, 0, 0);
+        });
+    }
+
+    // إعداد مستمعي الأحداث
+    function setupEventListeners() {
+        if (elements.mobileMenuBtn) {
+            elements.mobileMenuBtn.addEventListener('click', () => {
+                console.log('Mobile menu button clicked');
+                toggleMobileMenu();
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        if (elements.viewRoadmapBtn) {
+            elements.viewRoadmapBtn.addEventListener('click', () => {
+                console.log('View roadmap button clicked');
+                toggleRoadmapPopup();
+            });
+        }
+
+        if (elements.closeRoadmap) {
+            elements.closeRoadmap.addEventListener('click', () => {
+                console.log('Close roadmap button clicked');
+                toggleRoadmapPopup();
+            });
+        }
+
+        if (elements.chatBtn) {
+            elements.chatBtn.addEventListener('click', () => {
+                console.log('Chat button clicked');
+                toggleChatPopup();
+            });
+        }
+
+        if (elements.closeChat) {
+            elements.closeChat.addEventListener('click', () => {
+                console.log('Close chat button clicked');
+                toggleChatPopup();
+            });
+        }
+
+        if (elements.sendMessageBtn) {
+            elements.sendMessageBtn.addEventListener('click', sendMessage);
+        }
+
+        if (elements.messageInput) {
+            elements.messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+        }
+
+        if (elements.loadMoreBtn) {
+            elements.loadMoreBtn.addEventListener('click', loadMessages);
+        }
+
+        elements.toggleFeatures.forEach(toggle => {
+            toggle.addEventListener('click', toggleFeatures);
+        });
+
+        if (elements.googleLoginBtn) {
+            elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
+        }
+
+        // إضافة مستمعي الأحداث للنجوم
+        document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+            const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+            loadRatings(linkId, starsContainer);
+
+            starsContainer.querySelectorAll('i').forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.getAttribute('data-value'));
+                    submitRating(linkId, rating);
+                });
+            });
+        });
+    }
+
+    // تتبع حالة المصادقة
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            updateUIAfterLogin(user);
+            if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
+                loadMessages();
+            }
+            // تحديث تقييمات المستخدم
+            document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+                const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+                loadRatings(linkId, starsContainer);
+            });
+        } else {
             elements.chatMessages.innerHTML = '';
             hasMoreMessages = true;
             lastVisible = null;
-            if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
-        }
-    }
-
-    function setupTabs() {
-        elements.tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                elements.tabs.forEach(t => t.classList.remove('active'));
-                elements.tabContents.forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                const contentId = tab.getAttribute('data-tab');
-                const contentElement = document.getElementById(contentId);
-                if (contentElement) {
-                    contentElement.classList.add('active');
-                    tab.setAttribute('aria-selected', 'true');
-                    elements.tabs.forEach(t => {
-                        if (t !== tab) t.setAttribute('aria-selected', 'false');
-                    });
-                } else {
-                    console.error('عنصر المحتوى مفقود:', contentId);
-                }
-            });
-        });
-    }
-
-    function setupTooltips() {
-        // تأكد من تحميل Popper.js قبل استخدامها
-        if (typeof Popper === 'undefined') {
-            console.warn('Popper.js library not found. Tooltips might not work.');
-            return;
-        }
-        document.querySelectorAll('.features-tooltip').forEach(tooltip => {
-            const popperInstance = Popper.createPopper(tooltip, tooltip.querySelector('.tooltip-content') || tooltip, {
-                placement: 'top',
-                modifiers: [
-                    { name: 'offset', options: { offset: [0, 8] } },
-                ],
-            });
-            tooltip.addEventListener('mouseenter', () => {
-                tooltip.setAttribute('data-show', '');
-                popperInstance.update();
-            });
-            tooltip.addEventListener('mouseleave', () => {
-                tooltip.removeAttribute('data-show');
-            });
-            tooltip.addEventListener('focus', () => {
-                tooltip.setAttribute('data-show', '');
-                popperInstance.update();
-            });
-            tooltip.addEventListener('blur', () => {
-                tooltip.removeAttribute('data-show');
-            });
-        });
-    }
-
-    function openFeaturesPopup(event) {
-        if (!elements.featuresPopup || !elements.featuresList) return;
-        const featuresText = event.target.dataset.features;
-        if (featuresText) {
-            elements.featuresList.innerHTML = '';
-            const featuresArray = featuresText.split('\n');
-            featuresArray.forEach(feature => {
-                const sanitizedFeature = DOMPurify ? DOMPurify.sanitize(feature.trim()) : feature.trim();
-                const li = document.createElement('li');
-                li.textContent = sanitizedFeature;
-                elements.featuresList.appendChild(li);
-            });
-            elements.featuresPopup.classList.add('active');
-            elements.featuresPopup.setAttribute('aria-hidden', 'false');
-        }
-    }
-
-    function closeFeaturesPopup() {
-        if (elements.featuresPopup) {
-            elements.featuresPopup.classList.remove('active');
-            elements.featuresPopup.setAttribute('aria-hidden', 'true');
-        }
-    }
-
-    // --- 4. إعداد مستمعي الأحداث الأساسية (غير المعتمدة على Firebase) ---
-    //    هذه تعمل حتى لو فشل تحميل Firebase
-    function setupBaseEventListeners() {
-        if (elements.mobileMenuBtn) {
-            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-        }
-        if (elements.viewRoadmapBtn) {
-            elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
-        }
-        if (elements.closeRoadmap) {
-            elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
-        }
-        if (elements.featuresBtns) {
-            elements.featuresBtns.forEach(button => {
-                button.addEventListener('click', openFeaturesPopup);
+            elements.loadMoreBtn.style.display = 'none';
+            if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+            }
+            // إلغاء الاشتراك في تقييمات المستخدم
+            Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
+            unsubscribeRatings = {};
+            // إعادة تحميل التقييمات العامة
+            document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+                const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+                loadRatings(linkId, starsContainer);
             });
         }
-        if (elements.closeFeatures) {
-            elements.closeFeatures.addEventListener('click', closeFeaturesPopup);
-        }
-        setupTabs();
-        setupTooltips();
-        window.addEventListener('resize', closeMobileMenu);
-    }
-
-    // استدعاء setupBaseEventListeners فوراً
-    setupBaseEventListeners();
-
-
-    // --- 5. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch ---
-    //    هذه الكتلة ضرورية لضمان التعامل مع أخطاء التحميل.
-    try {
-        const firebaseConfig = {
-            apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
-            authDomain: "edumates-983dd.firebaseapp.com",
-            projectId: "edumates-983dd",
-            storageBucket: "edumates-983dd.firebasestorage.app",
-            messagingSenderId: "172548876353",
-            appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
-            measurementId: "G-L1KCZTW8R9"
-        };
-
-        // استيراد مكتبات Firebase
-        const firebaseAppModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
-        const firebaseAuthModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
-        const firebaseAnalyticsModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
-        const firestoreModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
-
-        // تعيين المكتبات المستوردة للمتغيرات العامة
-        const { initializeApp } = firebaseAppModule;
-        const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = firebaseAuthModule;
-        const { getAnalytics } = firebaseAnalyticsModule;
-        const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = firestoreModule;
-
-        // تهيئة التطبيق بعد الاستيراد الناجح
-        const app = initializeApp(firebaseConfig);
-        const currentAuth = getAuth(app); // تعريف داخلي
-        const currentProvider = new GoogleAuthProvider(); // تعريف داخلي
-        const analytics = getAnalytics(app); //Analytics is initialized but not used in this script
-        const currentDb = getFirestore(app); // تعريف داخلي
-        firebaseInitialized = true;
-        console.log('Firebase initialized successfully.');
-
-
-        // --- 6. تعريف جميع الدوال التي تعتمد على Firebase هنا ---
-        //    هذه الدوال ستتلقى كائنات Firebase كمعاملات لضمان الوصول الصحيح.
-
-        async function handleAuth() {
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                console.error('Firebase غير مهيأ');
-                return;
-            }
-            const user = currentAuth.currentUser;
-            try {
-                if (user) {
-                    await signOut(currentAuth);
-                    showToast('تم تسجيل الخروج بنجاح', 'success');
-                } else {
-                    await signInWithPopup(currentAuth, currentProvider);
-                    showToast('تم تسجيل الدخول بنجاح', 'success');
-                }
-            } catch (error) {
-                console.error('خطأ في عملية المصادقة:', error.code, error.message);
-                if (error.code === 'auth/network-request-failed') {
-                    showToast('فشل الاتصال بالشبكة، يرجى التحقق من الإنترنت', 'error');
-                } else if (error.code === 'auth/popup-closed-by-user') {
-                    showToast('تم إغلاق نافذة تسجيل الدخول', 'error');
-                } else if (error.code === 'auth/popup-blocked') {
-                    showToast('تم حظر النافذة المنبثقة لتسجيل الدخول. يرجى السماح بها في إعدادات المتصفح.', 'error');
-                } else {
-                    showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
-                }
-            }
-        }
-
-        function handleAuthStateChanged(user) {
-            console.log('handleAuthStateChanged fired. User object received:', user);
-            if (!elements.googleLoginBtn) return;
-            try {
-                if (user) {
-                    elements.googleLoginBtn.innerHTML = `
-                        <img src="${user.photoURL || 'https://via.placeholder.com/30'}" alt="صورة المستخدم" class="user-avatar">
-                        <span>${DOMPurify.sanitize(user.displayName || 'مستخدم')}</span>
-                        <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
-                    `;
-                    elements.googleLoginBtn.classList.add('user-logged-in');
-                    initializeRatings(currentDb, currentAuth); // تمرير db و auth
-                } else {
-                    elements.googleLoginBtn.innerHTML = `
-                        <i class="fab fa-google"></i> تسجيل الدخول
-                    `;
-                    elements.googleLoginBtn.classList.remove('user-logged-in');
-                    clearRatingsUI();
-                }
-            } catch (error) {
-                console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
-                showToast('خطأ في تحديث واجهة تسجيل الدخول', 'error');
-            }
-        }
-
-        async function sendMessage() {
-            console.log('sendMessage called. auth.currentUser is:', currentAuth.currentUser); // استخدام currentAuth
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                return;
-            }
-            const user = currentAuth.currentUser;
-            if (!user) {
-                showToast('يرجى تسجيل الدخول لإرسال الرسائل', 'error');
-                return;
-            }
-            const messageText = elements.messageInput.value.trim();
-            if (!messageText) {
-                showToast('يرجى إدخال رسالة غير فارغة', 'error');
-                return;
-            }
-            if (messageText.length > 500) {
-                showToast('الرسالة طويلة جدًا، الحد الأقصى 500 حرف', 'error');
-                return;
-            }
-            try {
-                elements.sendMessageBtn.disabled = true;
-                await addDoc(collection(currentDb, 'messages'), { // استخدام currentDb
-                    text: DOMPurify.sanitize(messageText),
-                    userId: user.uid,
-                    userName: DOMPurify.sanitize(user.displayName || 'مستخدم'),
-                    userPhoto: user.photoURL || 'https://via.placeholder.com/30',
-                    timestamp: serverTimestamp()
-                });
-                elements.messageInput.value = '';
-                scrollChatToBottom();
-                showToast('تم إرسال الرسالة بنجاح', 'success');
-            } catch (error) {
-                console.error('خطأ في إرسال الرسالة:', error.code, error.message);
-                showToast('حدث خطأ أثناء إرسال الرسالة', 'error');
-            } finally {
-                elements.sendMessageBtn.disabled = false;
-            }
-        }
-
-        // تم نقل هذه الدالة للخارج (في الجزء 3) لكنها تستدعى loadMessages
-        // و loadMessages تحتاج currentDb و currentAuth
-        async function loadMessages() { // لا تأخذ معلمات هنا، بل تستخدم currentDb و currentAuth من هذا النطاق
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                return;
-            }
-            if (!hasMoreMessages) return;
-            elements.chatLoading.classList.add('active');
-            let messagesQuery = query(
-                collection(currentDb, 'messages'), // استخدام currentDb
-                orderBy('timestamp', 'asc'),
-                limit(messagesPerPage)
-            );
-            if (lastVisible) {
-                messagesQuery = query(messagesQuery, startAfter(lastVisible));
-            }
-            try {
-                unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
-                    if (snapshot.empty) {
-                        hasMoreMessages = false;
-                        elements.loadMoreBtn.style.display = 'none';
-                        elements.chatLoading.classList.remove('active');
-                        return;
-                    }
-                    const messages = [];
-                    snapshot.forEach((doc) => {
-                        messages.push({ id: doc.id, ...doc.data() });
-                        lastVisible = doc;
-                    });
-                    messages.forEach((msg) => {
-                        const messageElement = document.createElement('div');
-                        // استخدام currentAuth.currentUser هنا
-                        messageElement.className = `message ${msg.userId === currentAuth.currentUser?.uid ? 'user-message' : ''}`;
-                        messageElement.innerHTML = `
-                            <div class="message-header">
-                                <img src="${msg.userPhoto}" alt="صورة المستخدم" class="message-avatar">
-                                <span class="message-sender">${DOMPurify.sanitize(msg.userName)}</span>
-                                <span class="message-time">${formatTimestamp(msg.timestamp)}</span>
-                            </div>
-                            <p class="message-text">${DOMPurify.sanitize(msg.text)}</p>
-                        `;
-                        elements.chatMessages.appendChild(messageElement);
-                    });
-                    elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
-                    elements.chatLoading.classList.remove('active');
-                    scrollChatToBottom();
-                }, (error) => {
-                    console.error('خطأ في تحميل الرسائل:', error.code, error.message);
-                    showToast('حدث خطأ أثناء تحميل الرسائل', 'error');
-                    elements.chatLoading.classList.remove('active');
-                });
-            } catch (error) {
-                console.error('خطأ في إعداد مستمع الرسائل:', error.code, error.message);
-                showToast('حدث خطأ أثناء تحميل الرسائل', 'error');
-                elements.chatLoading.classList.remove('active');
-            }
-        }
-
-        async function handleRating(event) {
-            event.stopPropagation();
-            event.preventDefault();
-            console.log('handleRating called. auth.currentUser is:', currentAuth.currentUser); // استخدام currentAuth
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                return;
-            }
-            const user = currentAuth.currentUser; // استخدام currentAuth
-            if (!user) {
-                showToast('يرجى تسجيل الدخول لتقييم الموارد', 'error');
-                return;
-            }
-            const star = event.target;
-            const ratingValue = parseInt(star.dataset.value);
-            const resourceCard = star.closest('.resource-card');
-            if (!resourceCard) {
-                console.error('بطاقة المورد مفقودة');
-                showToast('خطأ في تحديد المورد', 'error');
-                return;
-            }
-            const linkId = resourceCard.dataset.linkId;
-            try {
-                // استخدام setDoc مع { merge: true } لضمان تحديث التقييم بدلاً من إضافة تقييم جديد
-                const ratingRef = doc(currentDb, 'ratings', `${linkId}_${user.uid}`); // استخدام currentDb
-                await setDoc(ratingRef, {
-                    userId: user.uid,
-                    linkId: linkId,
-                    rating: ratingValue,
-                    timestamp: serverTimestamp()
-                }, { merge: true });
-
-                showToast('تم تسجيل تقييمك بنجاح', 'success');
-                await updateRatingUI(linkId, currentDb, currentAuth); // تمرير db و auth
-            } catch (error) {
-                console.error('خطأ في تسجيل التقييم:', error.code, error.message);
-                if (error.code === 'permission-denied') {
-                    showToast('ليس لديك إذن لتسجيل التقييم', 'error');
-                } else {
-                    showToast('حدث خطأ أثناء تسجيل التقييم', 'error');
-                }
-            }
-        }
-
-        async function updateRatingUI(linkId) { // لا تأخذ db و auth هنا، بل تستخدم currentDb و currentAuth
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                return;
-            }
-            try {
-                const ratingsQuery = query(collection(currentDb, 'ratings'), where('linkId', '==', linkId)); // استخدام currentDb
-                const ratingsSnapshot = await getDocs(ratingsQuery);
-                let totalRating = 0;
-                let ratingCount = 0;
-                ratingsSnapshot.forEach(doc => {
-                    console.log(`Rating for ${linkId} from user ${doc.data().userId}: ${doc.data().rating}`);
-                    totalRating += doc.data().rating;
-                    ratingCount++;
-                });
-                const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
-                console.log(`Calculated average for ${linkId}: ${averageRating} from ${ratingCount} ratings.`);
-                const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
-                const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
-                if (ratingElement && countElement) {
-                    ratingElement.textContent = averageRating;
-                    countElement.textContent = `(${ratingCount} تقييم)`;
-                    updateStarUI(linkId, parseFloat(averageRating));
-                } else {
-                    console.error('عناصر التقييم مفقودة:', { ratingElement, countElement });
-                }
-            } catch (error) {
-                console.error('خطأ في تحديث واجهة التقييم:', error.code, error.message);
-                showToast('حدث خطأ أثناء تحديث التقييم', 'error');
-            }
-        }
-
-        function updateStarUI(linkId, averageRating) {
-            const stars = document.querySelectorAll(`[data-link-id="${linkId}"] .rating-stars i`);
-            stars.forEach(star => {
-                const value = parseInt(star.dataset.value);
-                star.classList.toggle('rated', value <= Math.round(averageRating)); // استخدام Math.round
-            });
-        }
-
-        function clearRatingsUI() {
-            document.querySelectorAll('.resource-card').forEach(card => {
-                const linkId = card.dataset.linkId;
-                const ratingElement = card.querySelector('.average-rating');
-                const countElement = card.querySelector('.rating-count');
-                const stars = card.querySelectorAll('.rating-stars i');
-                if (ratingElement && countElement) {
-                    ratingElement.textContent = '0.0';
-                    countElement.textContent = '(0 تقييم)';
-                    stars.forEach(star => star.classList.remove('rated'));
-                }
-            });
-        }
-
-        function initializeRatings() { // لا تأخذ db و auth هنا، بل تستخدم currentDb و currentAuth
-            if (!firebaseInitialized) {
-                showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                return;
-            }
-            document.querySelectorAll('.resource-card').forEach(card => {
-                const linkId = card.dataset.linkId;
-                if (!unsubscribeRatings[linkId]) {
-                    unsubscribeRatings[linkId] = onSnapshot(
-                        query(collection(currentDb, 'ratings'), where('linkId', '==', linkId)), // استخدام currentDb
-                        () => updateRatingUI(linkId), // updateRatingUI لا تحتاج db و auth
-                        (error) => {
-                            console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
-                            showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
-                        }
-                    );
-                }
-            });
-        }
-
-        // --- 7. إعداد مستمعي الأحداث المعتمدة على Firebase ---
-        //    يجب أن يتم هذا الجزء *فقط* بعد التأكد من تهيئة Firebase ودوائله بنجاح.
-        function setupFirebaseEventListeners() {
-            // مستمع زر تسجيل الدخول
-            if (elements.googleLoginBtn) {
-                elements.googleLoginBtn.addEventListener('click', handleAuth);
-            }
-            // مستمع زر الدردشة
-            if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup); // toggleChatPopup لا تحتاج db/auth هنا
-            }
-            if (elements.closeChat) {
-                elements.closeChat.addEventListener('click', toggleChatPopup);
-            }
-            // مستمع زر إرسال الرسالة
-            if (elements.sendMessageBtn) {
-                elements.sendMessageBtn.addEventListener('click', sendMessage);
-            }
-            if (elements.messageInput) {
-                elements.messageInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
-            // مستمع زر تحميل المزيد في الدردشة
-            if (elements.loadMoreBtn) {
-                elements.loadMoreBtn.addEventListener('click', loadMessages);
-            }
-            elements.ratingStars.forEach(star => {
-                star.addEventListener('click', handleRating);
-                star.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleRating(e);
-                    }
-                });
-            });
-
-            // هذا المستمع يجب أن يتم بعد تهيئة Auth
-            onAuthStateChanged(currentAuth, handleAuthStateChanged); // استخدام currentAuth
-
-            // تهيئة التقييمات عند تحميل الصفحة إذا كان المستخدم مسجل الدخول بالفعل
-            if (currentAuth.currentUser) { // استخدام currentAuth
-                initializeRatings();
-            }
-        }
-
-        // استدعاء setupFirebaseEventListeners بعد تهيئة Firebase بنجاح
-        setupFirebaseEventListeners();
-
-    } catch (error) {
-        console.error('خطأ في تحميل مكتبات Firebase:', error);
-        showToast('خطأ في تحميل المكتبات الأساسية (Firebase)، يرجى إعادة تحميل الصفحة', 'error');
-        // في حالة فشل Firebase، قم بتعطيل الأزرار التي تعتمد عليه أو إظهار رسالة واضحة
-        if (elements.googleLoginBtn) elements.googleLoginBtn.disabled = true;
-        if (elements.chatBtn) elements.chatBtn.disabled = true;
-        if (elements.sendMessageBtn) elements.sendMessageBtn.disabled = true;
-        elements.ratingStars.forEach(star => star.classList.add('disabled'));
-    }
-
-    // تنظيف مستمعي الأحداث عند إغلاق الصفحة (تبقى في النهاية)
-    window.addEventListener('unload', () => {
-        if (unsubscribeMessages) unsubscribeMessages();
-        Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
     });
 });
