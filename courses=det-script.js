@@ -12,15 +12,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // استيراد مكتبات Firebase
     let firebaseInitialized = false;
-    let DOMPurify;
-    
+    let DOMPurify = window.DOMPurify; // Assume DOMPurify is loaded via <script> tag
+
     try {
-        // تحميل DOMPurify أولاً بشكل منفصل
-        const DOMPurifyModule = await import('https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js');
-        DOMPurify = DOMPurifyModule.default || window.DOMPurify;
-        
+        // التحقق من توفر DOMPurify
         if (!DOMPurify || !DOMPurify.sanitize) {
-            throw new Error('Failed to load DOMPurify');
+            console.warn('DOMPurify غير متاح، سيتم استخدام تهيئة بسيطة');
+            DOMPurify = { sanitize: (input) => input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '' };
         }
 
         // تحميل مكتبات Firebase
@@ -539,6 +537,25 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
             onAuthStateChanged(auth, handleAuthStateChanged);
             window.addEventListener('resize', closeMobileMenu);
+        }
+
+        // وظيفة لإغلاق قائمة الجوال
+        function toggleMobileMenu() {
+            if (elements.navLinks) {
+                elements.navLinks.classList.toggle('active');
+            }
+        }
+
+        function closeMobileMenu() {
+            if (elements.navLinks && window.innerWidth > 768) {
+                elements.navLinks.classList.remove('active');
+            }
+        }
+
+        function toggleRoadmapPopup() {
+            if (elements.roadmapPopup) {
+                elements.roadmapPopup.classList.toggle('active');
+            }
         }
 
         // تهيئة التطبيق
