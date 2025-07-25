@@ -21,18 +21,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         tabs: document.querySelectorAll('.tab'),
         tabContents: document.querySelectorAll('.tab-content'),
         ratingStars: document.querySelectorAll('.rating-stars i'),
-        featuresBtns: document.querySelectorAll('.features-btn'), // عنصر جديد
-        featuresPopup: document.getElementById('featuresPopup'),   // عنصر جديد
-        closeFeatures: document.getElementById('closeFeatures'), // عنصر جديد
-        featuresList: document.getElementById('featuresList')     // عنصر جديد
+        featuresBtns: document.querySelectorAll('.features-btn'),
+        featuresPopup: document.getElementById('featuresPopup'),
+        closeFeatures: document.getElementById('closeFeatures'),
+        featuresList: document.getElementById('featuresList')
     };
 
     // التحقق من وجود العناصر الأساسية جدًا مبكرًا
     if (!elements.googleLoginBtn || !elements.chatBtn) {
         console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-        // يمكن هنا استدعاء showToast إذا كانت الدالة معرفة بالفعل
-        // showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة');
-        // لن نقوم باستدعاء showToast هنا لأنها قد لا تكون معرفة بعد
+        // لا يمكن استدعاء showToast هنا لأنها قد لا تكون معرفة بعد
         return;
     }
 
@@ -41,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.currentYear.textContent = new Date().getFullYear();
     }
 
-    // دوال الواجهة الأساسية التي لا تعتمد على Firebase
+    // دوال الواجهة الأساسية التي لا تعتمد على Firebase (معرفة قبل استدعائها)
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     function closeMobileMenu() {
-        // نتحقق من window.innerWidth لمنع إغلاق القائمة على الشاشات الكبيرة
         if (window.innerWidth <= 768 && elements.navLinks) {
             elements.navLinks.classList.remove('active');
             if (elements.mobileMenuBtn) {
@@ -139,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // وظائف ميزة عرض الميزات (جديد - تم دمجها هنا)
+    // وظائف ميزة عرض الميزات (تم دمجها هنا)
     function openFeaturesPopup(event) {
         if (!elements.featuresPopup || !elements.featuresList) return;
         const featuresText = event.target.dataset.features;
@@ -163,24 +160,48 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // تهيئة وظائف الواجهة التي لا تعتمد على Firebase مباشرة
-    setupTabs();
-    setupTooltips(); // يمكن إزالة هذا إذا لم تكن تستخدمه لـ tooltips حقيقية
-    window.addEventListener('resize', closeMobileMenu); // نقل هذا المستمع إلى هنا
-
-    // متغيرات Firebase ستُعرّف لاحقاً
+    // دوال المحادثة والتقييم التي تعتمد على Firebase (معرفات عامة لتكون متاحة قبل تعريف دوال Firebase)
     let auth, db, provider;
     let firebaseInitialized = false;
-
-    // متغيرات لتتبع الصفحات والتقييمات الخاصة بـ Firebase
     let lastVisible = null;
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
     let unsubscribeRatings = {};
 
+    // *** الدوال التي تعتمد على Firebase ستعرف لاحقاً داخل كتلة try...catch ***
+    // (مثل handleAuth, sendMessage, handleRating, loadMessages, initializeRatings, updateRatingUI, clearRatingsUI, handleAuthStateChanged)
 
-    // 2. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch
+    // 2. إعداد مستمعي الأحداث الأساسية التي لا تعتمد على Firebase.
+    //    هذا يضمن أن أزرار الواجهة تعمل حتى لو فشل تحميل Firebase.
+    function setupBaseEventListeners() {
+        if (elements.mobileMenuBtn) {
+            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        }
+        if (elements.viewRoadmapBtn) {
+            elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
+        }
+        if (elements.closeRoadmap) {
+            elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
+        }
+        if (elements.featuresBtns) {
+            elements.featuresBtns.forEach(button => {
+                button.addEventListener('click', openFeaturesPopup);
+            });
+        }
+        if (elements.closeFeatures) {
+            elements.closeFeatures.addEventListener('click', closeFeaturesPopup);
+        }
+        // الدوال الأخرى التي لا تعتمد على Firebase مثل setupTabs و setupTooltips
+        setupTabs();
+        setupTooltips(); // يمكن إزالة هذا إذا لم تكن تستخدمه لـ tooltips حقيقية
+    }
+
+    // استدعاء setupBaseEventListeners فوراً
+    setupBaseEventListeners();
+
+
+    // 3. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch.
     //    هذه الكتلة ضرورية لضمان التعامل مع أخطاء التحميل.
     try {
         const firebaseConfig = {
@@ -207,7 +228,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         db = getFirestore(app); // تعيين للمتغير العام
         firebaseInitialized = true;
 
-        // 3. الدوال التي تعتمد على Firebase يجب أن تُعرّف هنا أو تُستدعى بعد تهيئة Firebase.
+        // 4. الدوال التي تعتمد على Firebase تُعرّف هنا لتتمكن من الوصول إلى كائنات auth و db.
 
         // وظائف المصادقة
         async function handleAuth() {
@@ -335,10 +356,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             try {
-                // ملاحظة: onSnapshot ستظل تحدث الرسائل في الوقت الفعلي.
-                // إذا كنت تريد تحميل "المزيد" من الرسائل السابقة فقط، استخدم getDocs هنا.
-                // الاستخدام الحالي لـ onSnapshot هنا قد يؤدي إلى إنشاء مستمع جديد في كل مرة يُضغط فيها زر "تحميل المزيد".
-                // لكننا سنبقيها كما هي حاليًا للتركيز على مشاكل المصادقة الأخرى.
                 unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
                     if (snapshot.empty) {
                         hasMoreMessages = false;
@@ -350,10 +367,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const messages = [];
                     snapshot.forEach((doc) => {
                         messages.push({ id: doc.id, ...doc.data() });
-                        lastVisible = doc; // تحديث آخر مستند مرئي
+                        lastVisible = doc;
                     });
 
-                    // قم بإضافة الرسائل الجديدة
                     messages.forEach((msg) => {
                         const messageElement = document.createElement('div');
                         messageElement.className = `message ${msg.userId === auth.currentUser?.uid ? 'user-message' : ''}`;
@@ -383,10 +399,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return 'الآن';
+            try {
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                return date.toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (error) {
+                console.error('خطأ في تنسيق الطابع الزمني:', error);
+                return 'غير متاح';
+            }
+        }
+
         // وظائف التقييم التي تعتمد على Firebase
         async function handleRating(event) {
-            event.stopPropagation(); // منع انتشار الحدث
-            event.preventDefault();  // منع السلوك الافتراضي
+            event.stopPropagation(); // منع انتشار الحدث لضمان عدم تشغيله عدة مرات
+            event.preventDefault();  // منع السلوك الافتراضي (إن وجد)
             console.log('handleRating called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 3
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
@@ -410,14 +443,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             const linkId = resourceCard.dataset.linkId;
 
             try {
-                // ضمان أن كل مستخدم لديه تقييم واحد فقط لكل linkId
+                // استخدام { merge: true } لضمان تحديث التقييم بدلاً من إضافة تقييم جديد لكل مرة
                 const ratingRef = doc(db, 'ratings', `${linkId}_${user.uid}`);
                 await setDoc(ratingRef, {
                     userId: user.uid,
                     linkId: linkId,
                     rating: ratingValue,
                     timestamp: serverTimestamp()
-                }, { merge: true }); // استخدام merge: true لتحديث المستند إذا كان موجودًا
+                }, { merge: true });
 
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
                 await updateRatingUI(linkId);
@@ -444,13 +477,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 let ratingCount = 0;
 
                 ratingsSnapshot.forEach(doc => {
-                    console.log(`Rating for ${linkId} from user ${doc.data().userId}: ${doc.data().rating}`); // سجل التقييمات الفردية
+                    console.log(`Rating for ${linkId} from user ${doc.data().userId}: ${doc.data().rating}`);
                     totalRating += doc.data().rating;
                     ratingCount++;
                 });
 
                 const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
-                console.log(`Calculated average for ${linkId}: ${averageRating} from ${ratingCount} ratings.`); // سجل المتوسط المحسوب
+                console.log(`Calculated average for ${linkId}: ${averageRating} from ${ratingCount} ratings.`);
                 const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
                 const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
 
@@ -471,7 +504,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             const stars = document.querySelectorAll(`[data-link-id="${linkId}"] .rating-stars i`);
             stars.forEach(star => {
                 const value = parseInt(star.dataset.value);
-                // النجوم يتم تلوينها بناءً على التقريب لأقرب عدد صحيح
                 star.classList.toggle('rated', value <= Math.round(averageRating));
             });
         }
@@ -499,11 +531,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             document.querySelectorAll('.resource-card').forEach(card => {
                 const linkId = card.dataset.linkId;
-                // نستخدم onSnapshot هنا للحفاظ على التحديث في الوقت الفعلي للتقييمات
                 if (!unsubscribeRatings[linkId]) {
                     unsubscribeRatings[linkId] = onSnapshot(
                         query(collection(db, 'ratings'), where('linkId', '==', linkId)),
-                        () => updateRatingUI(linkId), // يتم استدعاء updateRatingUI في كل مرة تتغير فيها التقييمات
+                        () => updateRatingUI(linkId),
                         (error) => {
                             console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
                             showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
@@ -513,8 +544,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // 4. إعداد مستمعي الأحداث التي تعتمد على Firebase
-        //    يجب أن يتم هذا الجزء بعد التأكد من تهيئة Firebase ودوائله بنجاح.
+        // 5. إعداد مستمعي الأحداث التي تعتمد على Firebase.
+        //    يجب أن يتم هذا الجزء *فقط* بعد التأكد من تهيئة Firebase ودوائله بنجاح.
         function setupFirebaseEventListeners() {
             // مستمع زر تسجيل الدخول
             if (elements.googleLoginBtn) {
@@ -522,7 +553,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             // مستمع زر الدردشة
             if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
+                elements.chatBtn.addEventListener('click', toggleChatPopup); // الآن toggleChatPopup معرفة
             }
             if (elements.closeChat) {
                 elements.closeChat.addEventListener('click', toggleChatPopup);
@@ -563,13 +594,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // استدعاء setupFirebaseEventListeners بعد تهيئة Firebase
+        // استدعاء setupFirebaseEventListeners بعد تهيئة Firebase بنجاح
         setupFirebaseEventListeners();
 
     } catch (error) {
         console.error('خطأ في استيراد مكتبات Firebase أو DOMPurify:', error);
         showToast('خطأ في تحميل المكتبات الأساسية، يرجى إعادة تحميل الصفحة', 'error');
-        // في حالة فشل Firebase، قد ترغب في تعطيل الأزرار التي تعتمد عليه أو إظهار رسالة واضحة
+        // في حالة فشل Firebase، قم بتعطيل الأزرار التي تعتمد عليه أو إظهار رسالة واضحة
         if (elements.googleLoginBtn) elements.googleLoginBtn.disabled = true;
         if (elements.chatBtn) elements.chatBtn.disabled = true;
         if (elements.sendMessageBtn) elements.sendMessageBtn.disabled = true;
