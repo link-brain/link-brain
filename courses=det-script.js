@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
-    // 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً)
+    // --- 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً) ---
     const elements = {
         currentYear: document.querySelector('.current-year'),
         mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
@@ -47,10 +47,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
-    let DOMPurify; // ستعرف بعد الاستيراد
     let unsubscribeRatings = {}; // تعريفها في النطاق الخارجي
 
-    // --- 2. تعريف جميع الدوال المساعدة للواجهة (معرفة قبل أي استدعاء لها) ---
+
+    // --- 2. استيراد المكتبات الخارجية ومعالجة DOMPurify بشكل مستقل ---
+    let DOMPurify; // تعريف DOMPurify هنا ليكون متاحاً عالمياً في هذا النطاق
+    try {
+        const domPurifyModule = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
+        DOMPurify = domPurifyModule.default; // تعيين DOMPurify هنا
+    } catch (error) {
+        console.error('خطأ في تحميل مكتبة DOMPurify:', error);
+        showToast('خطأ في تحميل مكتبة الأمان (DOMPurify)، يرجى إعادة تحميل الصفحة', 'error');
+        // إذا فشل DOMPurify، فقد لا تتمكن من تنظيف المدخلات، وهذا قد يكون مشكلة أمنية.
+        DOMPurify = { sanitize: (text) => text }; // توفير دالة وهمية لتجنب الأخطاء
+    }
+
+
+    // --- 3. تعريف جميع الدوال المساعدة للواجهة (معرفة قبل أي استدعاء لها) ---
     // هذه الدوال لا تعتمد على Firebase لذا يمكن تعريفها هنا.
 
     function showToast(message, type = 'info') {
@@ -91,6 +104,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.roadmapPopup) {
             const isActive = elements.roadmapPopup.classList.toggle('active');
             elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+        }
+    }
+
+    // هذه الدالة ستُستخدم بواسطة مستمع حدث زر الدردشة.
+    // يجب تعريفها هنا في هذا النطاق لضمان إتاحتها.
+    function toggleChatPopup() {
+        if (!elements.chatPopup) return;
+        const isActive = elements.chatPopup.classList.toggle('active');
+        elements.chatPopup.setAttribute('aria-hidden', !isActive);
+        if (isActive) {
+            if (elements.messageInput) elements.messageInput.focus();
+            // هنا قد نحتاج لـ Firebase، لكن استدعاء loadMessages سيتحقق من تهيئة Firebase
+            if (!elements.chatMessages.hasChildNodes() && firebaseInitialized) { // أضفنا firebaseInitialized هنا
+                loadMessages();
+            }
+            scrollChatToBottom();
+        } else if (unsubscribeMessages) {
+            unsubscribeMessages();
+            unsubscribeMessages = null;
+            elements.chatMessages.innerHTML = '';
+            hasMoreMessages = true;
+            lastVisible = null;
+            if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
         }
     }
 
@@ -140,7 +176,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // وظائف ميزة عرض الميزات (تم دمجها هنا)
     function openFeaturesPopup(event) {
         if (!elements.featuresPopup || !elements.featuresList) return;
         const featuresText = event.target.dataset.features;
@@ -148,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.featuresList.innerHTML = '';
             const featuresArray = featuresText.split('\n');
             featuresArray.forEach(feature => {
-                const sanitizedFeature = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(feature.trim()) : feature.trim();
+                const sanitizedFeature = DOMPurify ? DOMPurify.sanitize(feature.trim()) : feature.trim(); // استخدام DOMPurify بعد التأكد من وجوده
                 const li = document.createElement('li');
                 li.textContent = sanitizedFeature;
                 elements.featuresList.appendChild(li);
@@ -165,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // --- 3. إعداد مستمعي الأحداث الأساسية (غير المعتمدة على Firebase) ---
+    // --- 4. إعداد مستمعي الأحداث الأساسية (غير المعتمدة على Firebase) ---
     //    هذه تعمل حتى لو فشل تحميل Firebase
     function setupBaseEventListeners() {
         if (elements.mobileMenuBtn) {
@@ -187,14 +222,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
         setupTabs();
         setupTooltips();
-        window.addEventListener('resize', closeMobileMenu);
+        // window.addEventListener('resize', closeMobileMenu); // تم نقلها إلى setupBaseEventListeners
     }
 
     // استدعاء setupBaseEventListeners فوراً
     setupBaseEventListeners();
 
 
-    // --- 4. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch ---
+    // --- 5. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch ---
+    //    هذه الكتلة ضرورية لضمان التعامل مع أخطاء التحميل.
     try {
         const firebaseConfig = {
             apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
@@ -206,19 +242,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             measurementId: "G-L1KCZTW8R9"
         };
 
-        // استيراد المكتبات
+        // استيراد مكتبات Firebase
         const firebaseAppModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
         const firebaseAuthModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
         const firebaseAnalyticsModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
         const firestoreModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
-        const domPurifyModule = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
 
         // تعيين المكتبات المستوردة للمتغيرات العامة
         const { initializeApp } = firebaseAppModule;
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = firebaseAuthModule;
         const { getAnalytics } = firebaseAnalyticsModule;
         const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = firestoreModule;
-        DOMPurify = domPurifyModule.default; // DOMPurify عادة ما يتم استيراده كافتراضي
 
         // تهيئة التطبيق بعد الاستيراد الناجح
         const app = initializeApp(firebaseConfig);
@@ -228,7 +262,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         db = getFirestore(app);
         firebaseInitialized = true;
 
-        // --- 5. تعريف جميع الدوال التي تعتمد على Firebase هنا ---
+        // --- 6. تعريف جميع الدوال التي تعتمد على Firebase هنا ---
         //    الآن وبعد أن أصبحت Firebase و DOMPurify مهيأة ومعرفة، يمكن تعريف هذه الدوال بأمان.
 
         async function handleAuth() {
@@ -282,9 +316,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('خطأ في تحديث واجهة تسجيل الدخول', 'error');
             }
         }
-
-        // ملاحظة: toggleChatPopup تم تعريفها بالفعل في النطاق الخارجي (الجزء 2)
-        // ولكننا نحتاج دوال التابعة لها هنا
 
         async function sendMessage() {
             console.log('sendMessage called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 2
@@ -521,7 +552,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // --- 6. إعداد مستمعي الأحداث المعتمدة على Firebase ---
+        // --- 7. إعداد مستمعي الأحداث المعتمدة على Firebase ---
         //    يجب أن يتم هذا الجزء *فقط* بعد التأكد من تهيئة Firebase ودوائله بنجاح.
         function setupFirebaseEventListeners() {
             // مستمع زر تسجيل الدخول
@@ -530,7 +561,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             // مستمع زر الدردشة
             if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
+                elements.chatBtn.addEventListener('click', toggleChatPopup); // الآن toggleChatPopup معرفة
             }
             if (elements.closeChat) {
                 elements.closeChat.addEventListener('click', toggleChatPopup);
@@ -574,8 +605,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         setupFirebaseEventListeners();
 
     } catch (error) {
-        console.error('خطأ في استيراد مكتبات Firebase أو DOMPurify:', error);
-        showToast('خطأ في تحميل المكتبات الأساسية، يرجى إعادة تحميل الصفحة', 'error');
+        console.error('خطأ في استيراد مكتبات Firebase:', error); // قد يكون DOMPurify تم تحميله بالفعل
+        showToast('خطأ في تحميل المكتبات الأساسية (Firebase)، يرجى إعادة تحميل الصفحة', 'error');
         // في حالة فشل Firebase، قم بتعطيل الأزرار التي تعتمد عليه أو إظهار رسالة واضحة
         if (elements.googleLoginBtn) elements.googleLoginBtn.disabled = true;
         if (elements.chatBtn) elements.chatBtn.disabled = true;
