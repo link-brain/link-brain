@@ -1,235 +1,213 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    // تهيئة Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
-        authDomain: "edumates-983dd.firebaseapp.com",
-        projectId: "edumates-983dd",
-        storageBucket: "edumates-983dd.firebasestorage.app",
-        messagingSenderId: "172548876353",
-        appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
-        measurementId: "G-L1KCZTW8R9"
+
+    // 1. تعريف عناصر DOM الأساسية ودوال الواجهة التي لا تعتمد على Firebase مباشرة.
+    //    هذه العناصر والدوال يجب أن تكون متاحة بغض النظر عن حالة تحميل Firebase.
+    const elements = {
+        currentYear: document.querySelector('.current-year'),
+        mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
+        navLinks: document.querySelector('.nav-links'),
+        viewRoadmapBtn: document.querySelector('.view-roadmap-btn'),
+        roadmapPopup: document.querySelector('#roadmapPopup'),
+        closeRoadmap: document.querySelector('#closeRoadmap'),
+        googleLoginBtn: document.getElementById('googleLoginBtn'),
+        chatBtn: document.getElementById('chatBtn'),
+        chatPopup: document.getElementById('chatPopup'),
+        closeChat: document.getElementById('closeChat'),
+        chatMessages: document.getElementById('chatMessages'),
+        messageInput: document.getElementById('messageInput'),
+        sendMessageBtn: document.getElementById('sendMessageBtn'),
+        chatLoading: document.getElementById('chatLoading'),
+        loadMoreBtn: document.getElementById('loadMoreBtn'),
+        tabs: document.querySelectorAll('.tab'),
+        tabContents: document.querySelectorAll('.tab-content'),
+        ratingStars: document.querySelectorAll('.rating-stars i'),
+        featuresBtns: document.querySelectorAll('.features-btn'), // عنصر جديد
+        featuresPopup: document.getElementById('featuresPopup'),   // عنصر جديد
+        closeFeatures: document.getElementById('closeFeatures'), // عنصر جديد
+        featuresList: document.getElementById('featuresList')     // عنصر جديد
     };
 
-    // استيراد مكتبات Firebase
+    // التحقق من وجود العناصر الأساسية جدًا مبكرًا
+    if (!elements.googleLoginBtn || !elements.chatBtn) {
+        console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
+        // يمكن هنا استدعاء showToast إذا كانت الدالة معرفة بالفعل
+        // showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة');
+        // لن نقوم باستدعاء showToast هنا لأنها قد لا تكون معرفة بعد
+        return;
+    }
+
+    // تعيين السنة الحالية (لا يعتمد على Firebase)
+    if (elements.currentYear) {
+        elements.currentYear.textContent = new Date().getFullYear();
+    }
+
+    // دوال الواجهة الأساسية التي لا تعتمد على Firebase
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
+        }, 100);
+    }
+
+    // وظائف القائمة المتنقلة
+    function toggleMobileMenu() {
+        if (!elements.navLinks) return;
+        const isOpen = elements.navLinks.classList.contains('active');
+        elements.navLinks.classList.toggle('active');
+        elements.mobileMenuBtn.innerHTML = isOpen ?
+            '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
+            '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
+    }
+
+    function closeMobileMenu() {
+        // نتحقق من window.innerWidth لمنع إغلاق القائمة على الشاشات الكبيرة
+        if (window.innerWidth <= 768 && elements.navLinks) {
+            elements.navLinks.classList.remove('active');
+            if (elements.mobileMenuBtn) {
+                elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
+            }
+        }
+    }
+
+    // وظائف خارطة الطريق
+    function toggleRoadmapPopup() {
+        if (elements.roadmapPopup) {
+            const isActive = elements.roadmapPopup.classList.toggle('active');
+            elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
+        }
+    }
+
+    // إعداد علامات التبويب
+    function setupTabs() {
+        elements.tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                elements.tabs.forEach(t => t.classList.remove('active'));
+                elements.tabContents.forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                const contentId = tab.getAttribute('data-tab');
+                const contentElement = document.getElementById(contentId);
+                if (contentElement) {
+                    contentElement.classList.add('active');
+                    tab.setAttribute('aria-selected', 'true');
+                    elements.tabs.forEach(t => {
+                        if (t !== tab) t.setAttribute('aria-selected', 'false');
+                    });
+                } else {
+                    console.error('عنصر المحتوى مفقود:', contentId);
+                }
+            });
+        });
+    }
+
+    // إعداد Tooltips باستخدام Popper.js (هذه الدالة موجودة لكنها لم تعد مستخدمة لـ features-btn مباشرة)
+    function setupTooltips() {
+        document.querySelectorAll('.features-tooltip').forEach(tooltip => {
+            const popperInstance = Popper.createPopper(tooltip, tooltip.querySelector('.tooltip-content') || tooltip, {
+                placement: 'top',
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 8],
+                        },
+                    },
+                ],
+            });
+            tooltip.addEventListener('mouseenter', () => {
+                tooltip.setAttribute('data-show', '');
+                popperInstance.update();
+            });
+            tooltip.addEventListener('mouseleave', () => {
+                tooltip.removeAttribute('data-show');
+            });
+            tooltip.addEventListener('focus', () => {
+                tooltip.setAttribute('data-show', '');
+                popperInstance.update();
+            });
+            tooltip.addEventListener('blur', () => {
+                tooltip.removeAttribute('data-show');
+            });
+        });
+    }
+
+    // وظائف ميزة عرض الميزات (جديد - تم دمجها هنا)
+    function openFeaturesPopup(event) {
+        if (!elements.featuresPopup || !elements.featuresList) return;
+        const featuresText = event.target.dataset.features;
+        if (featuresText) {
+            elements.featuresList.innerHTML = '';
+            const featuresArray = featuresText.split('\n');
+            featuresArray.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = DOMPurify.sanitize(feature.trim());
+                elements.featuresList.appendChild(li);
+            });
+            elements.featuresPopup.classList.add('active');
+            elements.featuresPopup.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    function closeFeaturesPopup() {
+        if (elements.featuresPopup) {
+            elements.featuresPopup.classList.remove('active');
+            elements.featuresPopup.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    // تهيئة وظائف الواجهة التي لا تعتمد على Firebase مباشرة
+    setupTabs();
+    setupTooltips(); // يمكن إزالة هذا إذا لم تكن تستخدمه لـ tooltips حقيقية
+    window.addEventListener('resize', closeMobileMenu); // نقل هذا المستمع إلى هنا
+
+    // متغيرات Firebase ستُعرّف لاحقاً
+    let auth, db, provider;
     let firebaseInitialized = false;
+
+    // متغيرات لتتبع الصفحات والتقييمات الخاصة بـ Firebase
+    let lastVisible = null;
+    let unsubscribeMessages = null;
+    const messagesPerPage = 20;
+    let hasMoreMessages = true;
+    let unsubscribeRatings = {};
+
+
+    // 2. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch
+    //    هذه الكتلة ضرورية لضمان التعامل مع أخطاء التحميل.
     try {
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
+            authDomain: "edumates-983dd.firebaseapp.com",
+            projectId: "edumates-983dd",
+            storageBucket: "edumates-983dd.firebasestorage.app",
+            messagingSenderId: "172548876353",
+            appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
+            measurementId: "G-L1KCZTW8R9"
+        };
+
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
         const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
         const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
         const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
 
-        // تهيئة التطبيق
+        // تهيئة التطبيق بعد الاستيراد الناجح
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+        auth = getAuth(app); // تعيين للمتغير العام
+        provider = new GoogleAuthProvider(); // تعيين للمتغير العام
         const analytics = getAnalytics(app);
-        const db = getFirestore(app);
+        db = getFirestore(app); // تعيين للمتغير العام
         firebaseInitialized = true;
 
-        // عناصر DOM
-        const elements = {
-            currentYear: document.querySelector('.current-year'),
-            mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
-            navLinks: document.querySelector('.nav-links'),
-            viewRoadmapBtn: document.querySelector('.view-roadmap-btn'),
-            roadmapPopup: document.querySelector('#roadmapPopup'),
-            closeRoadmap: document.querySelector('#closeRoadmap'),
-            googleLoginBtn: document.getElementById('googleLoginBtn'),
-            chatBtn: document.getElementById('chatBtn'),
-            chatPopup: document.getElementById('chatPopup'),
-            closeChat: document.getElementById('closeChat'),
-            chatMessages: document.getElementById('chatMessages'),
-            messageInput: document.getElementById('messageInput'),
-            sendMessageBtn: document.getElementById('sendMessageBtn'),
-            chatLoading: document.getElementById('chatLoading'),
-            loadMoreBtn: document.getElementById('loadMoreBtn'),
-            tabs: document.querySelectorAll('.tab'),
-            tabContents: document.querySelectorAll('.tab-content'),
-            ratingStars: document.querySelectorAll('.rating-stars i'),
-            // عناصر جديدة لميزة عرض الميزات
-            featuresBtns: document.querySelectorAll('.features-btn'),
-            featuresPopup: document.getElementById('featuresPopup'),
-            closeFeatures: document.getElementById('closeFeatures'),
-            featuresList: document.getElementById('featuresList')
-        };
-
-        // التحقق من وجود العناصر
-        if (!elements.googleLoginBtn || !elements.chatBtn) {
-            console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-            showToast('خطأ في تحميل واجهة المستخدم، يرجى إعادة تحميل الصفحة');
-            return;
-        }
-
-        // تعيين السنة الحالية
-        if (elements.currentYear) {
-            elements.currentYear.textContent = new Date().getFullYear();
-        }
-
-        // إعداد علامات التبويب
-        function setupTabs() {
-            elements.tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    elements.tabs.forEach(t => t.classList.remove('active'));
-                    elements.tabContents.forEach(c => c.classList.remove('active'));
-                    tab.classList.add('active');
-                    const contentId = tab.getAttribute('data-tab');
-                    const contentElement = document.getElementById(contentId);
-                    if (contentElement) {
-                        contentElement.classList.add('active');
-                        tab.setAttribute('aria-selected', 'true');
-                        elements.tabs.forEach(t => {
-                            if (t !== tab) t.setAttribute('aria-selected', 'false');
-                        });
-                    } else {
-                        console.error('عنصر المحتوى مفقود:', contentId);
-                    }
-                });
-            });
-        }
-
-        setupTabs();
-
-        // إعداد Tooltips باستخدام Popper.js (ملاحظة: هذه الدالة لا تزال موجودة ولكنها غير مستخدمة حالياً بواسطة features-btn)
-        function setupTooltips() {
-            document.querySelectorAll('.features-tooltip').forEach(tooltip => {
-                const popperInstance = Popper.createPopper(tooltip, tooltip.querySelector('.tooltip-content') || tooltip, {
-                    placement: 'top',
-                    modifiers: [
-                        {
-                            name: 'offset',
-                            options: {
-                                offset: [0, 8],
-                            },
-                        },
-                    ],
-                });
-                tooltip.addEventListener('mouseenter', () => {
-                    tooltip.setAttribute('data-show', '');
-                    popperInstance.update();
-                });
-                tooltip.addEventListener('mouseleave', () => {
-                    tooltip.removeAttribute('data-show');
-                });
-                tooltip.addEventListener('focus', () => {
-                    tooltip.setAttribute('data-show', '');
-                    popperInstance.update();
-                });
-                tooltip.addEventListener('blur', () => {
-                    tooltip.removeAttribute('data-show');
-                });
-            });
-        }
-
-        setupTooltips();
-
-        // إظهار رسالة تأكيد عائمة
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`; // إضافة نوع لتخصيص الألوان (info, error, success)
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    setTimeout(() => {
-                        toast.remove();
-                    }, 300);
-                }, 3000);
-            }, 100);
-        }
-
-        // متغيرات لتتبع الصفحات والتقييمات
-        let lastVisible = null;
-        let unsubscribeMessages = null;
-        const messagesPerPage = 20;
-        let hasMoreMessages = true;
-        let unsubscribeRatings = {};
-
-        // إعداد مستمعي الأحداث
-        function setupEventListeners() {
-            if (elements.mobileMenuBtn) {
-                elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-            }
-            if (elements.viewRoadmapBtn) {
-                elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
-            }
-            if (elements.closeRoadmap) {
-                elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
-            }
-            if (elements.googleLoginBtn) {
-                elements.googleLoginBtn.addEventListener('click', handleAuth);
-            }
-            if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.closeChat) {
-                elements.closeChat.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.sendMessageBtn) {
-                elements.sendMessageBtn.addEventListener('click', sendMessage);
-            }
-            if (elements.messageInput) {
-                elements.messageInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
-            if (elements.loadMoreBtn) {
-                elements.loadMoreBtn.addEventListener('click', loadMessages);
-            }
-            elements.ratingStars.forEach(star => {
-                star.addEventListener('click', handleRating);
-                star.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleRating(e);
-                    }
-                });
-            });
-            // إضافة مستمعي أحداث لزر عرض الميزات
-            if (elements.featuresBtns) {
-                elements.featuresBtns.forEach(button => {
-                    button.addEventListener('click', openFeaturesPopup);
-                });
-            }
-            if (elements.closeFeatures) {
-                elements.closeFeatures.addEventListener('click', closeFeaturesPopup);
-            }
-
-            onAuthStateChanged(auth, handleAuthStateChanged);
-            window.addEventListener('resize', closeMobileMenu);
-        }
-
-        // وظائف القائمة المتنقلة
-        function toggleMobileMenu() {
-            if (!elements.navLinks) return;
-            const isOpen = elements.navLinks.classList.contains('active');
-            elements.navLinks.classList.toggle('active');
-            elements.mobileMenuBtn.innerHTML = isOpen ?
-                '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
-                '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
-        }
-
-        function closeMobileMenu() {
-            if (window.innerWidth <= 768 && elements.navLinks) {
-                elements.navLinks.classList.remove('active');
-                if (elements.mobileMenuBtn) {
-                    elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
-                }
-            }
-        }
-
-        // وظائف خارطة الطريق
-        function toggleRoadmapPopup() {
-            if (elements.roadmapPopup) {
-                const isActive = elements.roadmapPopup.classList.toggle('active');
-                elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
-            }
-        }
+        // 3. الدوال التي تعتمد على Firebase يجب أن تُعرّف هنا أو تُستدعى بعد تهيئة Firebase.
 
         // وظائف المصادقة
         async function handleAuth() {
@@ -260,6 +238,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
+        // هذه الدالة ستُستدعى بواسطة onAuthStateChanged
         function handleAuthStateChanged(user) {
             console.log('handleAuthStateChanged fired. User object received:', user); // سطر المراقبة 1
             if (!elements.googleLoginBtn) return;
@@ -285,27 +264,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // وظائف المحادثة
-        function toggleChatPopup() {
-            if (!elements.chatPopup) return;
-            const isActive = elements.chatPopup.classList.toggle('active');
-            elements.chatPopup.setAttribute('aria-hidden', !isActive);
-            if (isActive) {
-                if (elements.messageInput) elements.messageInput.focus();
-                if (!elements.chatMessages.hasChildNodes()) {
-                    loadMessages();
-                }
-                scrollChatToBottom();
-            } else if (unsubscribeMessages) {
-                unsubscribeMessages();
-                unsubscribeMessages = null;
-                elements.chatMessages.innerHTML = '';
-                hasMoreMessages = true;
-                lastVisible = null;
-                if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
-            }
-        }
-
+        // وظائف المحادثة التي تعتمد على Firebase
         function scrollChatToBottom() {
             if (elements.chatMessages) {
                 elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
@@ -376,6 +335,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             try {
+                // ملاحظة: onSnapshot ستظل تحدث الرسائل في الوقت الفعلي.
+                // إذا كنت تريد تحميل "المزيد" من الرسائل السابقة فقط، استخدم getDocs هنا.
+                // الاستخدام الحالي لـ onSnapshot هنا قد يؤدي إلى إنشاء مستمع جديد في كل مرة يُضغط فيها زر "تحميل المزيد".
+                // لكننا سنبقيها كما هي حاليًا للتركيز على مشاكل المصادقة الأخرى.
                 unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
                     if (snapshot.empty) {
                         hasMoreMessages = false;
@@ -387,9 +350,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     const messages = [];
                     snapshot.forEach((doc) => {
                         messages.push({ id: doc.id, ...doc.data() });
-                        lastVisible = doc;
+                        lastVisible = doc; // تحديث آخر مستند مرئي
                     });
 
+                    // قم بإضافة الرسائل الجديدة
                     messages.forEach((msg) => {
                         const messageElement = document.createElement('div');
                         messageElement.className = `message ${msg.userId === auth.currentUser?.uid ? 'user-message' : ''}`;
@@ -419,25 +383,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        function formatTimestamp(timestamp) {
-            if (!timestamp) return 'الآن';
-            try {
-                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-                return date.toLocaleString('ar-EG', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            } catch (error) {
-                console.error('خطأ في تنسيق الطابع الزمني:', error);
-                return 'غير متاح';
-            }
-        }
-
-        // وظائف التقييم
+        // وظائف التقييم التي تعتمد على Firebase
         async function handleRating(event) {
+            event.stopPropagation(); // منع انتشار الحدث
+            event.preventDefault();  // منع السلوك الافتراضي
             console.log('handleRating called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 3
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
@@ -461,13 +410,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             const linkId = resourceCard.dataset.linkId;
 
             try {
+                // ضمان أن كل مستخدم لديه تقييم واحد فقط لكل linkId
                 const ratingRef = doc(db, 'ratings', `${linkId}_${user.uid}`);
                 await setDoc(ratingRef, {
                     userId: user.uid,
                     linkId: linkId,
                     rating: ratingValue,
                     timestamp: serverTimestamp()
-                });
+                }, { merge: true }); // استخدام merge: true لتحديث المستند إذا كان موجودًا
+
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
                 await updateRatingUI(linkId);
             } catch (error) {
@@ -493,11 +444,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 let ratingCount = 0;
 
                 ratingsSnapshot.forEach(doc => {
+                    console.log(`Rating for ${linkId} from user ${doc.data().userId}: ${doc.data().rating}`); // سجل التقييمات الفردية
                     totalRating += doc.data().rating;
                     ratingCount++;
                 });
 
                 const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
+                console.log(`Calculated average for ${linkId}: ${averageRating} from ${ratingCount} ratings.`); // سجل المتوسط المحسوب
                 const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
                 const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
 
@@ -518,6 +471,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const stars = document.querySelectorAll(`[data-link-id="${linkId}"] .rating-stars i`);
             stars.forEach(star => {
                 const value = parseInt(star.dataset.value);
+                // النجوم يتم تلوينها بناءً على التقريب لأقرب عدد صحيح
                 star.classList.toggle('rated', value <= Math.round(averageRating));
             });
         }
@@ -536,7 +490,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // تهيئة التقييمات لجميع الموارد
+        // تهيئة التقييمات لجميع الموارد (تعتمد على Firebase)
         function initializeRatings() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
@@ -545,10 +499,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             document.querySelectorAll('.resource-card').forEach(card => {
                 const linkId = card.dataset.linkId;
+                // نستخدم onSnapshot هنا للحفاظ على التحديث في الوقت الفعلي للتقييمات
                 if (!unsubscribeRatings[linkId]) {
                     unsubscribeRatings[linkId] = onSnapshot(
                         query(collection(db, 'ratings'), where('linkId', '==', linkId)),
-                        () => updateRatingUI(linkId),
+                        () => updateRatingUI(linkId), // يتم استدعاء updateRatingUI في كل مرة تتغير فيها التقييمات
                         (error) => {
                             console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
                             showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
@@ -558,49 +513,72 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // وظائف ميزة عرض الميزات (جديد)
-        function openFeaturesPopup(event) {
-            if (!elements.featuresPopup || !elements.featuresList) return;
-            const featuresText = event.target.dataset.features; // الحصول على الميزات من data-features
-            if (featuresText) {
-                elements.featuresList.innerHTML = ''; // مسح الميزات السابقة
-                const featuresArray = featuresText.split('\n'); // تقسيم النص إلى قائمة
-                featuresArray.forEach(feature => {
-                    const li = document.createElement('li');
-                    li.textContent = DOMPurify.sanitize(feature.trim()); // تنظيف وتعبئة العنصر
-                    elements.featuresList.appendChild(li);
+        // 4. إعداد مستمعي الأحداث التي تعتمد على Firebase
+        //    يجب أن يتم هذا الجزء بعد التأكد من تهيئة Firebase ودوائله بنجاح.
+        function setupFirebaseEventListeners() {
+            // مستمع زر تسجيل الدخول
+            if (elements.googleLoginBtn) {
+                elements.googleLoginBtn.addEventListener('click', handleAuth);
+            }
+            // مستمع زر الدردشة
+            if (elements.chatBtn) {
+                elements.chatBtn.addEventListener('click', toggleChatPopup);
+            }
+            if (elements.closeChat) {
+                elements.closeChat.addEventListener('click', toggleChatPopup);
+            }
+            // مستمع زر إرسال الرسالة
+            if (elements.sendMessageBtn) {
+                elements.sendMessageBtn.addEventListener('click', sendMessage);
+            }
+            if (elements.messageInput) {
+                elements.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
                 });
-                elements.featuresPopup.classList.add('active'); // إظهار النافذة المنبثقة
-                elements.featuresPopup.setAttribute('aria-hidden', 'false');
             }
-        }
-
-        function closeFeaturesPopup() {
-            if (elements.featuresPopup) {
-                elements.featuresPopup.classList.remove('active'); // إخفاء النافذة المنبثقة
-                elements.featuresPopup.setAttribute('aria-hidden', 'true');
+            // مستمع زر تحميل المزيد في الدردشة
+            if (elements.loadMoreBtn) {
+                elements.loadMoreBtn.addEventListener('click', loadMessages);
             }
-        }
+            // مستمعي نجوم التقييم
+            elements.ratingStars.forEach(star => {
+                star.addEventListener('click', handleRating);
+                star.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleRating(e);
+                    }
+                });
+            });
 
+            // هذا المستمع يجب أن يتم بعد تهيئة Auth
+            onAuthStateChanged(auth, handleAuthStateChanged);
 
-        // تهيئة التطبيق
-        try {
-            setupEventListeners();
+            // تهيئة التقييمات عند تحميل الصفحة إذا كان المستخدم مسجل الدخول بالفعل
             if (auth.currentUser) {
                 initializeRatings();
             }
-        } catch (error) {
-            console.error('خطأ في تهيئة التطبيق:', error);
-            showToast('حدث خطأ أثناء تهيئة التطبيق', 'error');
         }
 
-        // تنظيف مستمعي الأحداث عند إغلاق الصفحة
-        window.addEventListener('unload', () => {
-            if (unsubscribeMessages) unsubscribeMessages();
-            Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
-        });
+        // استدعاء setupFirebaseEventListeners بعد تهيئة Firebase
+        setupFirebaseEventListeners();
+
     } catch (error) {
         console.error('خطأ في استيراد مكتبات Firebase أو DOMPurify:', error);
         showToast('خطأ في تحميل المكتبات الأساسية، يرجى إعادة تحميل الصفحة', 'error');
+        // في حالة فشل Firebase، قد ترغب في تعطيل الأزرار التي تعتمد عليه أو إظهار رسالة واضحة
+        if (elements.googleLoginBtn) elements.googleLoginBtn.disabled = true;
+        if (elements.chatBtn) elements.chatBtn.disabled = true;
+        if (elements.sendMessageBtn) elements.sendMessageBtn.disabled = true;
+        elements.ratingStars.forEach(star => star.classList.add('disabled')); // أضف فئة لتعطيل النجوم
     }
+
+    // تنظيف مستمعي الأحداث عند إغلاق الصفحة (تبقى في النهاية)
+    window.addEventListener('unload', () => {
+        if (unsubscribeMessages) unsubscribeMessages();
+        Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
+    });
 });
