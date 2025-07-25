@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
-    // --- 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً) ---
+    // 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً)
     const elements = {
         currentYear: document.querySelector('.current-year'),
         mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // التحقق من وجود العناصر الأساسية جدًا مبكرًا
     if (!elements.googleLoginBtn || !elements.chatBtn) {
         console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
+        // لا يمكن استدعاء showToast هنا لأنها قد لا تكون معرفة بعد
         return; // توقف التنفيذ إذا كانت العناصر الأساسية مفقودة
     }
 
@@ -46,10 +47,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     let unsubscribeMessages = null;
     const messagesPerPage = 20;
     let hasMoreMessages = true;
-    let unsubscribeRatings = {};
     let DOMPurify; // ستعرف بعد الاستيراد
+    let unsubscribeRatings = {}; // تعريفها في النطاق الخارجي
 
     // --- 2. تعريف جميع الدوال المساعدة للواجهة (معرفة قبل أي استدعاء لها) ---
+    // هذه الدوال لا تعتمد على Firebase لذا يمكن تعريفها هنا.
 
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
@@ -138,6 +140,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
+    // وظائف ميزة عرض الميزات (تم دمجها هنا)
     function openFeaturesPopup(event) {
         if (!elements.featuresPopup || !elements.featuresList) return;
         const featuresText = event.target.dataset.features;
@@ -145,7 +148,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.featuresList.innerHTML = '';
             const featuresArray = featuresText.split('\n');
             featuresArray.forEach(feature => {
-                // DOMPurify قد لا يكون معرفاً هنا قبل الاستيراد
                 const sanitizedFeature = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(feature.trim()) : feature.trim();
                 const li = document.createElement('li');
                 li.textContent = sanitizedFeature;
@@ -164,6 +166,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // --- 3. إعداد مستمعي الأحداث الأساسية (غير المعتمدة على Firebase) ---
+    //    هذه تعمل حتى لو فشل تحميل Firebase
     function setupBaseEventListeners() {
         if (elements.mobileMenuBtn) {
             elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
@@ -182,7 +185,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.closeFeatures) {
             elements.closeFeatures.addEventListener('click', closeFeaturesPopup);
         }
-        // الدوال الأخرى التي لا تعتمد على Firebase مثل setupTabs و setupTooltips
         setupTabs();
         setupTooltips();
         window.addEventListener('resize', closeMobileMenu);
@@ -226,7 +228,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         db = getFirestore(app);
         firebaseInitialized = true;
 
-        // --- 5. تعريف جميع الدوال التي تعتمد على Firebase (الآن بعد أن أصبحت Firebase مهيأة) ---
+        // --- 5. تعريف جميع الدوال التي تعتمد على Firebase هنا ---
+        //    الآن وبعد أن أصبحت Firebase و DOMPurify مهيأة ومعرفة، يمكن تعريف هذه الدوال بأمان.
 
         async function handleAuth() {
             if (!firebaseInitialized) {
@@ -280,31 +283,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        function scrollChatToBottom() {
-            if (elements.chatMessages) {
-                elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
-            }
-        }
-
-        function toggleChatPopup() { // هذه الدالة تم نقلها هنا لتكون متاحة
-            if (!elements.chatPopup) return;
-            const isActive = elements.chatPopup.classList.toggle('active');
-            elements.chatPopup.setAttribute('aria-hidden', !isActive);
-            if (isActive) {
-                if (elements.messageInput) elements.messageInput.focus();
-                if (!elements.chatMessages.hasChildNodes()) {
-                    loadMessages();
-                }
-                scrollChatToBottom();
-            } else if (unsubscribeMessages) {
-                unsubscribeMessages();
-                unsubscribeMessages = null;
-                elements.chatMessages.innerHTML = '';
-                hasMoreMessages = true;
-                lastVisible = null;
-                if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
-            }
-        }
+        // ملاحظة: toggleChatPopup تم تعريفها بالفعل في النطاق الخارجي (الجزء 2)
+        // ولكننا نحتاج دوال التابعة لها هنا
 
         async function sendMessage() {
             console.log('sendMessage called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 2
@@ -343,6 +323,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('حدث خطأ أثناء إرسال الرسالة', 'error');
             } finally {
                 elements.sendMessageBtn.disabled = false;
+            }
+        }
+
+        function scrollChatToBottom() {
+            if (elements.chatMessages) {
+                elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
             }
         }
 
@@ -538,15 +524,18 @@ document.addEventListener('DOMContentLoaded', async function() {
         // --- 6. إعداد مستمعي الأحداث المعتمدة على Firebase ---
         //    يجب أن يتم هذا الجزء *فقط* بعد التأكد من تهيئة Firebase ودوائله بنجاح.
         function setupFirebaseEventListeners() {
+            // مستمع زر تسجيل الدخول
             if (elements.googleLoginBtn) {
                 elements.googleLoginBtn.addEventListener('click', handleAuth);
             }
+            // مستمع زر الدردشة
             if (elements.chatBtn) {
                 elements.chatBtn.addEventListener('click', toggleChatPopup);
             }
             if (elements.closeChat) {
                 elements.closeChat.addEventListener('click', toggleChatPopup);
             }
+            // مستمع زر إرسال الرسالة
             if (elements.sendMessageBtn) {
                 elements.sendMessageBtn.addEventListener('click', sendMessage);
             }
@@ -558,6 +547,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }
                 });
             }
+            // مستمع زر تحميل المزيد في الدردشة
             if (elements.loadMoreBtn) {
                 elements.loadMoreBtn.addEventListener('click', loadMessages);
             }
