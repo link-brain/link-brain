@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
 
-    // 1. تعريف عناصر DOM الأساسية ودوال الواجهة التي لا تعتمد على Firebase مباشرة.
-    //    هذه العناصر والدوال يجب أن تكون متاحة بغض النظر عن حالة تحميل Firebase.
+    // --- 1. تعريف عناصر DOM الأساسية والمتغيرات العامة (معرفة فوراً) ---
     const elements = {
         currentYear: document.querySelector('.current-year'),
         mobileMenuBtn: document.querySelector('.mobile-menu-btn'),
@@ -30,8 +29,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // التحقق من وجود العناصر الأساسية جدًا مبكرًا
     if (!elements.googleLoginBtn || !elements.chatBtn) {
         console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-        // لا يمكن استدعاء showToast هنا لأنها قد لا تكون معرفة بعد
-        return;
+        return; // توقف التنفيذ إذا كانت العناصر الأساسية مفقودة
     }
 
     // تعيين السنة الحالية (لا يعتمد على Firebase)
@@ -39,7 +37,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.currentYear.textContent = new Date().getFullYear();
     }
 
-    // دوال الواجهة الأساسية التي لا تعتمد على Firebase (معرفة قبل استدعائها)
+    // متغيرات Firebase ستُعرّف لاحقاً
+    let auth, db, provider;
+    let firebaseInitialized = false;
+
+    // متغيرات لتتبع الصفحات والتقييمات الخاصة بـ Firebase
+    let lastVisible = null;
+    let unsubscribeMessages = null;
+    const messagesPerPage = 20;
+    let hasMoreMessages = true;
+    let unsubscribeRatings = {};
+    let DOMPurify; // ستعرف بعد الاستيراد
+
+    // --- 2. تعريف جميع الدوال المساعدة للواجهة (معرفة قبل أي استدعاء لها) ---
+
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -56,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, 100);
     }
 
-    // وظائف القائمة المتنقلة
     function toggleMobileMenu() {
         if (!elements.navLinks) return;
         const isOpen = elements.navLinks.classList.contains('active');
@@ -75,7 +85,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // وظائف خارطة الطريق
     function toggleRoadmapPopup() {
         if (elements.roadmapPopup) {
             const isActive = elements.roadmapPopup.classList.toggle('active');
@@ -83,7 +92,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // إعداد علامات التبويب
     function setupTabs() {
         elements.tabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -105,18 +113,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // إعداد Tooltips باستخدام Popper.js (هذه الدالة موجودة لكنها لم تعد مستخدمة لـ features-btn مباشرة)
     function setupTooltips() {
         document.querySelectorAll('.features-tooltip').forEach(tooltip => {
             const popperInstance = Popper.createPopper(tooltip, tooltip.querySelector('.tooltip-content') || tooltip, {
                 placement: 'top',
                 modifiers: [
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: [0, 8],
-                        },
-                    },
+                    { name: 'offset', options: { offset: [0, 8] } },
                 ],
             });
             tooltip.addEventListener('mouseenter', () => {
@@ -136,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
     }
 
-    // وظائف ميزة عرض الميزات (تم دمجها هنا)
     function openFeaturesPopup(event) {
         if (!elements.featuresPopup || !elements.featuresList) return;
         const featuresText = event.target.dataset.features;
@@ -144,8 +145,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.featuresList.innerHTML = '';
             const featuresArray = featuresText.split('\n');
             featuresArray.forEach(feature => {
+                // DOMPurify قد لا يكون معرفاً هنا قبل الاستيراد
+                const sanitizedFeature = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(feature.trim()) : feature.trim();
                 const li = document.createElement('li');
-                li.textContent = DOMPurify.sanitize(feature.trim());
+                li.textContent = sanitizedFeature;
                 elements.featuresList.appendChild(li);
             });
             elements.featuresPopup.classList.add('active');
@@ -160,20 +163,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // دوال المحادثة والتقييم التي تعتمد على Firebase (معرفات عامة لتكون متاحة قبل تعريف دوال Firebase)
-    let auth, db, provider;
-    let firebaseInitialized = false;
-    let lastVisible = null;
-    let unsubscribeMessages = null;
-    const messagesPerPage = 20;
-    let hasMoreMessages = true;
-    let unsubscribeRatings = {};
-
-    // *** الدوال التي تعتمد على Firebase ستعرف لاحقاً داخل كتلة try...catch ***
-    // (مثل handleAuth, sendMessage, handleRating, loadMessages, initializeRatings, updateRatingUI, clearRatingsUI, handleAuthStateChanged)
-
-    // 2. إعداد مستمعي الأحداث الأساسية التي لا تعتمد على Firebase.
-    //    هذا يضمن أن أزرار الواجهة تعمل حتى لو فشل تحميل Firebase.
+    // --- 3. إعداد مستمعي الأحداث الأساسية (غير المعتمدة على Firebase) ---
     function setupBaseEventListeners() {
         if (elements.mobileMenuBtn) {
             elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
@@ -194,15 +184,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
         // الدوال الأخرى التي لا تعتمد على Firebase مثل setupTabs و setupTooltips
         setupTabs();
-        setupTooltips(); // يمكن إزالة هذا إذا لم تكن تستخدمه لـ tooltips حقيقية
+        setupTooltips();
+        window.addEventListener('resize', closeMobileMenu);
     }
 
     // استدعاء setupBaseEventListeners فوراً
     setupBaseEventListeners();
 
 
-    // 3. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch.
-    //    هذه الكتلة ضرورية لضمان التعامل مع أخطاء التحميل.
+    // --- 4. تهيئة Firebase واستيراد مكتباته داخل كتلة try...catch ---
     try {
         const firebaseConfig = {
             apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
@@ -214,30 +204,36 @@ document.addEventListener('DOMContentLoaded', async function() {
             measurementId: "G-L1KCZTW8R9"
         };
 
-        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
-        const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
-        const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
-        const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
-        const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
+        // استيراد المكتبات
+        const firebaseAppModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
+        const firebaseAuthModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
+        const firebaseAnalyticsModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
+        const firestoreModule = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+        const domPurifyModule = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
+
+        // تعيين المكتبات المستوردة للمتغيرات العامة
+        const { initializeApp } = firebaseAppModule;
+        const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = firebaseAuthModule;
+        const { getAnalytics } = firebaseAnalyticsModule;
+        const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = firestoreModule;
+        DOMPurify = domPurifyModule.default; // DOMPurify عادة ما يتم استيراده كافتراضي
 
         // تهيئة التطبيق بعد الاستيراد الناجح
         const app = initializeApp(firebaseConfig);
-        auth = getAuth(app); // تعيين للمتغير العام
-        provider = new GoogleAuthProvider(); // تعيين للمتغير العام
-        const analytics = getAnalytics(app);
-        db = getFirestore(app); // تعيين للمتغير العام
+        auth = getAuth(app);
+        provider = new GoogleAuthProvider();
+        const analytics = getAnalytics(app); //Analytics is initialized but not used in this script
+        db = getFirestore(app);
         firebaseInitialized = true;
 
-        // 4. الدوال التي تعتمد على Firebase تُعرّف هنا لتتمكن من الوصول إلى كائنات auth و db.
+        // --- 5. تعريف جميع الدوال التي تعتمد على Firebase (الآن بعد أن أصبحت Firebase مهيأة) ---
 
-        // وظائف المصادقة
         async function handleAuth() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 console.error('Firebase غير مهيأ');
                 return;
             }
-
             const user = auth.currentUser;
             try {
                 if (user) {
@@ -259,7 +255,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // هذه الدالة ستُستدعى بواسطة onAuthStateChanged
         function handleAuthStateChanged(user) {
             console.log('handleAuthStateChanged fired. User object received:', user); // سطر المراقبة 1
             if (!elements.googleLoginBtn) return;
@@ -271,13 +266,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
-                    initializeRatings(); // إعادة تحميل التقييمات عند تسجيل الدخول
+                    initializeRatings();
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
                     `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
-                    clearRatingsUI(); // إعادة تعيين واجهة التقييمات عند تسجيل الخروج
+                    clearRatingsUI();
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
@@ -285,10 +280,29 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // وظائف المحادثة التي تعتمد على Firebase
         function scrollChatToBottom() {
             if (elements.chatMessages) {
                 elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+            }
+        }
+
+        function toggleChatPopup() { // هذه الدالة تم نقلها هنا لتكون متاحة
+            if (!elements.chatPopup) return;
+            const isActive = elements.chatPopup.classList.toggle('active');
+            elements.chatPopup.setAttribute('aria-hidden', !isActive);
+            if (isActive) {
+                if (elements.messageInput) elements.messageInput.focus();
+                if (!elements.chatMessages.hasChildNodes()) {
+                    loadMessages();
+                }
+                scrollChatToBottom();
+            } else if (unsubscribeMessages) {
+                unsubscribeMessages();
+                unsubscribeMessages = null;
+                elements.chatMessages.innerHTML = '';
+                hasMoreMessages = true;
+                lastVisible = null;
+                if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
             }
         }
 
@@ -298,24 +312,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-
             const user = auth.currentUser;
             if (!user) {
                 showToast('يرجى تسجيل الدخول لإرسال الرسائل', 'error');
                 return;
             }
-
             const messageText = elements.messageInput.value.trim();
             if (!messageText) {
                 showToast('يرجى إدخال رسالة غير فارغة', 'error');
                 return;
             }
-
             if (messageText.length > 500) {
                 showToast('الرسالة طويلة جدًا، الحد الأقصى 500 حرف', 'error');
                 return;
             }
-
             try {
                 elements.sendMessageBtn.disabled = true;
                 await addDoc(collection(db, 'messages'), {
@@ -341,20 +351,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-
             if (!hasMoreMessages) return;
-
             elements.chatLoading.classList.add('active');
             let messagesQuery = query(
                 collection(db, 'messages'),
                 orderBy('timestamp', 'asc'),
                 limit(messagesPerPage)
             );
-
             if (lastVisible) {
                 messagesQuery = query(messagesQuery, startAfter(lastVisible));
             }
-
             try {
                 unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
                     if (snapshot.empty) {
@@ -363,13 +369,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                         elements.chatLoading.classList.remove('active');
                         return;
                     }
-
                     const messages = [];
                     snapshot.forEach((doc) => {
                         messages.push({ id: doc.id, ...doc.data() });
                         lastVisible = doc;
                     });
-
                     messages.forEach((msg) => {
                         const messageElement = document.createElement('div');
                         messageElement.className = `message ${msg.userId === auth.currentUser?.uid ? 'user-message' : ''}`;
@@ -383,7 +387,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                         `;
                         elements.chatMessages.appendChild(messageElement);
                     });
-
                     elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
                     elements.chatLoading.classList.remove('active');
                     scrollChatToBottom();
@@ -416,22 +419,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // وظائف التقييم التي تعتمد على Firebase
         async function handleRating(event) {
-            event.stopPropagation(); // منع انتشار الحدث لضمان عدم تشغيله عدة مرات
-            event.preventDefault();  // منع السلوك الافتراضي (إن وجد)
+            event.stopPropagation();
+            event.preventDefault();
             console.log('handleRating called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 3
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-
             const user = auth.currentUser;
             if (!user) {
                 showToast('يرجى تسجيل الدخول لتقييم الموارد', 'error');
                 return;
             }
-
             const star = event.target;
             const ratingValue = parseInt(star.dataset.value);
             const resourceCard = star.closest('.resource-card');
@@ -441,9 +441,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return;
             }
             const linkId = resourceCard.dataset.linkId;
-
             try {
-                // استخدام { merge: true } لضمان تحديث التقييم بدلاً من إضافة تقييم جديد لكل مرة
                 const ratingRef = doc(db, 'ratings', `${linkId}_${user.uid}`);
                 await setDoc(ratingRef, {
                     userId: user.uid,
@@ -451,7 +449,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                     rating: ratingValue,
                     timestamp: serverTimestamp()
                 }, { merge: true });
-
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
                 await updateRatingUI(linkId);
             } catch (error) {
@@ -469,24 +466,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-
             try {
                 const ratingsQuery = query(collection(db, 'ratings'), where('linkId', '==', linkId));
                 const ratingsSnapshot = await getDocs(ratingsQuery);
                 let totalRating = 0;
                 let ratingCount = 0;
-
                 ratingsSnapshot.forEach(doc => {
                     console.log(`Rating for ${linkId} from user ${doc.data().userId}: ${doc.data().rating}`);
                     totalRating += doc.data().rating;
                     ratingCount++;
                 });
-
                 const averageRating = ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : '0.0';
                 console.log(`Calculated average for ${linkId}: ${averageRating} from ${ratingCount} ratings.`);
                 const ratingElement = document.querySelector(`[data-link-id="${linkId}"] .average-rating`);
                 const countElement = document.querySelector(`[data-link-id="${linkId}"] .rating-count`);
-
                 if (ratingElement && countElement) {
                     ratingElement.textContent = averageRating;
                     countElement.textContent = `(${ratingCount} تقييم)`;
@@ -522,13 +515,11 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // تهيئة التقييمات لجميع الموارد (تعتمد على Firebase)
         function initializeRatings() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-
             document.querySelectorAll('.resource-card').forEach(card => {
                 const linkId = card.dataset.linkId;
                 if (!unsubscribeRatings[linkId]) {
@@ -544,21 +535,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        // 5. إعداد مستمعي الأحداث التي تعتمد على Firebase.
+        // --- 6. إعداد مستمعي الأحداث المعتمدة على Firebase ---
         //    يجب أن يتم هذا الجزء *فقط* بعد التأكد من تهيئة Firebase ودوائله بنجاح.
         function setupFirebaseEventListeners() {
-            // مستمع زر تسجيل الدخول
             if (elements.googleLoginBtn) {
                 elements.googleLoginBtn.addEventListener('click', handleAuth);
             }
-            // مستمع زر الدردشة
             if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup); // الآن toggleChatPopup معرفة
+                elements.chatBtn.addEventListener('click', toggleChatPopup);
             }
             if (elements.closeChat) {
                 elements.closeChat.addEventListener('click', toggleChatPopup);
             }
-            // مستمع زر إرسال الرسالة
             if (elements.sendMessageBtn) {
                 elements.sendMessageBtn.addEventListener('click', sendMessage);
             }
@@ -570,11 +558,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }
                 });
             }
-            // مستمع زر تحميل المزيد في الدردشة
             if (elements.loadMoreBtn) {
                 elements.loadMoreBtn.addEventListener('click', loadMessages);
             }
-            // مستمعي نجوم التقييم
             elements.ratingStars.forEach(star => {
                 star.addEventListener('click', handleRating);
                 star.addEventListener('keypress', (e) => {
@@ -604,7 +590,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (elements.googleLoginBtn) elements.googleLoginBtn.disabled = true;
         if (elements.chatBtn) elements.chatBtn.disabled = true;
         if (elements.sendMessageBtn) elements.sendMessageBtn.disabled = true;
-        elements.ratingStars.forEach(star => star.classList.add('disabled')); // أضف فئة لتعطيل النجوم
+        elements.ratingStars.forEach(star => star.classList.add('disabled'));
     }
 
     // تنظيف مستمعي الأحداث عند إغلاق الصفحة (تبقى في النهاية)
