@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
         authDomain: "edumates-983dd.firebaseapp.com",
         projectId: "edumates-983dd",
-        storageBucket: "edumates-983dd.firebasestorage.app",
+        storageBucket: "edumates-983dd.appspot.com",
         messagingSenderId: "172548876353",
         appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
         measurementId: "G-L1KCZTW8R9"
@@ -12,12 +12,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // استيراد مكتبات Firebase
     let firebaseInitialized = false;
+    let DOMPurify;
     try {
+        // تحميل DOMPurify أولاً
+        DOMPurify = (await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js")).default;
+        
+        // تحميل مكتبات Firebase
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
         const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
         const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
-        const DOMPurify = await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.0/purify.min.js");
 
         // تهيئة التطبيق
         const app = initializeApp(firebaseConfig);
@@ -87,6 +91,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // إعداد Tooltips باستخدام Popper.js
         function setupTooltips() {
+            if (typeof Popper === 'undefined') {
+                console.warn('Popper.js غير محمل، سيتم تخطي إعداد Tooltips');
+                return;
+            }
+
             document.querySelectorAll('.features-tooltip').forEach(tooltip => {
                 const popperInstance = Popper.createPopper(tooltip, tooltip.querySelector('.tooltip-content') || tooltip, {
                     placement: 'top',
@@ -121,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // إظهار رسالة تأكيد عائمة
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
-            toast.className = `toast ${type}`; // إضافة نوع لتخصيص الألوان (info, error, success)
+            toast.className = `toast ${type}`;
             toast.textContent = message;
             document.body.appendChild(toast);
             setTimeout(() => {
@@ -255,13 +264,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
-                    initializeRatings(); // إعادة تحميل التقييمات عند تسجيل الدخول
+                    initializeRatings();
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
                     `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
-                    clearRatingsUI(); // إعادة تعيين واجهة التقييمات عند تسجيل الخروج
+                    clearRatingsUI();
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
