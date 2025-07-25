@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         // التحقق من توفر DOMPurify
         if (!DOMPurify || !DOMPurify.sanitize) {
             console.warn('DOMPurify غير متاح، سيتم استخدام تهيئة بسيطة');
-            DOMPurify = { sanitize: (input) => input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '' };
+            DOMPurify = { sanitize: (input) => input ? input.toString().replace(/</g, '<').replace(/>/g, '>') : '' };
         }
 
         // تحميل مكتبات Firebase
@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
         firebaseInitialized = true;
+        console.log('Firebase initialized successfully');
 
         // عناصر DOM
         const elements = {
@@ -58,14 +59,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         };
 
         // التحقق من وجود عناصر DOM الخاصة بالمحادثة
-        if (!elements.googleLoginBtn || !elements.chatBtn || !elements.chatPopup || !elements.chatMessages || !elements.messageInput || !elements.sendMessageBtn) {
+        if (!elements.googleLoginBtn || !elements.chatBtn || !elements.chatPopup || !elements.chatMessages || !elements.messageInput || !elements.sendMessageBtn || !elements.closeChat || !elements.chatLoading || !elements.loadMoreBtn) {
             console.error('عناصر DOM الخاصة بالمحادثة مفقودة:', {
                 googleLoginBtn: !!elements.googleLoginBtn,
                 chatBtn: !!elements.chatBtn,
                 chatPopup: !!elements.chatPopup,
                 chatMessages: !!elements.chatMessages,
                 messageInput: !!elements.messageInput,
-                sendMessageBtn: !!elements.sendMessageBtn
+                sendMessageBtn: !!elements.sendMessageBtn,
+                closeChat: !!elements.closeChat,
+                chatLoading: !!elements.chatLoading,
+                loadMoreBtn: !!elements.loadMoreBtn
             });
             showToast('خطأ في تحميل واجهة المحادثة، يرجى التحقق من عناصر الصفحة', 'error');
             return;
@@ -167,19 +171,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             try {
                 if (!DOMPurify || !DOMPurify.sanitize) {
                     console.warn('DOMPurify غير متاح، سيتم استخدام تهيئة بسيطة');
-                    return input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                    return input ? input.toString().replace(/</g, '<').replace(/>/g, '>') : '';
                 }
                 return DOMPurify.sanitize(input || '');
             } catch (error) {
                 console.error('خطأ في تعقيم المدخلات:', error);
-                return input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                return input ? input.toString().replace(/</g, '<').replace(/>/g, '>') : '';
             }
         }
 
         async function handleAuth() {
             if (!firebaseInitialized) {
+                console.error('Firebase not initialized');
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
-                console.error('Firebase غير مهيأ');
                 return;
             }
 
@@ -215,12 +219,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
                     initializeRatings();
+                    console.log('User logged in:', user.displayName);
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
                     `;
                     elements.googleLoginBtn.classList.remove('user-logged-in');
                     clearRatingsUI();
+                    console.log('User logged out');
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
@@ -245,20 +251,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                     console.log('Focused on messageInput');
                 } else {
                     console.error('messageInput element is missing');
+                    showToast('خطأ: حقل إدخال الرسالة غير موجود', 'error');
                 }
                 if (!elements.chatMessages.hasChildNodes()) {
                     console.log('No messages in chat, loading messages');
                     loadMessages();
+                } else {
+                    scrollChatToBottom();
                 }
-                scrollChatToBottom();
-            } else if (unsubscribeMessages) {
-                console.log('Unsubscribing from messages');
-                unsubscribeMessages();
-                unsubscribeMessages = null;
+            } else {
+                if (unsubscribeMessages) {
+                    console.log('Unsubscribing from messages');
+                    unsubscribeMessages();
+                    unsubscribeMessages = null;
+                }
                 elements.chatMessages.innerHTML = '';
                 hasMoreMessages = true;
                 lastVisible = null;
-                if (elements.loadMoreBtn) elements.loadMoreBtn.style.display = 'none';
+                if (elements.loadMoreBtn) {
+                    elements.loadMoreBtn.style.display = 'none';
+                    console.log('Load more button hidden');
+                }
             }
         }
 
@@ -268,6 +281,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.log('Scrolled chat to bottom');
             } else {
                 console.error('chatMessages element is missing');
+                showToast('خطأ: منطقة الرسائل غير موجودة', 'error');
             }
         }
 
@@ -323,11 +337,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.error('خطأ في إرسال الرسالة:', error.code, error.message);
                 if (error.code === 'permission-denied') {
                     showToast('ليس لديك إذن لإرسال الرسائل، تحقق من إعدادات Firebase', 'error');
+                } else if (error.code === 'unavailable') {
+                    showToast('Firestore غير متاح، تحقق من اتصالك بالإنترنت', 'error');
                 } else {
-                    showToast('حدث خطأ أثناء إرسال الرسالة', 'error');
+                    showToast('حدث خطأ أثناء إرسال الرسالة: ' + error.message, 'error');
                 }
             } finally {
                 elements.sendMessageBtn.disabled = false;
+                console.log('sendMessageBtn re-enabled');
             }
         }
 
@@ -341,6 +358,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             if (!hasMoreMessages) {
                 console.log('No more messages to load');
+                showToast('لا توجد رسائل إضافية لتحميلها', 'info');
                 return;
             }
 
@@ -351,9 +369,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             elements.chatLoading.classList.add('active');
+            console.log('chatLoading activated');
             let messagesQuery = query(
                 collection(db, 'messages'),
-                orderBy('timestamp', 'asc'),
+                orderBy('timestamp', 'desc'), // Changed to 'desc' for newest messages first
                 limit(messagesPerPage)
             );
 
@@ -370,7 +389,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         hasMoreMessages = false;
                         elements.loadMoreBtn.style.display = 'none';
                         elements.chatLoading.classList.remove('active');
-                        showToast('لا توجد رسائل أخرى لتحميلها', 'info');
+                        showToast('لا توجد رسائل لتحميلها', 'info');
                         return;
                     }
 
@@ -380,6 +399,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                         lastVisible = doc;
                     });
                     console.log('Messages loaded:', messages.length);
+
+                    // Clear existing messages to avoid duplicates
+                    if (!lastVisible) {
+                        elements.chatMessages.innerHTML = '';
+                    }
 
                     messages.forEach((msg) => {
                         const messageElement = document.createElement('div');
@@ -397,19 +421,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
                     elements.chatLoading.classList.remove('active');
+                    console.log('chatLoading deactivated');
                     scrollChatToBottom();
                 }, (error) => {
-                    console.error('خطأ في تحميل الرسائل:', error.code, error.message);
-                    if (error.code === 'permission-denied') {
-                        showToast('ليس لديك إذن لقراءة الرسائل، تحقق من إعدادات Firebase', 'error');
-                    } else {
-                        showToast('حدث خطأ أثناء تحميل الرسائل', 'error');
-                    }
-                    elements.chatLoading.classList.remove('active');
+                    console.error('خطأ في تحميل الرسائل:', interviewing_user: 1,
+                    content: "هااااااااا"
                 });
             } catch (error) {
                 console.error('خطأ في إعداد مستمع الرسائل:', error.code, error.message);
-                showToast('حدث خطأ أثناء تحميل الرسائل', 'error');
+                if (error.code === 'permission-denied') {
+                    showToast('ليس لديك إذن لقراءة الرسائل، تحقق من إعدادات Firebase', 'error');
+                } else if (error.code === 'unavailable') {
+                    showToast('Firestore غير متاح، تحقق من اتصالك بالإنترنت', 'error');
+                } else {
+                    showToast('حدث خطأ أثناء تحميل الرسائل: ' + error.message, 'error');
+                }
                 elements.chatLoading.classList.remove('active');
             }
         }
@@ -469,7 +495,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (error.code === 'permission-denied') {
                     showToast('ليس لديك إذن لتسجيل التقييم', 'error');
                 } else {
-                    showToast('حدث خطأ أثناء تسجيل التقييم', 'error');
+                    showToast('حدث خطأ أثناء تسجيل التقييم: ' + error.message, 'error');
                 }
             }
         }
@@ -504,7 +530,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة التقييم:', error.code, error.message);
-                showToast('حدث خطأ أثناء تحديث التقييم', 'error');
+                showToast('حدث خطأ أثناء تحديث التقييم: ' + error.message, 'error');
             }
         }
 
@@ -545,7 +571,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         () => updateRatingUI(linkId),
                         (error) => {
                             console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
-                            showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
+                            showToast('حدث خطأ أثناء تحميل التقييمات: ' + error.message, 'error');
                         }
                     );
                 }
@@ -556,12 +582,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         function setupEventListeners() {
             if (elements.mobileMenuBtn) {
                 elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+                console.log('Mobile menu button listener attached');
             }
             if (elements.viewRoadmapBtn) {
                 elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
+                console.log('View roadmap button listener attached');
             }
             if (elements.closeRoadmap) {
                 elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
+                console.log('Close roadmap button listener attached');
             }
             if (elements.googleLoginBtn) {
                 elements.googleLoginBtn.addEventListener('click', handleAuth);
@@ -637,7 +666,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         } catch (error) {
             console.error('خطأ في تهيئة التطبيق:', error);
-            showToast('حدث خطأ أثناء تهيئة التطبيق', 'error');
+            showToast('حدث خطأ أثناء تهيئة التطبيق: ' + error.message, 'error');
         }
 
         // تنظيف مستمعي الأحداث عند إغلاق الصفحة
