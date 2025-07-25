@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     // التحقق من وجود العناصر الأساسية جدًا مبكرًا
     if (!elements.googleLoginBtn || !elements.chatBtn) {
         console.error('عناصر DOM مفقودة:', { googleLoginBtn: !!elements.googleLoginBtn, chatBtn: !!elements.chatBtn });
-        // لا يمكن استدعاء showToast هنا لأنها قد لا تكون معرفة بعد
         return; // توقف التنفيذ إذا كانت العناصر الأساسية مفقودة
     }
 
@@ -38,8 +37,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.currentYear.textContent = new Date().getFullYear();
     }
 
-    // متغيرات Firebase ستُعرّف لاحقاً
-    let auth, db, provider;
+    // متغيرات Firebase ستُعرّف لاحقاً وتُمرّر كمعاملات
     let firebaseInitialized = false;
 
     // متغيرات لتتبع الصفحات والتقييمات الخاصة بـ Firebase
@@ -48,7 +46,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     const messagesPerPage = 20;
     let hasMoreMessages = true;
     let unsubscribeRatings = {}; // تعريفها في النطاق الخارجي
-
 
     // --- 2. استيراد مكتبة DOMPurify ومعالجتها بشكل مستقل ---
     let DOMPurify; // تعريف DOMPurify هنا ليكون متاحاً عالمياً في هذا النطاق
@@ -111,17 +108,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // هذه الدالة ستُستخدم بواسطة مستمع حدث زر الدردشة.
-    // يجب تعريفها هنا في هذا النطاق لضمان إتاحتها.
+    // ملاحظة: toggleChatPopup ستستخدم loadMessages التي تعتمد على Firebase،
+    // لذلك يجب أن تكون loadMessages معرفة وجاهزة قبل استدعائها.
+    // في هذا الهيكل الجديد، سيتم تعريف loadMessages داخل try...catch،
+    // ولهذا سنمرر لها db و auth
     function toggleChatPopup() {
         if (!elements.chatPopup) return;
         const isActive = elements.chatPopup.classList.toggle('active');
         elements.chatPopup.setAttribute('aria-hidden', !isActive);
         if (isActive) {
             if (elements.messageInput) elements.messageInput.focus();
-            // هنا قد نحتاج لـ Firebase، لكن استدعاء loadMessages سيتحقق من تهيئة Firebase
-            if (!elements.chatMessages.hasChildNodes() && firebaseInitialized) { // أضفنا firebaseInitialized هنا
-                loadMessages();
+            // استدعي loadMessages فقط إذا كانت Firebase مهيأة
+            if (!elements.chatMessages.hasChildNodes() && firebaseInitialized) {
+                // يجب تمرير db و auth إلى loadMessages
+                loadMessages(db, auth);
             }
             scrollChatToBottom();
         } else if (unsubscribeMessages) {
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
         setupTabs();
         setupTooltips();
-        window.addEventListener('resize', closeMobileMenu); // نقل هذا المستمع إلى هنا
+        window.addEventListener('resize', closeMobileMenu);
     }
 
     // استدعاء setupBaseEventListeners فوراً
@@ -265,16 +265,16 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // تهيئة التطبيق بعد الاستيراد الناجح
         const app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        provider = new GoogleAuthProvider();
+        const currentAuth = getAuth(app); // تعريف داخلي
+        const currentProvider = new GoogleAuthProvider(); // تعريف داخلي
         const analytics = getAnalytics(app); //Analytics is initialized but not used in this script
-        db = getFirestore(app);
+        const currentDb = getFirestore(app); // تعريف داخلي
         firebaseInitialized = true;
         console.log('Firebase initialized successfully.');
 
 
         // --- 6. تعريف جميع الدوال التي تعتمد على Firebase هنا ---
-        //    الآن وبعد أن أصبحت Firebase و DOMPurify مهيأة ومعرفة، يمكن تعريف هذه الدوال بأمان.
+        //    هذه الدوال ستتلقى كائنات Firebase كمعاملات لضمان الوصول الصحيح.
 
         async function handleAuth() {
             if (!firebaseInitialized) {
@@ -282,13 +282,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.error('Firebase غير مهيأ');
                 return;
             }
-            const user = auth.currentUser;
+            const user = currentAuth.currentUser;
             try {
                 if (user) {
-                    await signOut(auth);
+                    await signOut(currentAuth);
                     showToast('تم تسجيل الخروج بنجاح', 'success');
                 } else {
-                    await signInWithPopup(auth, provider);
+                    await signInWithPopup(currentAuth, currentProvider);
                     showToast('تم تسجيل الدخول بنجاح', 'success');
                 }
             } catch (error) {
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     showToast('فشل الاتصال بالشبكة، يرجى التحقق من الإنترنت', 'error');
                 } else if (error.code === 'auth/popup-closed-by-user') {
                     showToast('تم إغلاق نافذة تسجيل الدخول', 'error');
-                } else if (error.code === 'auth/popup-blocked') { // إضافة معالجة خاصة لهذا الخطأ
+                } else if (error.code === 'auth/popup-blocked') {
                     showToast('تم حظر النافذة المنبثقة لتسجيل الدخول. يرجى السماح بها في إعدادات المتصفح.', 'error');
                 } else {
                     showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         function handleAuthStateChanged(user) {
-            console.log('handleAuthStateChanged fired. User object received:', user); // سطر المراقبة 1
+            console.log('handleAuthStateChanged fired. User object received:', user);
             if (!elements.googleLoginBtn) return;
             try {
                 if (user) {
@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
-                    initializeRatings();
+                    initializeRatings(currentDb, currentAuth); // تمرير db و auth
                 } else {
                     elements.googleLoginBtn.innerHTML = `
                         <i class="fab fa-google"></i> تسجيل الدخول
@@ -331,12 +331,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         async function sendMessage() {
-            console.log('sendMessage called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 2
+            console.log('sendMessage called. auth.currentUser is:', currentAuth.currentUser); // استخدام currentAuth
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-            const user = auth.currentUser;
+            const user = currentAuth.currentUser;
             if (!user) {
                 showToast('يرجى تسجيل الدخول لإرسال الرسائل', 'error');
                 return;
@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             try {
                 elements.sendMessageBtn.disabled = true;
-                await addDoc(collection(db, 'messages'), {
+                await addDoc(collection(currentDb, 'messages'), { // استخدام currentDb
                     text: DOMPurify.sanitize(messageText),
                     userId: user.uid,
                     userName: DOMPurify.sanitize(user.displayName || 'مستخدم'),
@@ -370,7 +370,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        async function loadMessages() {
+        // تم نقل هذه الدالة للخارج (في الجزء 3) لكنها تستدعى loadMessages
+        // و loadMessages تحتاج currentDb و currentAuth
+        async function loadMessages() { // لا تأخذ معلمات هنا، بل تستخدم currentDb و currentAuth من هذا النطاق
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
@@ -378,7 +380,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (!hasMoreMessages) return;
             elements.chatLoading.classList.add('active');
             let messagesQuery = query(
-                collection(db, 'messages'),
+                collection(currentDb, 'messages'), // استخدام currentDb
                 orderBy('timestamp', 'asc'),
                 limit(messagesPerPage)
             );
@@ -400,7 +402,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     });
                     messages.forEach((msg) => {
                         const messageElement = document.createElement('div');
-                        messageElement.className = `message ${msg.userId === auth.currentUser?.uid ? 'user-message' : ''}`;
+                        // استخدام currentAuth.currentUser هنا
+                        messageElement.className = `message ${msg.userId === currentAuth.currentUser?.uid ? 'user-message' : ''}`;
                         messageElement.innerHTML = `
                             <div class="message-header">
                                 <img src="${msg.userPhoto}" alt="صورة المستخدم" class="message-avatar">
@@ -426,32 +429,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        function formatTimestamp(timestamp) {
-            if (!timestamp) return 'الآن';
-            try {
-                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-                return date.toLocaleString('ar-EG', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-            } catch (error) {
-                console.error('خطأ في تنسيق الطابع الزمني:', error);
-                return 'غير متاح';
-            }
-        }
-
         async function handleRating(event) {
             event.stopPropagation();
             event.preventDefault();
-            console.log('handleRating called. auth.currentUser is:', auth.currentUser); // سطر المراقبة 3
+            console.log('handleRating called. auth.currentUser is:', currentAuth.currentUser); // استخدام currentAuth
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
-            const user = auth.currentUser;
+            const user = currentAuth.currentUser; // استخدام currentAuth
             if (!user) {
                 showToast('يرجى تسجيل الدخول لتقييم الموارد', 'error');
                 return;
@@ -467,7 +453,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const linkId = resourceCard.dataset.linkId;
             try {
                 // استخدام setDoc مع { merge: true } لضمان تحديث التقييم بدلاً من إضافة تقييم جديد
-                const ratingRef = doc(db, 'ratings', `${linkId}_${user.uid}`);
+                const ratingRef = doc(currentDb, 'ratings', `${linkId}_${user.uid}`); // استخدام currentDb
                 await setDoc(ratingRef, {
                     userId: user.uid,
                     linkId: linkId,
@@ -476,7 +462,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }, { merge: true });
 
                 showToast('تم تسجيل تقييمك بنجاح', 'success');
-                await updateRatingUI(linkId);
+                await updateRatingUI(linkId, currentDb, currentAuth); // تمرير db و auth
             } catch (error) {
                 console.error('خطأ في تسجيل التقييم:', error.code, error.message);
                 if (error.code === 'permission-denied') {
@@ -487,13 +473,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        async function updateRatingUI(linkId) {
+        async function updateRatingUI(linkId) { // لا تأخذ db و auth هنا، بل تستخدم currentDb و currentAuth
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
             }
             try {
-                const ratingsQuery = query(collection(db, 'ratings'), where('linkId', '==', linkId));
+                const ratingsQuery = query(collection(currentDb, 'ratings'), where('linkId', '==', linkId)); // استخدام currentDb
                 const ratingsSnapshot = await getDocs(ratingsQuery);
                 let totalRating = 0;
                 let ratingCount = 0;
@@ -523,8 +509,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const stars = document.querySelectorAll(`[data-link-id="${linkId}"] .rating-stars i`);
             stars.forEach(star => {
                 const value = parseInt(star.dataset.value);
-                // استخدام Math.round بدلاً من Math.floor لتقريب النجوم المرئية
-                star.classList.toggle('rated', value <= Math.round(averageRating));
+                star.classList.toggle('rated', value <= Math.round(averageRating)); // استخدام Math.round
             });
         }
 
@@ -542,7 +527,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
-        function initializeRatings() {
+        function initializeRatings() { // لا تأخذ db و auth هنا، بل تستخدم currentDb و currentAuth
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
                 return;
@@ -551,8 +536,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const linkId = card.dataset.linkId;
                 if (!unsubscribeRatings[linkId]) {
                     unsubscribeRatings[linkId] = onSnapshot(
-                        query(collection(db, 'ratings'), where('linkId', '==', linkId)),
-                        () => updateRatingUI(linkId),
+                        query(collection(currentDb, 'ratings'), where('linkId', '==', linkId)), // استخدام currentDb
+                        () => updateRatingUI(linkId), // updateRatingUI لا تحتاج db و auth
                         (error) => {
                             console.error(`خطأ في مستمع تقييم ${linkId}:`, error.code, error.message);
                             showToast('حدث خطأ أثناء تحميل التقييمات', 'error');
@@ -571,7 +556,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
             // مستمع زر الدردشة
             if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
+                elements.chatBtn.addEventListener('click', toggleChatPopup); // toggleChatPopup لا تحتاج db/auth هنا
             }
             if (elements.closeChat) {
                 elements.closeChat.addEventListener('click', toggleChatPopup);
@@ -603,10 +588,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             // هذا المستمع يجب أن يتم بعد تهيئة Auth
-            onAuthStateChanged(auth, handleAuthStateChanged);
+            onAuthStateChanged(currentAuth, handleAuthStateChanged); // استخدام currentAuth
 
             // تهيئة التقييمات عند تحميل الصفحة إذا كان المستخدم مسجل الدخول بالفعل
-            if (auth.currentUser) {
+            if (currentAuth.currentUser) { // استخدام currentAuth
                 initializeRatings();
             }
         }
