@@ -13,10 +13,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     // استيراد مكتبات Firebase
     let firebaseInitialized = false;
     let DOMPurify;
+    
     try {
-        // تحميل DOMPurify أولاً
-        DOMPurify = (await import("https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js")).default;
+        // تحميل DOMPurify أولاً بشكل منفصل
+        const DOMPurifyModule = await import('https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js');
+        DOMPurify = DOMPurifyModule.default || window.DOMPurify;
         
+        if (!DOMPurify || !DOMPurify.sanitize) {
+            throw new Error('Failed to load DOMPurify');
+        }
+
         // تحميل مكتبات Firebase
         const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
         const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
@@ -151,81 +157,20 @@ document.addEventListener('DOMContentLoaded', async function() {
         let hasMoreMessages = true;
         let unsubscribeRatings = {};
 
-        // إعداد مستمعي الأحداث
-        function setupEventListeners() {
-            if (elements.mobileMenuBtn) {
-                elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-            }
-            if (elements.viewRoadmapBtn) {
-                elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
-            }
-            if (elements.closeRoadmap) {
-                elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
-            }
-            if (elements.googleLoginBtn) {
-                elements.googleLoginBtn.addEventListener('click', handleAuth);
-            }
-            if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.closeChat) {
-                elements.closeChat.addEventListener('click', toggleChatPopup);
-            }
-            if (elements.sendMessageBtn) {
-                elements.sendMessageBtn.addEventListener('click', sendMessage);
-            }
-            if (elements.messageInput) {
-                elements.messageInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                    }
-                });
-            }
-            if (elements.loadMoreBtn) {
-                elements.loadMoreBtn.addEventListener('click', loadMessages);
-            }
-            elements.ratingStars.forEach(star => {
-                star.addEventListener('click', handleRating);
-                star.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleRating(e);
-                    }
-                });
-            });
-            onAuthStateChanged(auth, handleAuthStateChanged);
-            window.addEventListener('resize', closeMobileMenu);
-        }
-
-        // وظائف القائمة المتنقلة
-        function toggleMobileMenu() {
-            if (!elements.navLinks) return;
-            const isOpen = elements.navLinks.classList.contains('active');
-            elements.navLinks.classList.toggle('active');
-            elements.mobileMenuBtn.innerHTML = isOpen ?
-                '<i class="fas fa-bars" aria-label="فتح القائمة"></i>' :
-                '<i class="fas fa-times" aria-label="إغلاق القائمة"></i>';
-        }
-
-        function closeMobileMenu() {
-            if (window.innerWidth <= 768 && elements.navLinks) {
-                elements.navLinks.classList.remove('active');
-                if (elements.mobileMenuBtn) {
-                    elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars" aria-label="فتح القائمة"></i>';
-                }
-            }
-        }
-
-        // وظائف خارطة الطريق
-        function toggleRoadmapPopup() {
-            if (elements.roadmapPopup) {
-                const isActive = elements.roadmapPopup.classList.toggle('active');
-                elements.roadmapPopup.setAttribute('aria-hidden', !isActive);
-            }
-        }
-
         // وظائف المصادقة
+        function sanitizeInput(input) {
+            try {
+                if (!DOMPurify || !DOMPurify.sanitize) {
+                    console.warn('DOMPurify غير متاح، سيتم استخدام تهيئة بسيطة');
+                    return input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+                }
+                return DOMPurify.sanitize(input || '');
+            } catch (error) {
+                console.error('خطأ في تعقيم المدخلات:', error);
+                return input ? input.toString().replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+            }
+        }
+
         async function handleAuth() {
             if (!firebaseInitialized) {
                 showToast('خطأ في تهيئة Firebase، يرجى إعادة تحميل الصفحة', 'error');
@@ -260,7 +205,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (user) {
                     elements.googleLoginBtn.innerHTML = `
                         <img src="${user.photoURL || 'https://via.placeholder.com/30'}" alt="صورة المستخدم" class="user-avatar">
-                        <span>${DOMPurify.sanitize(user.displayName || 'مستخدم')}</span>
+                        <span>${sanitizeInput(user.displayName || 'مستخدم')}</span>
                         <i class="fas fa-sign-out-alt logout-icon" aria-label="تسجيل الخروج"></i>
                     `;
                     elements.googleLoginBtn.classList.add('user-logged-in');
@@ -331,9 +276,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             try {
                 elements.sendMessageBtn.disabled = true;
                 await addDoc(collection(db, 'messages'), {
-                    text: DOMPurify.sanitize(messageText),
+                    text: sanitizeInput(messageText),
                     userId: user.uid,
-                    userName: DOMPurify.sanitize(user.displayName || 'مستخدم'),
+                    userName: sanitizeInput(user.displayName || 'مستخدم'),
                     userPhoto: user.photoURL || 'https://via.placeholder.com/30',
                     timestamp: serverTimestamp()
                 });
@@ -388,10 +333,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                         messageElement.innerHTML = `
                             <div class="message-header">
                                 <img src="${msg.userPhoto}" alt="صورة المستخدم" class="message-avatar">
-                                <span class="message-sender">${DOMPurify.sanitize(msg.userName)}</span>
+                                <span class="message-sender">${sanitizeInput(msg.userName)}</span>
                                 <span class="message-time">${formatTimestamp(msg.timestamp)}</span>
                             </div>
-                            <p class="message-text">${DOMPurify.sanitize(msg.text)}</p>
+                            <p class="message-text">${sanitizeInput(msg.text)}</p>
                         `;
                         elements.chatMessages.appendChild(messageElement);
                     });
@@ -549,6 +494,53 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
 
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            if (elements.mobileMenuBtn) {
+                elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            }
+            if (elements.viewRoadmapBtn) {
+                elements.viewRoadmapBtn.addEventListener('click', toggleRoadmapPopup);
+            }
+            if (elements.closeRoadmap) {
+                elements.closeRoadmap.addEventListener('click', toggleRoadmapPopup);
+            }
+            if (elements.googleLoginBtn) {
+                elements.googleLoginBtn.addEventListener('click', handleAuth);
+            }
+            if (elements.chatBtn) {
+                elements.chatBtn.addEventListener('click', toggleChatPopup);
+            }
+            if (elements.closeChat) {
+                elements.closeChat.addEventListener('click', toggleChatPopup);
+            }
+            if (elements.sendMessageBtn) {
+                elements.sendMessageBtn.addEventListener('click', sendMessage);
+            }
+            if (elements.messageInput) {
+                elements.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+            if (elements.loadMoreBtn) {
+                elements.loadMoreBtn.addEventListener('click', loadMessages);
+            }
+            elements.ratingStars.forEach(star => {
+                star.addEventListener('click', handleRating);
+                star.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleRating(e);
+                    }
+                });
+            });
+            onAuthStateChanged(auth, handleAuthStateChanged);
+            window.addEventListener('resize', closeMobileMenu);
+        }
+
         // تهيئة التطبيق
         try {
             setupEventListeners();
@@ -566,7 +558,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
         });
     } catch (error) {
-        console.error('خطأ في استيراد مكتبات Firebase أو DOMPurify:', error);
+        console.error('خطأ في استيراد المكتبات:', error);
         showToast('خطأ في تحميل المكتبات الأساسية، يرجى إعادة تحميل الصفحة', 'error');
     }
 });
