@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 } else if (error.code === 'auth/popup-closed-by-user') {
                     showToast('تم إغلاق نافذة تسجيل الدخول', 'error');
                 } else {
-                    showToast('حدث خطأ أثناء تسجيل الدخول/الخروج', 'error');
+                    showToast('حدث خطأ أثناء تسجيل الدخول/الخروج: ' + error.message, 'error');
                 }
             }
         }
@@ -230,22 +230,27 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             } catch (error) {
                 console.error('خطأ في تحديث واجهة المستخدم للمصادقة:', error);
-                showToast('خطأ في تحديث واجهة تسجيل الدخول', 'error');
+                showToast('خطأ في تحديث واجهة تسجيل الدخول: ' + error.message, 'error');
             }
         }
 
         // وظائف المحادثة
-        function toggleChatPopup() {
+        function toggleChatPopup(event) {
+            if (event) event.stopPropagation(); // منع انتشار الحدث
             console.log('toggleChatPopup called');
             if (!elements.chatPopup) {
                 console.error('chatPopup element is missing');
                 showToast('خطأ: نافذة المحادثة غير موجودة', 'error');
                 return;
             }
-            const isActive = elements.chatPopup.classList.toggle('active');
-            elements.chatPopup.setAttribute('aria-hidden', !isActive);
-            console.log('Chat popup active:', isActive);
-            if (isActive) {
+
+            const isCurrentlyActive = elements.chatPopup.classList.contains('active');
+            console.log('Current chat popup state:', isCurrentlyActive);
+
+            if (!isCurrentlyActive) {
+                elements.chatPopup.classList.add('active');
+                elements.chatPopup.setAttribute('aria-hidden', 'false');
+                console.log('Chat popup opened');
                 if (elements.messageInput) {
                     elements.messageInput.focus();
                     console.log('Focused on messageInput');
@@ -260,6 +265,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                     scrollChatToBottom();
                 }
             } else {
+                elements.chatPopup.classList.remove('active');
+                elements.chatPopup.setAttribute('aria-hidden', 'true');
+                console.log('Chat popup closed');
                 if (unsubscribeMessages) {
                     console.log('Unsubscribing from messages');
                     unsubscribeMessages();
@@ -273,6 +281,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                     console.log('Load more button hidden');
                 }
             }
+
+            // التحقق من حالة CSS
+            const computedStyle = window.getComputedStyle(elements.chatPopup);
+            console.log('Chat popup display style:', computedStyle.display);
         }
 
         function scrollChatToBottom() {
@@ -285,7 +297,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        async function sendMessage() {
+        async function sendMessage(event) {
+            if (event) event.stopPropagation(); // منع انتشار الحدث
             console.log('sendMessage called');
             if (!firebaseInitialized) {
                 console.error('Firebase not initialized');
@@ -372,7 +385,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log('chatLoading activated');
             let messagesQuery = query(
                 collection(db, 'messages'),
-                orderBy('timestamp', 'desc'), // Changed to 'desc' for newest messages first
+                orderBy('timestamp', 'desc'), // Newest messages first
                 limit(messagesPerPage)
             );
 
@@ -389,6 +402,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         hasMoreMessages = false;
                         elements.loadMoreBtn.style.display = 'none';
                         elements.chatLoading.classList.remove('active');
+                        show_declare(toc): void;
                         showToast('لا توجد رسائل لتحميلها', 'info');
                         return;
                     }
@@ -400,7 +414,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                     });
                     console.log('Messages loaded:', messages.length);
 
-                    // Clear existing messages to avoid duplicates
                     if (!lastVisible) {
                         elements.chatMessages.innerHTML = '';
                     }
@@ -424,8 +437,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                     console.log('chatLoading deactivated');
                     scrollChatToBottom();
                 }, (error) => {
-                    console.error('خطأ في تحميل الرسائل:', interviewing_user: 1,
-                    content: "هااااااااا"
+                    console.error('خطأ في تحميل الرسائل:', error.code, error.message);
+                    if (error.code === 'permission-denied') {
+                        showToast('ليس لديك إذن لقراءة الرسائل، تحقق من إعدادات Firebase', 'error');
+                    } else if (error.code === 'unavailable') {
+                        showToast('Firestore غير متاح، تحقق من اتصالك بالإنترنت', 'error');
+                    } else {
+                        showToast('حدث خطأ أثناء تحميل الرسائل: ' + error.message, 'error');
+                    }
+                    elements.chatLoading.classList.remove('active');
                 });
             } catch (error) {
                 console.error('خطأ في إعداد مستمع الرسائل:', error.code, error.message);
@@ -597,11 +617,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.log('Google login button listener attached');
             }
             if (elements.chatBtn) {
-                elements.chatBtn.addEventListener('click', toggleChatPopup);
+                elements.chatBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    console.log('Chat button clicked');
+                    toggleChatPopup(event);
+                });
                 console.log('Chat button listener attached');
             }
             if (elements.closeChat) {
-                elements.closeChat.addEventListener('click', toggleChatPopup);
+                elements.closeChat.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    console.log('Close chat button clicked');
+                    toggleChatPopup(event);
+                });
                 console.log('Close chat button listener attached');
             }
             if (elements.sendMessageBtn) {
@@ -613,7 +641,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
                         console.log('Enter key pressed in messageInput');
-                        sendMessage();
+                        sendMessage(e);
                     }
                 });
                 console.log('Message input keypress listener attached');
@@ -632,6 +660,15 @@ document.addEventListener('DOMContentLoaded', async function() {
                 });
             });
             onAuthStateChanged(auth, handleAuthStateChanged);
+
+            // إضافة مستمع للنقر خارج النافذة المنبثقة لإغلاقها
+            elements.chatPopup.addEventListener('click', (event) => {
+                if (event.target === elements.chatPopup) {
+                    console.log('Clicked outside chat popup, closing');
+                    toggleChatPopup(event);
+                }
+            });
+
             window.addEventListener('resize', closeMobileMenu);
         }
 
