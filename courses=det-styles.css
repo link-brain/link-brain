@@ -116,7 +116,7 @@ img {
 
 .nav-links {
     display: flex;
-    gap: 2rem; /* زيادة التباعد بين الروابط */
+    gap: 2rem;
     align-items: center;
 }
 
@@ -158,12 +158,13 @@ img {
     background: white;
     color: var(--primary-blue);
     border: 2px solid var(--primary-blue);
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem; /* تقليل التباعد الداخلي */
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
+    font-size: 0.9rem; /* تصغير حجم الخط */
     transition: var(--transition);
 }
 
@@ -172,16 +173,36 @@ img {
     color: white;
 }
 
-.chat-btn {
+.logout-btn {
     background: white;
-    color: var(--accent-purple);
-    border: 2px solid var(--accent-purple);
-    padding: 0.75rem 1.5rem;
+    color: var(--accent-orange);
+    border: 2px solid var(--accent-orange);
+    padding: 0.5rem 1rem;
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.logout-btn:hover {
+    background: var(--accent-orange);
+    color: white;
+}
+
+.chat-btn {
+    background: white;
+    color: var(--accent-purple);
+    border: 2px solid var(--accent-purple);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
     transition: var(--transition);
 }
 
@@ -202,7 +223,7 @@ img {
 /* مسار التصفح */
 .breadcrumbs {
     background-color: #f3f4f6;
-    padding: 1.25rem 0; /* زيادة التباعد الداخلي */
+    padding: 1.25rem 0;
     font-size: 0.95rem;
     color: var(--text-medium);
     border-bottom: 1px solid var(--border-color);
@@ -225,26 +246,13 @@ img {
 
 /* تفاصيل الدورة */
 .course-details-section {
-    padding: 4rem 0; /* زيادة التباعد الرأسي */
+    padding: 4rem 0;
 }
 
 .section-header {
     text-align: center;
     margin-bottom: 3.5rem;
     position: relative;
-}
-
-.course-badge {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--accent-orange) 0%, #ea580c 100%);
-    color: white;
-    padding: 0.25rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
 }
 
 .section-header h1 {
@@ -259,37 +267,18 @@ img {
     font-size: 1.1rem;
     color: var(--text-medium);
     max-width: 800px;
-    margin: 0 auto 2rem; /* زيادة الهامش السفلي */
-}
-
-.course-meta {
-    display: flex;
-    justify-content: center;
-    gap: 2.5rem; /* زيادة التباعد بين العناصر */
-    margin-bottom: 2.5rem;
-    font-size: 1rem;
-    color: var(--text-medium);
-}
-
-.course-meta span {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.course-meta i {
-    color: var(--primary-blue);
+    margin: 0 auto 2rem;
 }
 
 .view-roadmap-btn {
     background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
     font-size: 1.1rem;
-    padding: 1rem 2.5rem; /* زيادة التباعد الداخلي */
+    padding: 1rem 2.5rem;
 }
 
 /* أقسام اللغات */
 .language-section {
-    margin-bottom: 3.5rem; /* زيادة الهامش السفلي */
+    margin-bottom: 3.5rem;
     background: white;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
@@ -321,8 +310,8 @@ img {
 .resources-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 2.5rem; /* زيادة التباعد */
-    padding: 2.5rem; /* زيادة التباعد الداخلي */
+    gap: 2.5rem;
+    padding: 2.5rem;
 }
 
 .video-links, 
@@ -350,7 +339,7 @@ img {
 .resource-card {
     background: var(--light-bg);
     border-radius: var(--border-radius);
-    padding: 1.75rem; /* زيادة التباعد الداخلي */
+    padding: 1.75rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     transition: var(--transition);
@@ -378,8 +367,8 @@ img {
 
 .resource-meta {
     display: flex;
-    gap: 2rem; /* زيادة التباعد */
-    margin-bottom: 1.25rem; /* زيادة الهامش */
+    gap: 2rem;
+    margin-bottom: 1.25rem;
     font-size: 0.9rem;
     color: var(--text-medium);
 }
@@ -392,7 +381,7 @@ img {
 }
 
 .rating-container {
-    margin: 1.25rem 0; /* زيادة الهامش */
+    margin: 1.25rem 0;
 }
 
 .rating-stars {
@@ -425,10 +414,38 @@ img {
     color: var(--text-medium);
 }
 
+.toggle-features {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--primary-blue);
+    display: block;
+    margin: 0.5rem auto 0;
+    transition: var(--transition);
+}
+
+.toggle-features:hover {
+    color: var(--primary-dark);
+}
+
+.toggle-features i {
+    transition: transform 0.3s ease;
+}
+
+.toggle-features.active i {
+    transform: rotate(180deg);
+}
+
 .features-list {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px dashed var(--border-color);
+    display: none; /* إخفاء القائمة افتراضيًا */
+}
+
+.features-list.active {
+    display: block; /* إظهار القائمة عند النقر */
 }
 
 .features-list li {
@@ -449,7 +466,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 1.25rem; /* زيادة الهامش */
+    margin-top: 1.25rem;
 }
 
 .quiz-btn {
@@ -460,7 +477,7 @@ img {
 
 .quiz-btn:hover {
     background: linear-gradient(135deg, #7c3aed, #6d28d9);
-    transform: translateY(-2px); /* إضافة تأثير hover متسق */
+    transform: translateY(-2px);
 }
 
 /* نوافذ منبثقة */
@@ -532,7 +549,7 @@ img {
 .popup-content h2 {
     font-size: 1.8rem;
     color: var(--primary-dark);
-    padding: 1.75rem; /* زيادة التباعد الداخلي */
+    padding: 1.75rem;
     background: #f9fafb;
     display: flex;
     align-items: center;
@@ -548,7 +565,7 @@ img {
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: 70vh; /* زيادة الارتفاع لتحسين تجربة المستخدم */
+    height: 50vh; /* تقصير ارتفاع نافذة الدردشة */
 }
 
 .chat-loading {
@@ -576,7 +593,7 @@ img {
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 1.75rem; /* زيادة التباعد الداخلي */
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -586,7 +603,7 @@ img {
     background: #f3f4f6;
     border-radius: var(--border-radius);
     padding: 1.2rem;
-    max-width: 85%; /* زيادة العرض الأقصى */
+    max-width: 85%;
     animation: messageIn 0.3s ease;
 }
 
@@ -643,7 +660,7 @@ img {
     background: white;
     color: var(--primary-blue);
     border: 2px solid var(--primary-blue);
-    margin: 1.25rem auto; /* زيادة الهامش */
+    margin: 1.25rem auto;
     padding: 0.75rem 1.5rem;
     display: flex;
     align-items: center;
@@ -657,7 +674,7 @@ img {
 
 .chat-input-container {
     display: flex;
-    padding: 1.25rem; /* زيادة التباعد الداخلي */
+    padding: 1.25rem;
     background: #f9fafb;
     border-top: 1px solid var(--border-color);
     gap: 0.75rem;
@@ -699,10 +716,10 @@ img {
 }
 
 .roadmap-steps {
-    padding: 1.75rem; /* زيادة التباعد الداخلي */
+    padding: 1.75rem;
     display: flex;
     flex-direction: column;
-    gap: 1.75rem; /* زيادة التباعد بين العناصر */
+    gap: 1.75rem;
 }
 
 .roadmap-item {
@@ -820,7 +837,7 @@ img {
     flex: 2;
     display: flex;
     flex-wrap: wrap;
-    gap: 2.5rem; /* تقليل التباعد لتحسين المظهر */
+    gap: 2.5rem;
 }
 
 .footer-column {
@@ -917,7 +934,7 @@ img {
     .auth-buttons {
         width: 100%;
         flex-direction: column;
-        margin-top: 1.5rem; /* زيادة الهامش */
+        margin-top: 1.5rem;
     }
     
     .mobile-menu-btn {
@@ -929,17 +946,12 @@ img {
         font-size: 2rem;
     }
     
-    .course-meta {
-        flex-direction: column;
-        gap: 1.25rem; /* زيادة التباعد */
-    }
-    
     .popup-content {
         width: 95%;
     }
     
     .chat-messages {
-        padding: 1.25rem; /* تقليل التباعد للشاشات الصغيرة */
+        padding: 1.25rem;
     }
     
     .message {
