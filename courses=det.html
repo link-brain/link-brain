@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دورة تطوير الواجهات الأمامية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="courses=det-styles.css">
+    <link rel="stylesheet" href="courses-det-styles.css">
+    <!-- إضافة مكتبة Firebase لدعم تسجيل الدخول والمحادثة -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -604,5 +608,656 @@
     </footer>
 
     <script src="courses-det-script.js"></script>
+    <!-- كود JavaScript إضافي لدعم زر المميزات وفتح/إغلاق المحادثة -->
+    <script>
+        // وظيفة لتبديل إظهار/إخفاء المميزات
+        document.querySelectorAll('.toggle-features').forEach(button => {
+            button.addEventListener('click', () => {
+                const featuresList = button.nextElementSibling;
+                featuresList.classList.toggle('active');
+                button.classList.toggle('active');
+            });
+        });
+
+        // وظيفة لفتح/إغلاق نافذة الدردشة
+        document.getElementById('chatBtn').addEventListener('click', () => {
+            document.getElementById('chatPopup').classList.add('active');
+        });
+
+        document.getElementById('closeChat').addEventListener('click', () => {
+            document.getElementById('chatPopup').classList.remove('active');
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دورة تطوير الواجهات الأمامية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="courses-det-styles.css">
+    <!-- إضافة مكتبة Firebase لدعم تسجيل الدخول والمحادثة -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <i class="fas fa-fire" style="color: #2563eb;"></i> Edumates
+            </a>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active">الرئيسية</a></li>
+                <li><a href="#" class="nav-link">الكورسات</a></li>
+                <li><a href="#" class="nav-link">اتصل بنا</a></li>
+                <div class="auth-buttons">
+                    <button id="googleLoginBtn" class="google-login-btn">
+                        <i class="fab fa-google"></i> تسجيل دخول
+                    </button>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> خروج
+                    </button>
+                    <button id="chatBtn" class="chat-btn">
+                        <i class="fas fa-comment"></i> المحادثة
+                    </button>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="breadcrumbs">
+        <div class="container">
+            <a href="#">الرئيسية</a> > <a href="#">الكورسات</a> > <span>Frontend</span>
+        </div>
+    </section>
+
+    <section class="course-details-section">
+        <div class="container">
+            <div class="section-header">
+                <h1>دورة تطوير الواجهات الأمامية (Frontend)</h1>
+                <p class="course-description">
+                    احترف تطوير الويب من الصفر إلى الاحتراف مع أفضل المصادر التعليمية العربية
+                </p>
+                <button class="btn view-roadmap-btn">خارطة التعلم</button>
+            </div>
+
+            <div class="language-section">
+                <div class="language-header">
+                    <img src="https://via.placeholder.com/48" alt="HTML" class="language-icon">
+                    <h2>HTML</h2>
+                </div>
+                <div class="resources-container">
+                    <div class="video-links">
+                        <h3><i class="fas fa-video"></i> فيديوهات الشرح</h3>
+                        <div class="resource-card" data-link-id="html-elzero">
+                            <a href="#" class="resource-title">دورة HTML - Elzero Web School</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 12 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> مبتدئ</span>
+                            </div>
+                            <div class="rating-container" data-link-id="html-elzero">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> أفضل قناة عربية</li>
+                                <li><i class="fas fa-check-circle"></i> تغطية شاملة للأساسيات</li>
+                                <li><i class="fas fa-check-circle"></i> تمارين عملية</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="html-abdalrhman">
+                            <a href="#" class="resource-title">دورة HTML - عبدالرحمن جمال</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 8 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> مبتدئ</span>
+                            </div>
+                            <div class="rating-container" data-link-id="html-abdalrhman">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> محتوى مجاني بالكامل</li>
+                                <li><i class="fas fa-check-circle"></i> شرح مبسط</li>
+                                <li><i class="fas fa-check-circle"></i> تغطية جميع الأساسيات</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="html-outcode">
+                            <a href="#" class="resource-title">outcode</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 10 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> مبتدئ</span>
+                            </div>
+                            <div class="rating-container" data-link-id="html-outcode">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> موجز ومركز</li>
+                                <li><i class="fas fa-check-circle"></i> تفاصيل</li>
+                                <li><i class="fas fa-check-circle"></i> فيديوهات قصيرة</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="book-links">
+                        <h3><i class="fas fa-book"></i> مراجع ومواقع</h3>
+                        <div class="resource-card" data-link-id="html-mdn">
+                            <a href="#" class="resource-title">مرجع لجميع عناصر HTML</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> جميع المستويات</span>
+                            </div>
+                            <div class="rating-container" data-link-id="html-mdn">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> جميع الأكواد</li>
+                                <li><i class="fas fa-check-circle"></i> تفصيل كامل للأكواد</li>
+                                <li><i class="fas fa-check-circle"></i> موقع عربي</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="html-updates">
+                            <a href="#" class="resource-title">للبقاء على اطلاع بكل تحديثات HTML</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> جميع المستويات</span>
+                            </div>
+                            <div class="rating-container" data-link-id="html-updates">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> مرجع كامل</li>
+                                <li><i class="fas fa-check-circle"></i> واضح جذاب</li>
+                                <li><i class="fas fa-check-circle"></i> شرح مفصل</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-button">
+                    <a href="exam-html.html" class="btn quiz-btn">اختبار HTML</a>
+                </div>
+            </div>
+
+            <div class="language-section">
+                <div class="language-header">
+                    <img src="https://via.placeholder.com/48" alt="CSS" class="language-icon">
+                    <h2>CSS</h2>
+                </div>
+                <div class="resources-container">
+                    <div class="video-links">
+                        <h3><i class="fas fa-video"></i> فيديوهات الشرح</h3>
+                        <div class="resource-card" data-link-id="css-elzero">
+                            <a href="#" class="resource-title">دورة CSS - Elzero Web School</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 15 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> متوسط</span>
+                            </div>
+                            <div class="rating-container" data-link-id="css-elzero">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> شرح عملي وتفاعلي</li>
+                                <li><i class="fas fa-check-circle"></i> مشاريع تصميمية</li>
+                                <li><i class="fas fa-check-circle"></i> شرح متقدم</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="css-abdalrhman">
+                            <a href="#" class="resource-title">تعلم CSS - عبدالرحمن جمال</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 10 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> متوسط</span>
+                            </div>
+                            <div class="rating-container" data-link-id="css-abdalrhman">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> شرح تفصيلي</li>
+                                <li><i class="fas fa-check-circle"></i> تحديات برمجية</li>
+                                <li><i class="fas fa-check-circle"></i> شرح مسلي بالرسم</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="css-codzella">
+                            <a href="#" class="resource-title">دورة codzella</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 12 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> مبتدئ</span>
+                            </div>
+                            <div class="rating-container" data-link-id="css-codzella">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> شرح عملي</li>
+                                <li><i class="fas fa-check-circle"></i> HTML+CSS</li>
+                                <li><i class="fas fa-check-circle"></i> شرح الأساسيات</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="book-links">
+                        <h3><i class="fas fa-book"></i> مراجع ومواقع</h3>
+                        <div class="resource-card" data-link-id="css-mdn">
+                            <a href="#" class="resource-title">للبقاء على اطلاع بتحديثات HTML</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> متقدم</span>
+                            </div>
+                            <div class="rating-container" data-link-id="css-mdn">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> مرجع سريع</li>
+                                <li><i class="fas fa-check-circle"></i> شرح وافي لكل الجوانب</li>
+                                <li><i class="fas fa-check-circle"></i> تغطية شاملة</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="css-all-tags">
+                            <a href="#" class="resource-title">جميع أوسمة CSS</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> جميع المستويات</span>
+                            </div>
+                            <div class="rating-container" data-link-id="css-all-tags">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> مرجع شامل</li>
+                                <li><i class="fas fa-check-circle"></i> جميع الأكواد</li>
+                                <li><i class="fas fa-check-circle"></i> مرجع احترافي</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-button">
+                    <a href="exam-css.html" class="btn quiz-btn">اختبار CSS</a>
+                </div>
+            </div>
+
+            <div class="language-section">
+                <div class="language-header">
+                    <img src="https://via.placeholder.com/48" alt="JavaScript" class="language-icon">
+                    <h2>JavaScript</h2>
+                </div>
+                <div class="resources-container">
+                    <div class="video-links">
+                        <h3><i class="fas fa-video"></i> فيديوهات الشرح</h3>
+                        <div class="resource-card" data-link-id="js-elzero">
+                            <a href="#" class="resource-title">دورة JavaScript - Elzero Web School</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 30 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> متقدم</span>
+                            </div>
+                            <div class="rating-container" data-link-id="js-elzero">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> شرح مفصل</li>
+                                <li><i class="fas fa-check-circle"></i> مشاريع تفاعلية</li>
+                                <li><i class="fas fa-check-circle"></i> شرح متكامل</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="js-abdalrhman">
+                            <a href="#" class="resource-title">تعلم JavaScript - عبدالرحمن جمال</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 25 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> متوسط</span>
+                            </div>
+                            <div class="rating-container" data-link-id="js-abdalrhman">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> تعليم مجاني</li>
+                                <li><i class="fas fa-check-circle"></i> تحديات برمجية</li>
+                                <li><i class="fas fa-check-circle"></i> شرح ممتع</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="js-tramiz">
+                            <a href="#" class="resource-title">أكادمية ترميز</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> 20 ساعة</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> مبتدئ</span>
+                            </div>
+                            <div class="rating-container" data-link-id="js-tramiz">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> دروس موجزة</li>
+                                <li><i class="fas fa-check-circle"></i> أمثلة عملية</li>
+                                <li><i class="fas fa-check-circle"></i> جودة إنتاج عالية</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="book-links">
+                        <h3><i class="fas fa-book"></i> مراجع ومواقع</h3>
+                        <div class="resource-card" data-link-id="js-hsoub">
+                            <a href="#" class="resource-title">مرجع لجميع أكواد اللغة</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> جميع المستويات</span>
+                            </div>
+                            <div class="rating-container" data-link-id="js-hsoub">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> مرجع أساسي</li>
+                                <li><i class="fas fa-check-circle"></i> أمثلة تفاعلية</li>
+                                <li><i class="fas fa-check-circle"></i> مجاني أونلاين</li>
+                            </ul>
+                        </div>
+                        <div class="resource-card" data-link-id="js-updates">
+                            <a href="#" class="resource-title">للبقاء باطلاع لتحديثات اللغة</a>
+                            <div class="resource-meta">
+                                <span class="resource-duration"><i class="fas fa-clock"></i> مرجع دائم</span>
+                                <span class="resource-level"><i class="fas fa-signal"></i> جميع المستويات</span>
+                            </div>
+                            <div class="rating-container" data-link-id="js-updates">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                    <span class="average-rating">0.0</span>
+                                    <span class="rating-count">(0 تقييم)</span>
+                                </div>
+                            </div>
+                            <button class="toggle-features"><i class="fas fa-chevron-down"></i></button>
+                            <ul class="features-list">
+                                <li><i class="fas fa-check-circle"></i> تركيز على الأساسيات</li>
+                                <li><i class="fas fa-check-circle"></i> نصائح متقدمة</li>
+                                <li><i class="fas fa-check-circle"></i> أسلوب مختصر</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-button">
+                    <a href="exam-js.html" class="btn quiz-btn">اختبار JavaScript</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="popup-overlay" id="chatPopup" aria-hidden="true">
+        <div class="popup-content chat-container">
+            <button class="close-popup" id="closeChat"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-comment"></i> محادثة الطلاب</h2>
+            <div class="chat-loading" id="chatLoading">
+                <i class="fas fa-spinner"></i>
+                <p>جارٍ التحميل...</p>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <button class="load-more-btn" id="loadMoreBtn">
+                <i class="fas fa-sync"></i> تحميل المزيد
+            </button>
+            <div class="chat-input-container">
+                <input type="text" id="messageInput" placeholder="اكتب رسالتك...">
+                <button class="send-message-btn" id="sendMessageBtn">
+                    <i class="fas fa-paper-plane"></i> إرسال
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="roadmapPopup" aria-hidden="true">
+        <div class="popup-content roadmap-content">
+            <button class="close-popup" id="closeRoadmap"><i class="fas fa-times"></i></button>
+            <h2><i class="fas fa-map"></i> خارطة التعلم</h2>
+            <div class="roadmap-steps">
+                <div class="roadmap-item">
+                    <span class="roadmap-number">1</span>
+                    <div class="roadmap-text">
+                        <h3>HTML</h3>
+                        <p>تعلم هيكلة صفحات الويب باستخدام HTML5</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">2</span>
+                    <div class="roadmap-text">
+                        <h3>CSS</h3>
+                        <p>إتقان تنسيق وتصميم المواقع باستخدام CSS3</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">3</span>
+                    <div class="roadmap-text">
+                        <h3>JavaScript</h3>
+                        <p>إضافة التفاعل والمنطق للمواقع باستخدام JavaScript</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">4</span>
+                    <div class="roadmap-text">
+                        <h3>Git & GitHub</h3>
+                        <p>تعلم إدارة المشاريع والتعاون مع المطورين</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">5</span>
+                    <div class="roadmap-text">
+                        <h3>أطر العمل (Frameworks)</h3>
+                        <p>تعلم React أو Vue.js لبناء تطبيقات ويب متقدمة</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">6</span>
+                    <div class="roadmap-text">
+                        <h3>أدوات البناء</h3>
+                        <p>إتقان استخدام Webpack, Babel وغيرها</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">7</span>
+                    <div class="roadmap-text">
+                        <h3>التصميم المتجاوب</h3>
+                        <p>إتقان تصميم المواقع المتوافقة مع جميع الأجهزة</p>
+                    </div>
+                </div>
+                <div class="roadmap-item">
+                    <span class="roadmap-number">8</span>
+                    <div class="roadmap-text">
+                        <h3>النشر والتوزيع</h3>
+                        <p>تعلم نشر المواقع على السيرفرات</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="#" class="footer-logo">
+                    <i class="fas fa-fire" style="color: #f97316;"></i> Edumates
+                </a>
+                <p class="footer-description">
+                    منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3 class="footer-title">الكورسات</h3>
+                    <ul>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الكورسات الجديدة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الكورسات الأكثر مشاهدة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الكورسات المجانية</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الكورسات المدفوعة</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">المساعدة</h3>
+                    <ul>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> سياسة الخصوصية</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> شروط الاستخدام</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-angle-left"></i> الدعم الفني</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3 class="footer-title">تواصل معنا</h3>
+                    <ul>
+                        <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر، القاهرة</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-phone"></i> 01116442939</a></li>
+                        <li><a href="#" class="footer-link"><i class="fas fa-envelope"></i> info@edumates.com</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">© <span class="current-year"></span> Edumates. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
+
+    <script src="courses-det-script.js"></script>
+    <!-- كود JavaScript إضافي لدعم زر المميزات وفتح/إغلاق المحادثة -->
+    <script>
+        // وظيفة لتبديل إظهار/إخفاء المميزات
+        document.querySelectorAll('.toggle-features').forEach(button => {
+            button.addEventListener('click', () => {
+                const featuresList = button.nextElementSibling;
+                featuresList.classList.toggle('active');
+                button.classList.toggle('active');
+            });
+        });
+
+        // وظيفة لفتح/إغلاق نافذة الدردشة
+        document.getElementById('chatBtn').addEventListener('click', () => {
+            document.getElementById('chatPopup').classList.add('active');
+        });
+
+        document.getElementById('closeChat').addEventListener('click', () => {
+            document.getElementById('chatPopup').classList.remove('active');
+        });
+    </script>
 </body>
 </html>
