@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset 
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://edumates.netlify.app/</loc>
   </url>
-
   <url>
     <loc>https://edumates.netlify.app/courses</loc>
   </url>
-
   <url>
     <loc>https://edumates.netlify.app/courses=det.html?id=1</loc>
   </url>
-
   <url>
     <loc>https://edumates.netlify.app/exam-html</loc>
   </url>
-
   <url>
     <loc>https://edumates.netlify.app/exam-css</loc>
   </url>
-
   <url>
     <loc>https://edumates.netlify.app/exam-js</loc>
   </url>
-
 </urlset>
