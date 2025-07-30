@@ -1,26 +1,23 @@
 document.addEventListener('DOMContentLoaded', async function() {
     // تهيئة Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
-        authDomain: "edumates-983dd.firebaseapp.com",
-        projectId: "edumates-983dd",
-        storageBucket: "edumates-983dd.firebasestorage.app",
-        messagingSenderId: "172548876353",
-        appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
-        measurementId: "G-L1KCZTW8R9"
+        apiKey: "AIzaSyD3-3DWygRsa6XtdXkqPH-03u8g1BOdKVE",
+        authDomain: "edumates-academy.firebaseapp.com",
+        projectId: "edumates-academy",
+        storageBucket: "edumates-academy.appspot.com",
+        messagingSenderId: "470232849413",
+        appId: "1:470232849413:web:35cf4dc85e5bcdb09b8056"
     };
 
     // استيراد مكتبات Firebase
-    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
-    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
-    const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
-    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js");
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getAuth, GoogleAuthProvider, signInWithPopup, signOut } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+    const { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, limit, startAfter, where, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
     // تهيئة التطبيق
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
-    const analytics = getAnalytics(app);
     const db = getFirestore(app);
 
     // عناصر DOM
@@ -76,6 +73,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     let hasMoreMessages = true;
     let unsubscribeRatings = {};
 
+    // وظيفة إشعارات التوست
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+
     // إعداد مستمعي الأحداث
     setupEventListeners();
 
@@ -110,10 +116,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     // وظائف المحادثة
     function toggleChatPopup() {
         if (elements.chatPopup) {
-            const isActive = elements.chatPopup.classList.toggle('active');
-            elements.chatPopup.setAttribute('aria-hidden', !isActive);
-            console.log('Chat popup toggled:', isActive ? 'Opened' : 'Closed');
-            if (isActive) {
+            const isVisible = elements.chatPopup.style.display === "block";
+            elements.chatPopup.style.display = isVisible ? "none" : "block";
+            elements.chatPopup.setAttribute('aria-hidden', isVisible);
+            console.log('Chat popup toggled:', !isVisible ? 'Opened' : 'Closed');
+            if (!isVisible) {
                 elements.messageInput.focus();
                 if (!elements.chatMessages.hasChildNodes()) {
                     loadMessages();
@@ -138,18 +145,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     async function sendMessage() {
         const user = auth.currentUser;
         if (!user) {
-            alert('يرجى تسجيل الدخول لإرسال الرسائل');
+            showToast('يرجى تسجيل الدخول لإرسال الرسائل', 'error');
             return;
         }
 
         const messageText = elements.messageInput.value.trim();
         if (!messageText) {
-            alert('يرجى إدخال رسالة غير فارغة');
+            showToast('يرجى إدخال رسالة غير فارغة', 'error');
             return;
         }
 
         if (messageText.length > 500) {
-            alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
+            showToast('الرسالة طويلة جدًا، الحد الأقصى 500 حرف', 'error');
             return;
         }
 
@@ -163,11 +170,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 timestamp: serverTimestamp()
             });
             elements.messageInput.value = '';
-            scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
+            scrollChatToBottom();
+            showToast('تم إرسال الرسالة بنجاح', 'success');
             console.log('Message sent and scrolled to bottom');
         } catch (error) {
             console.error('خطأ في إرسال الرسالة:', error);
-            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+            showToast('حدث خطأ أثناء إرسال الرسالة: ' + error.message, 'error');
         } finally {
             elements.sendMessageBtn.disabled = false;
         }
@@ -179,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         elements.chatLoading.classList.add('active');
         let messagesQuery = query(
             collection(db, 'messages'),
-            orderBy('timestamp', 'asc'), // ترتيب تصاعدي لعرض الرسائل القديمة أولاً
+            orderBy('timestamp', 'asc'),
             limit(messagesPerPage)
         );
 
@@ -205,17 +213,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
             elements.chatLoading.classList.remove('active');
 
-            // تنظيف قائمة الرسائل فقط عند التحميل الأول
             if (!elements.chatMessages.hasChildNodes()) {
                 elements.chatMessages.innerHTML = '';
                 console.log('Cleared chat messages on initial load');
             }
 
-            // إضافة الرسائل في نهاية القائمة
             messages.forEach((message) => {
-                if (!message.text || !message.timestamp) return; // تخطي الرسائل غير الصالحة
+                if (!message.text || !message.timestamp) return;
                 const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
-                const messageElement = document.createElement('div');
+                const messageElement = document.createElement typo;
                 messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
                 messageElement.innerHTML = `
                     <div class="message-header">
@@ -227,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </div>
                     <p class="message-text">${sanitizeHTML(message.text)}</p>
                 `;
-                elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
+                elements.chatMessages.appendChild(messageElement);
                 console.log(`Added message from ${message.userName} at ${message.timestamp ? new Date(message.timestamp.toMillis()).toISOString() : 'now'}`);
             });
 
@@ -235,7 +241,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, (error) => {
             console.error('خطأ في تحميل الرسائل:', error);
             elements.chatLoading.classList.remove('active');
-            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+            showToast('حدث خطأ أثناء تحميل الرسائل: ' + error.message, 'error');
         });
     }
 
@@ -249,7 +255,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // وظائف تبديل الميزات
     function toggleFeatures(event) {
         const toggle = event.currentTarget;
-        const featuresList = toggle.nextElementSibling.nextElementSibling; // تعديل لتخطي div التقييم
+        const featuresList = toggle.nextElementSibling.nextElementSibling;
         const isActive = featuresList.classList.contains('active');
 
         document.querySelectorAll('.features-list').forEach(list => {
@@ -272,9 +278,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
             updateUIAfterLogin(user);
+            showToast(`مرحباً ${user.displayName} 👋`, 'success');
         } catch (error) {
             console.error('خطأ في تسجيل الدخول:', error);
-            alert('حدث خطأ أثناء تسجيل الدخول: ' + error.message);
+            showToast('فشل تسجيل الدخول: ' + error.message, 'error');
         } finally {
             elements.googleLoginBtn.disabled = false;
         }
@@ -299,6 +306,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         location.reload();
                     } catch (error) {
                         console.error('خطأ في تسجيل الخروج:', error);
+                        showToast('حدث خطأ أثناء تسجيل الخروج: ' + error.message, 'error');
                     }
                 });
             }
@@ -309,12 +317,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     async function submitRating(linkId, rating) {
         const user = auth.currentUser;
         if (!user) {
-            alert('يرجى تسجيل الدخول لتقييم الرابط');
+            showToast('يرجى تسجيل الدخول لتقييم الرابط', 'error');
             return;
         }
 
         try {
-            // التحقق مما إذا كان المستخدم قد قيّم الرابط مسبقًا
             const existingRatingQuery = query(
                 collection(db, 'ratings'),
                 where('linkId', '==', linkId),
@@ -323,7 +330,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const existingRatingSnapshot = await getDocs(existingRatingQuery);
 
             if (!existingRatingSnapshot.empty) {
-                alert('لقد قيّمت هذا الرابط مسبقًا');
+                showToast('لقد قيّمت هذا الرابط مسبقًا', 'error');
                 return;
             }
 
@@ -334,9 +341,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 timestamp: serverTimestamp()
             });
             console.log(`تم تقييم الرابط ${linkId} بـ ${rating} نجوم`);
+            showToast('تم تسجيل تقييمك، شكرًا لك!', 'success');
         } catch (error) {
             console.error('خطأ في إرسال التقييم:', error);
-            alert('حدث خطأ أثناء إرسال التقييم: ' + error.message);
+            showToast('حدث خطأ أثناء إرسال التقييم: ' + error.message, 'error');
         }
     }
 
@@ -344,18 +352,13 @@ document.addEventListener('DOMContentLoaded', async function() {
         const stars = starsContainer.querySelectorAll('i');
         stars.forEach(star => {
             const starValue = parseInt(star.getAttribute('data-value'));
-            // تلوين النجوم بناءً على تقييم المستخدم إذا موجود
             if (userRating && starValue <= userRating) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            }
-            // تلوين النجوم بناءً على المتوسط فقط إذا كان هناك تقييمات
-            else if (rating > 0 && starValue <= Math.floor(rating)) {
+            } else if (rating > 0 && starValue <= Math.floor(rating)) {
                 star.classList.add('rated');
                 star.style.color = 'var(--accent-orange)';
-            }
-            // إذا لم يكن هناك تقييمات أو تقييم المستخدم، كل النجوم رمادية
-            else {
+            } else {
                 star.classList.remove('rated');
                 star.style.color = 'var(--text-light)';
             }
@@ -400,6 +403,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         }, (error) => {
             console.error('خطأ في تحميل التقييمات:', error);
             updateStarDisplay(starsContainer, 0, 0);
+            showToast('حدث خطأ أثناء تحميل التقييمات: ' + error.message, 'error');
         });
     }
 
@@ -474,12 +478,20 @@ document.addEventListener('DOMContentLoaded', async function() {
             const linkId = starsContainer.parentElement.getAttribute('data-link-id');
             loadRatings(linkId, starsContainer);
 
-            starsContainer.querySelectorAll('i').forEach(star => {
+            starsContainer.querySelectorAll('i').forEach((star, index) => {
                 star.addEventListener('click', () => {
-                    const rating = parseInt(star.getAttribute('data-value'));
+                    const rating = index + 1;
                     submitRating(linkId, rating);
                 });
             });
+        });
+
+        // إغلاق نافذة المحادثة عند النقر خارجها
+        window.addEventListener("click", (e) => {
+            if (elements.chatPopup && !elements.chatPopup.contains(e.target) && e.target.id !== "chatBtn") {
+                elements.chatPopup.style.display = "none";
+                elements.chatPopup.setAttribute("aria-hidden", true);
+            }
         });
     }
 
@@ -487,10 +499,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     auth.onAuthStateChanged(user => {
         if (user) {
             updateUIAfterLogin(user);
-            if (elements.chatPopup.classList.contains('active') && !unsubscribeMessages) {
+            if (elements.chatPopup.style.display === "block" && !unsubscribeMessages) {
                 loadMessages();
             }
-            // تحديث تقييمات المستخدم
             document.querySelectorAll('.rating-stars').forEach(starsContainer => {
                 const linkId = starsContainer.parentElement.getAttribute('data-link-id');
                 loadRatings(linkId, starsContainer);
@@ -504,10 +515,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 unsubscribeMessages();
                 unsubscribeMessages = null;
             }
-            // إلغاء الاشتراك في تقييمات المستخدم
             Object.values(unsubscribeRatings).forEach(unsubscribe => unsubscribe());
             unsubscribeRatings = {};
-            // إعادة تحميل التقييمات العامة
             document.querySelectorAll('.rating-stars').forEach(starsContainer => {
                 const linkId = starsContainer.parentElement.getAttribute('data-link-id');
                 loadRatings(linkId, starsContainer);
