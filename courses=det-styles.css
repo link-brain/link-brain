@@ -423,7 +423,7 @@ body {
   margin-bottom: 0.8rem;
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column; /* Ensure vertical stacking */
   padding: 0.8rem;
   background: var(--light-bg);
   border-radius: var(--border-radius);
@@ -437,13 +437,19 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.link-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
 .video-links a,
 .book-links a {
   color: var(--primary-blue);
   text-decoration: none;
   font-weight: 500;
   transition: var(--transition);
-  flex: 1;
 }
 
 .video-links a:hover,
@@ -455,7 +461,6 @@ body {
   cursor: pointer;
   color: var(--primary-blue);
   font-size: 1rem;
-  margin-right: 0.5rem;
   transition: var(--transition);
 }
 
@@ -473,7 +478,6 @@ body {
   padding: 1rem;
   border-radius: var(--border-radius);
   margin-top: 0.6rem;
-  margin-right: 1rem;
   box-shadow: var(--box-shadow);
   border: 1px solid var(--border-color);
 }
@@ -500,7 +504,6 @@ body {
   align-items: center;
   gap: 0.3rem;
   margin-top: 0.6rem;
-  margin-right: 0.8rem;
 }
 
 .rating-stars i {
