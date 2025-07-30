@@ -1,324 +1,479 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفاصيل الدورة - منصة إدميتس التعليمية</title>
-    <meta name="description" content="استكشف تفاصيل دوراتنا التعليمية مع روابط للفيديوهات، الكتب والاختبارات لضمان أفضل تجربة تعليمية">
-    
-    <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="courses=det-styles.css">
-    
-    <!-- Preload important resources -->
-    <link rel="preload" href="https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js" as="script">
-    <link rel="preload" href="https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js" as="script">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edumates - كورسات الواجهة الأمامية</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="courses=det-styles.css" />
+  <script type="module" src="courses=det-script.js"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>جاري التحميل...</p>
-    </div>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <a href="index.html" class="logo">إدميتس</a>
-        
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">الرئيسية</a>
-            <a href="courses.html" class="nav-link active">الدورات</a>
-            <a href="about.html" class="nav-link">من نحن</a>
-            <a href="contact.html" class="nav-link">اتصل بنا</a>
-            
-            <div class="auth-buttons">
-                <button id="googleLoginBtn" class="google-login-btn">
-                    <i class="fab fa-google"></i>
-                    تسجيل الدخول
-                </button>
-                <button id="chatBtn" class="chat-btn">
-                    <i class="fas fa-comments"></i>
-                    الدردشة
-                </button>
-            </div>
-        </div>
-        
-        <button class="mobile-menu-btn">
-            <i class="fas fa-bars"></i>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">Edumates</a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">الرئيسية</a>
+      <a href="courses.html" class="nav-link active">الكورسات</a>
+      <a href="#footer" class="nav-link">اتصل بنا</a>
+      <div class="auth-buttons">
+        <button class="btn google-login-btn" id="googleLoginBtn">
+          <i class="fab fa-google"></i> تسجيل الدخول عبر جوجل
         </button>
-    </nav>
+        <button class="btn chat-btn" id="chatBtn">
+          <i class="fas fa-comment-alt"></i> المحادثة
+        </button>
+      </div>
+    </div>
+    <button class="mobile-menu-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
 
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
-        <a href="index.html">الرئيسية</a> / 
-        <a href="courses.html">الدورات</a> / 
-        <span>تفاصيل الدورة</span>
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="index.html">الرئيسية</a> >
+    <a href="courses.html">الكورسات</a> >
+    <span>frontend</span>
+  </div>
+
+  <!-- Main Section Start -->
+  <section class="course-details-section">
+    <div class="section-header">
+      <h2>تعلم frontend</h2>
+      <p>
+        اكتشف أساسيات تطوير الويب مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية
+      </p>
+      <button class="btn view-roadmap-btn">
+        <i class="fas fa-map"></i> View Roadmap
+      </button>
     </div>
 
-    <!-- Course Details Section -->
-    <section class="course-details-section">
-        <div class="section-header">
-            <h2>تعلم تطوير الواجهات الأمامية (Front End)</h2>
-            <p>هذه الدورة الشاملة ستأخذك من المبتدئ إلى المحترف في تطوير الواجهات الأمامية باستخدام أحدث التقنيات</p>
+    <!-- HTML Section -->
+    <div class="language-section">
+      <h3><i class="fab fa-html5"></i> HTML</h3>
+      <div class="resources-container">
+        <div class="video-links">
+          <h4>فيديوهات الشرح</h4>
+          <ul>
+            <li data-link-id="html-elzero">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> دورة HTML - Elzero Web School</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>افضل قناة عربيه</p>
+                <p>تغطية شاملة للأساسيات</p>
+                <p>تمارين عملية</p>
+              </div>
+            </li>
+            <li data-link-id="html-abdalrhman">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> دوره abdalrhman Gamal</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>محتوى مجاني بالكامل</p>
+                <p>شرح مبسط</p>
+                <p>تغطيه جميع الاساسيات</p>
+              </div>
+            </li>
+            <li data-link-id="html-outcode">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> outcode</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>موجز ومركز</p>
+                <p>تفاصيل</p>
+                <p>فيديوهات قصيره</p>
+              </div>
+            </li>
+          </ul>
         </div>
-
-        <div class="language-section">
-            <h3>الموارد التعليمية</h3>
-            
-            <div class="resources-container">
-                <!-- Video Links Section -->
-                <div class="video-links">
-                    <h4>فيديوهات تعليمية</h4>
-                    <ul>
-                        <li data-link-id="video1">
-                            <a href="https://youtube.com/playlist?list=PLDoPjvoNmBAzjsz06gkzlSrlev53MGIKe" target="_blank" rel="noopener noreferrer">
-                                سلسلة تعلم HTML كاملة من الزيرو
-                            </a>
-                            <div class="rating-stars">
-                                <span class="average-rating">0.0</span>
-                                <span class="rating-count">(0 تقييم)</span>
-                                <i class="fas fa-star" data-value="1"></i>
-                                <i class="fas fa-star" data-value="2"></i>
-                                <i class="fas fa-star" data-value="3"></i>
-                                <i class="fas fa-star" data-value="4"></i>
-                                <i class="fas fa-star" data-value="5"></i>
-                            </div>
-                        </li>
-                        <li data-link-id="video2">
-                            <a href="https://youtube.com/playlist?list=PLDoPjvoNmBAz6DT8SzQ1CODJTH-NIA7R9" target="_blank" rel="noopener noreferrer">
-                                سلسلة تعلم CSS كاملة من الصفر
-                            </a>
-                            <div class="rating-stars">
-                                <span class="average-rating">0.0</span>
-                                <span class="rating-count">(0 تقييم)</span>
-                                <i class="fas fa-star" data-value="1"></i>
-                                <i class="fas fa-star" data-value="2"></i>
-                                <i class="fas fa-star" data-value="3"></i>
-                                <i class="fas fa-star" data-value="4"></i>
-                                <i class="fas fa-star" data-value="5"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Book Links Section -->
-                <div class="book-links">
-                    <h4>كتب ومراجع</h4>
-                    <ul>
-                        <li data-link-id="book1">
-                            <a href="https://example.com/html-book.pdf" target="_blank" rel="noopener noreferrer">
-                                كتاب HTML5 المرجع الشامل
-                            </a>
-                            <div class="rating-stars">
-                                <span class="average-rating">0.0</span>
-                                <span class="rating-count">(0 تقييم)</span>
-                                <i class="fas fa-star" data-value="1"></i>
-                                <i class="fas fa-star" data-value="2"></i>
-                                <i class="fas fa-star" data-value="3"></i>
-                                <i class="fas fa-star" data-value="4"></i>
-                                <i class="fas fa-star" data-value="5"></i>
-                            </div>
-                        </li>
-                        <li data-link-id="book2">
-                            <a href="https://example.com/css-book.pdf" target="_blank" rel="noopener noreferrer">
-                                كتاب CSS3 المتقدم
-                            </a>
-                            <div class="rating-stars">
-                                <span class="average-rating">0.0</span>
-                                <span class="rating-count">(0 تقييم)</span>
-                                <i class="fas fa-star" data-value="1"></i>
-                                <i class="fas fa-star" data-value="2"></i>
-                                <i class="fas fa-star" data-value="3"></i>
-                                <i class="fas fa-star" data-value="4"></i>
-                                <i class="fas fa-star" data-value="5"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                
-                <!-- Quiz Section -->
-                <div class="quiz-button">
-                    <button class="quiz-btn">
-                        <i class="fas fa-graduation-cap"></i>
-                        ابدأ الاختبار النهائي
-                    </button>
-                </div>
-            </div>
+        <div class="book-links">
+          <h4>مواقع مهمه</h4>
+          <ul>
+            <li data-link-id="html-ref">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> مرجع لجميع عناصر html</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>جميع الاكواد</p>
+                <p>تفصيل كامل للاكواد</p>
+                <p>موقع عربي</p>
+              </div>
+            </li>
+            <li data-link-id="html-updates">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> للبقاء على اطلاع بكل تحديثاتhtml</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>مرجع كامل</p>
+                <p>واضح جذاب</p>
+                <p>شرح مفصل</p>
+              </div>
+            </li>
+          </ul>
         </div>
-
-        <!-- Course Features -->
-        <div class="language-section">
-            <h3>مميزات الدورة</h3>
-            
-            <div class="resources-container">
-                <div class="video-links">
-                    <h4>HTML Features</h4>
-                    <div class="toggle-features">
-                        <i class="fas fa-chevron-down"></i> عرض المميزات
-                    </div>
-                    <div class="features-list">
-                        <p>• تعلم أساسيات HTML5</p>
-                        <p>• فهم هيكل الصفحة</p>
-                        <p>• استخدام العناصر الدلالية</p>
-                        <p>• إنشاء النماذج والجداول</p>
-                        <a href="exam-html.html" class="btn">اختبار HTML</a>
-                    </div>
-                </div>
-                
-                <div class="book-links">
-                    <h4>CSS Features</h4>
-                    <div class="toggle-features">
-                        <i class="fas fa-chevron-down"></i> عرض المميزات
-                    </div>
-                    <div class="features-list">
-                        <p>• تعلم أساسيات CSS3</p>
-                        <p>• التنسيق المتقدم</p>
-                        <p>• Flexbox و Grid</p>
-                        <p>• التحريك والانتقالات</p>
-                        <a href="exam-css.html" class="btn">اختبار CSS</a>
-                    </div>
-                </div>
-                
-                <div class="quiz-button">
-                    <button class="view-roadmap-btn">
-                        <i class="fas fa-map-marked-alt"></i>
-                        عرض خارطة التعلم
-                    </button>
-                </div>
-            </div>
+        <div class="quiz-button">
+          <a href="exam-html.html" class="btn quiz-btn">
+            <i class="fas fa-question-circle"></i> اختبار HTML
+          </a>
         </div>
-    </section>
-
-    <!-- Roadmap Popup -->
-    <div class="roadmap-popup" id="roadmapPopup">
-        <div class="roadmap-content">
-            <button class="close-roadmap" id="closeRoadmap">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2>خارطة تعلم تطوير الواجهات الأمامية</h2>
-            
-            <div class="roadmap-item">
-                <h3>المرحلة الأولى: أساسيات HTML</h3>
-                <p>• فهم هيكل HTML الأساسي</p>
-                <p>• تعلم العناصر الأساسية (العناوين، الفقرات، الروابط)</p>
-                <p>• إنشاء القوائم والجداول</p>
-                <p>• استخدام النماذج وعناصر الإدخال</p>
-            </div>
-            
-            <div class="roadmap-item">
-                <h3>المرحلة الثانية: أساسيات CSS</h3>
-                <p>• الربط بين HTML وCSS</p>
-                <p>• تحديد العناصر باستخدام الـSelectors</p>
-                <p>• تعلم خصائص النص والخلفيات</p>
-                <p>• فهم نموذج الصندوق (Box Model)</p>
-            </div>
-            
-            <div class="roadmap-item">
-                <h3>المرحلة الثالثة: CSS المتقدم</h3>
-                <p>• تعلم Flexbox لتخطيط الصفحات</p>
-                <p>• استخدام CSS Grid للتصاميم المعقدة</p>
-                <p>• إنشاء تأثيرات الحركة والانتقالات</p>
-                <p>• تصميم متجاوب لجميع الشاشات</p>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- Chat Popup -->
-    <div class="chat-popup" id="chatPopup">
-        <div class="chat-content">
-            <button class="close-chat" id="closeChat">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2>دردشة الدورة التعليمية</h2>
-            
-            <div class="chat-messages" id="chatMessages"></div>
-            
-            <div class="chat-loading" id="chatLoading">
-                <i class="fas fa-spinner fa-spin"></i> جاري تحميل الرسائل...
-            </div>
-            
-            <button class="load-more-btn" id="loadMoreBtn">تحميل المزيد</button>
-            
-            <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا...">
-                <button id="sendMessageBtn" class="send-message-btn">
-                    <i class="fas fa-paper-plane"></i> إرسال
-                </button>
-            </div>
+    <!-- CSS Section -->
+    <div class="language-section">
+      <h3><i class="fab fa-css3-alt"></i> CSS</h3>
+      <div class="resources-container">
+        <div class="video-links">
+          <h4>فيديوهات الشرح</h4>
+          <ul>
+            <li data-link-id="css-elzero">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> دورة CSS - Elzero Web School</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>شرح عملي وتفاعلي</p>
+                <p>مشاريع تصميمية</p>
+                <p>شرح تفاعلي</p>
+              </div>
+            </li>
+            <li data-link-id="css-abdalrhman">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> تعلم CSS - abdalrhman Gamal</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>شرح تفصيلي</p>
+                <p>تحديات برمجية</p>
+                <p>شرح مسلي بالرسم</p>
+              </div>
+            </li>
+            <li data-link-id="css-codzella">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> دورة codzella</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>شرح عملي</p>
+                <p>html+css</p>
+                <p>شرح الاساسيات</p>
+              </div>
+            </li>
+          </ul>
         </div>
+        <div class="book-links">
+          <h4>مواقع مهمه</h4>
+          <ul>
+            <li data-link-id="css-updates">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> للبقاء على اطلاع بتحديثات html</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>مرجع سريع</p>
+                <p>شرح وافي لكل الجوانب</p>
+                <p>تغطية شاملة</p>
+              </div>
+            </li>
+            <li data-link-id="css-tags">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> جميع اوسمهcss</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>مرجع شامل</p>
+                <p>جميع الاكواد</p>
+                <p>مرجع احترافي</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="quiz-button">
+          <a href="exam-css.html" class="btn quiz-btn">
+            <i class="fas fa-question-circle"></i> اختبار CSS
+          </a>
+        </div>
+      </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <div class="footer-logo">إدميتس</div>
-                <p class="footer-description">
-                    منصة تعليمية متكاملة تهدف إلى تقديم أفضل المحتويات التعليمية 
-                    بطريقة تفاعلية وسهلة للجميع.
-                </p>
-                <div class="social-links">
-                    <a href="#" class="social-link" aria-label="Twitter">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Instagram">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-link" aria-label="YouTube">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h3 class="footer-title">روابط سريعة</h3>
-                    <ul>
-                        <li><a href="index.html" class="footer-link">الرئيسية</a></li>
-                        <li><a href="courses.html" class="footer-link">الدورات</a></li>
-                        <li><a href="about.html" class="footer-link">من نحن</a></li>
-                        <li><a href="contact.html" class="footer-link">اتصل بنا</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3 class="footer-title">الدورات</h3>
-                    <ul>
-                        <li><a href="#" class="footer-link">تطوير الويب</a></li>
-                        <li><a href="#" class="footer-link">برمجة التطبيقات</a></li>
-                        <li><a href="#" class="footer-link">علوم البيانات</a></li>
-                        <li><a href="#" class="footer-link">الأمن السيبراني</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h3 class="footer-title">المساعدة</h3>
-                    <ul>
-                        <li><a href="#" class="footer-link">الأسئلة الشائعة</a></li>
-                        <li><a href="#" class="footer-link">الدعم الفني</a></li>
-                        <li><a href="#" class="footer-link">سياسة الخصوصية</a></li>
-                        <li><a href="#" class="footer-link">شروط الاستخدام</a></li>
-                    </ul>
-                </div>
-            </div>
+    <!-- JavaScript Section -->
+    <div class="language-section">
+      <h3><i class="fab fa-js-square"></i> JavaScript</h3>
+      <div class="resources-container">
+        <div class="video-links">
+          <h4>فيديوهات شرح</h4>
+          <ul>
+            <li data-link-id="js-elzero">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> دورة JavaScript - Elzero Web School</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>شرح مفصل</p>
+                <p>شرح تفاعلي</p>
+                <p>مشاريع تفاعلية</p>
+              </div>
+            </li>
+            <li data-link-id="js-abdalrhman">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> تعلم JavaScript - abdalrhman Gamal</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>تعليم مجاني</p>
+                <p>تحديات برمجية</p>
+                <p>شرح ممتع</p>
+              </div>
+            </li>
+            <li data-link-id="js-trmiz">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> اكادمية ترميز</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>دروس موجزة</p>
+                <p>أمثلة عملية</p>
+                <p>جودة إنتاج عالية</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        
-        <div class="footer-bottom">
-            <p class="copyright">
-                جميع الحقوق محفوظة &copy; <span class="current-year">2023</span> إدميتس
-            </p>
+        <div class="book-links">
+          <h4>مواقع ومراجع</h4>
+          <ul>
+            <li data-link-id="js-ref">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> مرجع لجميع اكواد اللغه</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>مرجع اساسي</p>
+                <p>أمثلة تفاعلية</p>
+                <p>مجاني أونلاين</p>
+              </div>
+            </li>
+            <li data-link-id="js-updates">
+              <span class="toggle-features"><i class="fas fa-chevron-down"></i> للبقاء باطلاع لتحديثات اللغه</span>
+              <div class="rating-stars">
+                <i class="fas fa-star" data-value="1"></i>
+                <i class="fas fa-star" data-value="2"></i>
+                <i class="fas fa-star" data-value="3"></i>
+                <i class="fas fa-star" data-value="4"></i>
+                <i class="fas fa-star" data-value="5"></i>
+                <span class="average-rating">0.0</span>
+                <span class="rating-count">(0 تقييم)</span>
+              </div>
+              <div class="features-list">
+                <p>تركيز على الأساسيات</p>
+                <p>نصائح متقدمة</p>
+                <p>أسلوب مختصر</p>
+              </div>
+            </li>
+          </ul>
         </div>
-    </footer>
+        <div class="quiz-button">
+          <a href="exam-js.html" class="btn quiz-btn">
+            <i class="fas fa-question-circle"></i> اختبار JavaScript
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- JavaScript -->
-    <script src="courses=det-script.js" defer></script>
+  <!-- Chat Popup -->
+  <div class="chat-popup" id="chatPopup" aria-hidden="true">
+    <div class="chat-content">
+      <span class="close-chat" id="closeChat"><i class="fas fa-times"></i></span>
+      <h2>محادثة الطلاب</h2>
+      <div class="chat-loading" id="chatLoading">جارٍ التحميل...</div>
+      <button class="btn load-more-btn" id="loadMoreBtn">تحميل المزيد</button>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." />
+        <button class="btn send-message-btn" id="sendMessageBtn">
+          <i class="fas fa-paper-plane"></i> إرسال
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Roadmap Popup -->
+  <div class="roadmap-popup" id="roadmapPopup" aria-hidden="true">
+    <div class="roadmap-content">
+      <span class="close-roadmap" id="closeRoadmap"><i class="fas fa-times"></i></span>
+      <h2>خارطة طريق تطوير الواجهات الأمامية</h2>
+      <div class="roadmap-item">
+        <h3>1. HTML</h3>
+        <p>1-html لتقوم بتصميم هيكل الصفحه</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>2. CSS</h3>
+        <p>لتعلم تخطيط الموقع والالوان والتصاميم</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>3. JavaScript</h3>
+        <p>اضافه المنطق والتحريك والوظائف للموقع</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>4. التحكم في الإصدارات</h3>
+        <p>تعلم Git وGitHub للتحكم في الإصدارات، التعاون، والمساهمة في المشاريع مفتوحة المصدر.</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>5. أطر عمل الواجهات الأمامية</h3>
+        <p>استكشف React، Vue، أو Angular. افهم المكونات، إدارة الحالة، والتوجيه.</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>6. أدوات البناء</h3>
+        <p>تعلم Webpack، Vite، أو Parcel للتجميع، مع npm/yarn لإدارة الحزم.</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>7. التصميم الاحترافي</h3>
+        <p>tailwind css, bootstrap</p>
+      </div>
+      <div class="roadmap-item">
+        <h3>8. النشر</h3>
+        <p>تعلم نشر التطبيقات باستخدام Vercel، Netlify، أو AWS. افهم خطوط أنابيب CI/CD.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer" id="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h2 class="footer-logo">Edumates</h2>
+        <p class="footer-description">
+          منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <div class="footer-column">
+          <h3 class="footer-title">الكورسات</h3>
+          <ul>
+            <li><a href="#" class="footer-link">الكورسات الجديدة <i class="fas fa-chevron-left"></i></a></li>
+            <li><a href="#" class="footer-link">الكورسات الأكثر مشاهدة <i class="fas fa-chevron-left"></i></a></li>
+            <li><a href="#" class="footer-link">الكورسات المجانية <i class="fas fa-chevron-left"></i></a></li>
+            <li><a href="#" class="footer-link">الكورسات المدفوعة <i class="fas fa-chevron-left"></i></a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3 class="footer-title">المساعدة</h3>
+          <ul>
+            <li><a href="#" class="footer-link">سياسة الخصوصية <i class="fas fa-chevron-left"></i></a></li>
+            <li><a href="#" class="footer-link">شروط الاستخدام <i class="fas fa-chevron-left"></i></a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3 class="footer-title">تواصل معنا</h3>
+          <ul>
+            <li><a href="#" class="footer-link"><i class="fas fa-map-marker-alt"></i> مصر القاهره</a></li>
+            <li><a href="tel:01116442939" class="footer-link"><i class="fas fa-phone-alt"></i> 01116442939</a></li>
+            <li><a href="mailto:info@edumates.com" class="footer-link"><i class="fas fa-envelope"></i> info@edumates.com</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="copyright">© <span class="current-year"></span> Edumates. جميع الحقوق محفوظة.</p>
+    </div>
+  </footer>
 </body>
 </html>
