@@ -515,3 +515,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 });
+
+
+// --- Roadmap Detail Popups ---
+document.querySelectorAll('.roadmap-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const skillName = item.querySelector('h3').innerText.split(' ')[1].toLowerCase();
+        const popup = document.getElementById(`popup-${skillName}`);
+        if (popup) {
+            popup.classList.add('active');
+        }
+    });
+});
+
+// إغلاق النوافذ عند الضغط على الخلفية أو زر الإغلاق
+document.querySelectorAll('.roadmap-detail-popup').forEach(popup => {
+    popup.addEventListener('click', (e) => {
+        if (e.target.classList.contains('roadmap-detail-popup') || e.target.classList.contains('close-popup')) {
+            popup.classList.remove('active');
+        }
+    });
+});
