@@ -516,23 +516,63 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 });
 
-
-// --- Roadmap Detail Popups ---
-document.querySelectorAll('.roadmap-item').forEach(item => {
-    item.addEventListener('click', () => {
-        const skillName = item.querySelector('h3').innerText.split(' ')[1].toLowerCase();
-        const popup = document.getElementById(`popup-${skillName}`);
-        if (popup) {
-            popup.classList.add('active');
-        }
+// Roadmap popup behavior (robust)
+document.addEventListener('DOMContentLoaded', function() {
+  // افتح popup عند الضغط على أي عنصر من الرودماب
+  document.querySelectorAll('.roadmap-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      // تأكد أن الضغط لم يكن على رابط داخل العنصر
+      if (e.target.tagName.toLowerCase() === 'a') return;
+      const skill = item.dataset.skill;
+      if (!skill) return;
+      const popup = document.getElementById('popup-' + skill);
+      if (popup) {
+        popup.classList.add('active');
+        popup.setAttribute('aria-hidden', 'false');
+        const btn = popup.querySelector('.view-sources, .close-popup');
+        if (btn) btn.focus();
+      }
     });
-});
+  });
 
-// إغلاق النوافذ عند الضغط على الخلفية أو زر الإغلاق
-document.querySelectorAll('.roadmap-detail-popup').forEach(popup => {
-    popup.addEventListener('click', (e) => {
-        if (e.target.classList.contains('roadmap-detail-popup') || e.target.classList.contains('close-popup')) {
-            popup.classList.remove('active');
-        }
+  // إغلاق Popup عند الضغط على الخلفية أو زر الإغلاق
+  document.querySelectorAll('.roadmap-detail-popup').forEach(p => {
+    p.addEventListener('click', function(ev) {
+      if (ev.target === p || ev.target.classList.contains('close-popup')) {
+        p.classList.remove('active');
+        p.setAttribute('aria-hidden', 'true');
+      }
     });
+  });
+
+  // ربط أزرار "رؤية المصادر" بالتمرير للجزء المناسب وإغلاق النافذة
+  document.querySelectorAll('.view-sources').forEach(btn => {
+    btn.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      const targetId = btn.dataset.target;
+      if (targetId) {
+        const targetElem = document.getElementById(targetId);
+        if (targetElem) {
+          document.querySelectorAll('.roadmap-detail-popup.active').forEach(p => {
+            p.classList.remove('active');
+            p.setAttribute('aria-hidden', 'true');
+          });
+          targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          const fallback = document.getElementById('additional-resources');
+          if (fallback) fallback.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+
+  // إغلاق بالضغط على Esc
+  document.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Escape') {
+      document.querySelectorAll('.roadmap-detail-popup.active').forEach(p => {
+        p.classList.remove('active');
+        p.setAttribute('aria-hidden', 'true');
+      });
+    }
+  });
 });
