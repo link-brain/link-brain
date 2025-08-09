@@ -576,3 +576,55 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+
+
+
+// === Roadmap main close button ===
+document.addEventListener('DOMContentLoaded', function () {
+  const roadmapModal = document.getElementById('roadmapPopup');
+  if (roadmapModal) {
+    // إضافة زر إغلاق إذا لم يكن موجود
+    if (!roadmapModal.querySelector('.close-roadmap')) {
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'close-roadmap';
+      closeBtn.innerHTML = '×';
+      closeBtn.setAttribute('aria-label', 'إغلاق الرودماب');
+      closeBtn.style.position = 'absolute';
+      closeBtn.style.top = '10px';
+      closeBtn.style.left = '10px';
+      closeBtn.style.background = 'transparent';
+      closeBtn.style.border = 'none';
+      closeBtn.style.fontSize = '1.5rem';
+      closeBtn.style.cursor = 'pointer';
+      roadmapModal.prepend(closeBtn);
+      closeBtn.addEventListener('click', function () {
+        roadmapModal.classList.remove('active');
+      });
+    }
+  }
+
+  // تعديل أزرار رؤية المصادر
+  document.querySelectorAll('.view-sources').forEach(btn => {
+    btn.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      const targetId = btn.dataset.target;
+      // إغلاق النوافذ المنبثقة
+      document.querySelectorAll('.roadmap-detail-popup.active').forEach(p => {
+        p.classList.remove('active');
+      });
+      // إغلاق نافذة الرودماب الرئيسية
+      if (roadmapModal) {
+        roadmapModal.classList.remove('active');
+      }
+      // الانتقال للقسم المطلوب بعد الإغلاق
+      if (targetId) {
+        const targetElem = document.getElementById(targetId);
+        if (targetElem) {
+          setTimeout(() => {
+            targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 300);
+        }
+      }
+    });
+  });
+});
