@@ -43,7 +43,7 @@
     </div>
 
     <!-- HTML Section -->
-    <div class="language-section">
+    <div class="language-section" id="html-section">
       <h3><i class="fab fa-html5"></i> HTML</h3>
       <div class="resources-container">
         <img src="pic/html.png" alt="HTML Course" class="course-image">
@@ -164,7 +164,7 @@
     </div>
 
     <!-- CSS Section -->
-    <div class="language-section">
+    <div class="language-section" id="css-section">
       <h3><i class="fab fa-css3-alt"></i> CSS</h3>
       <div class="resources-container">
         <img src="pic/css.png" alt="CSS Course" class="course-image">
@@ -285,7 +285,7 @@
     </div>
 
     <!-- JavaScript Section -->
-    <div class="language-section">
+    <div class="language-section" id="js-section">
       <h3><i class="fab fa-js"></i> JavaScript</h3>
       <div class="resources-container">
         <img src="pic/js.png" alt="JavaScript Course" class="course-image">
@@ -425,41 +425,46 @@
 
   <!-- Roadmap Popup -->
   <div class="roadmap-popup" id="roadmapPopup" aria-hidden="true">
-    <div class="roadmap-content">
-      <i class="fas fa-times close-roadmap" id="closeRoadmap" aria-label="إغلاق خارطة الطريق"></i>
-      <h2>خارطة طريق تطوير الواجهات الأمامية</h2>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+    <div class="roadmap-content"><div class="roadmap-item" data-skill="html">
         <h3><i class="fab fa-html5"></i> 1. HTML</h3>
         <p>html لتقوم بتصميم هيكل الصفحه</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="css">
         <h3><i class="fab fa-css3-alt"></i> 2. CSS</h3>
         <p>لتعلم تخطيط الموقع والالوان والتصاميم</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="javascript">
         <h3><i class="fab fa-js"></i> 3. JavaScript</h3>
         <p>اضافه المنطق والتحريك والوظائف للموقع</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="git">
         <h3><i class="fab fa-git-alt"></i> 4. التحكم في الإصدارات</h3>
         <p>تعلم Git وGitHub للتحكم في الإصدارات، التعاون، والمساهمة في المشاريع مفتوحة المصدر.</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="frameworks">
         <h3><i class="fab fa-react"></i> 5. أطر عمل الواجهات الأمامية</h3>
         <p>استكشف React، Vue، أو Angular. افهم المكونات، إدارة الحالة، والتوجيه.</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="tools">
         <h3><i class="fas fa-tools"></i> 6. أدوات البناء</h3>
         <p>تعلم Webpack، Vite، أو Parcel للتجميع، مع npm/yarn لإدارة الحزم.</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
+<div class="roadmap-item" data-skill="design">
         <h3><i class="fas fa-paint-brush"></i> 7. التصميم الاحترافي</h3>
         <p>tailwind css, bootstrap</p>
       </div>
-      <div class="roadmap-item"><span class="roadmap-hashtag">#</span>
-        <h3><i class="fas fa-cloud-upload-alt"></i> 8. النشر</h3>
-        <p>تعلم نشر التطبيقات باستخدام Vercel، Netlify، أو AWS. افهم خطوط أنابيب CI/CD.</p>
-      </div>
+<div class="roadmap-item" data-skill="performance">
+  <h3><i class="fas fa-tachometer-alt"></i> أداء الموقع</h3>
+  <p>تحسين سرعة تحميل المواقع وتحسين تجربة المستخدم</p>
+</div>
+<div class="roadmap-item" data-skill="accessibility">
+  <h3><i class="fas fa-tachometer-alt"></i> قابلية الوصول</h3>
+  <p>إنشاء مواقع قابلة للاستخدام لذوي الاحتياجات الخاصة ووفق معايير WCAG</p>
+</div>
+<div class="roadmap-item" data-skill="testing">
+  <h3><i class="fas fa-tachometer-alt"></i> اختبار</h3>
+  <p>اختبار الوحدات، التكامل، والواجهات وضمان الجودة</p>
+</div></div>
     </div>
   </div>
 
@@ -507,19 +512,228 @@
       <p class="copyright">© <span class="current-year"></span> Edumates. جميع الحقوق محفوظة.</p>
     </div>
   
+
 <!-- Roadmap Detail Popups -->
 <div id="roadmap-popups">
-  <div class="roadmap-detail-popup" id="popup-html">
-    <h2>#HTML</h2>
-    <p>ستتعلم أساسيات HTML لبناء هيكل صفحات الويب، وتشمل:</p>
-    <ul>
-      <li>إنشاء العناصر والعناوين والفقرات</li>
-      <li>الروابط والصور والقوائم</li>
-      <li>النماذج وعناصر الإدخال</li>
-    </ul>
-    <a href="#html-section" class="btn">رؤية المصادر</a>
+  <div class="roadmap-detail-popup" id="popup-html" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-html-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-html-title">#HTML</h2>
+      <p>أساسيات HTML لبناء هيكل صفحات الويب.</p>
+      <ul>
+        <li>عناصر الهيكل (head, body, header, footer)</li>
+        <li>الروابط، الصور، القوائم والنماذج</li>
+        <li>العناصر الدلالية semantic elements</li>
+      </ul>
+      <a href="#html-section" class="btn view-sources" data-target="html-section">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-css" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-css-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-css-title">#CSS</h2>
+      <p>CSS لتصميم صفحات الويب وتخطيطها.</p>
+      <ul>
+        <li>النماذج، الفليكس، جريد</li>
+        <li>الأنماط والألوان والخطوط</li>
+        <li>التجاوب media queries وresponsive design</li>
+      </ul>
+      <a href="#css-section" class="btn view-sources" data-target="css-section">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-javascript" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-javascript-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-javascript-title">#JavaScript</h2>
+      <p>لغة البرمجة لإضافة تفاعل للمواقع.</p>
+      <ul>
+        <li>المتغيرات والدوال</li>
+        <li>DOM والتعامل مع الأحداث</li>
+        <li>البرمجة غير المتزامنة Promises وAsync/Await</li>
+      </ul>
+      <a href="#js-section" class="btn view-sources" data-target="js-section">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-git" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-git-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-git-title">#Git</h2>
+      <p>نظام التحكم في الإصدارات للتعاون وإدارة التغييرات.</p>
+      <ul>
+        <li>الالتزامات Commits والفروع Branches</li>
+        <li>دمج التغييرات merge وpull requests</li>
+        <li>أدوات GitHub/GitLab للوصول والمراجعة</li>
+      </ul>
+      <a href="#resources-git" class="btn view-sources" data-target="resources-git">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-frameworks" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-frameworks-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-frameworks-title">#Frameworks</h2>
+      <p>أطر العمل الشائعة لبناء واجهات متقدمة.</p>
+      <ul>
+        <li>React: مكونات وحالة (state)</li>
+        <li>Vue: انسياب البيانات (reactivity)</li>
+        <li>Angular: بنية كاملة للتطبيقات</li>
+      </ul>
+      <a href="#resources-frameworks" class="btn view-sources" data-target="resources-frameworks">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-tools" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-tools-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-tools-title">#Build Tools</h2>
+      <p>أدوات البناء وإدارة الحزم والتجميع.</p>
+      <ul>
+        <li>npm وyarn لإدارة الحزم</li>
+        <li>Vite/Webpack لتجميع الموارد</li>
+        <li>أتمتة المهام والأداء</li>
+      </ul>
+      <a href="#resources-tools" class="btn view-sources" data-target="resources-tools">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-design" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-design-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-design-title">#Design</h2>
+      <p>مبادئ التصميم وتجربة المستخدم.</p>
+      <ul>
+        <li>تصميم واجهة المستخدم UI</li>
+        <li>نظام الألوان والطباعة</li>
+        <li>استخدام مكتبات مثل Tailwind أو Bootstrap</li>
+      </ul>
+      <a href="#resources-design" class="btn view-sources" data-target="resources-design">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-deployment" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-deployment-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-deployment-title">#Deployment</h2>
+      <p>نشر التطبيقات على الإنترنت ومفاهيم CI/CD.</p>
+      <ul>
+        <li>Vercel وNetlify للنشر السريع</li>
+        <li>مبادئ CI/CD</li>
+        <li>إعدادات الدومين والشهادات SSL</li>
+      </ul>
+      <a href="#resources-deployment" class="btn view-sources" data-target="resources-deployment">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-performance" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-performance-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-performance-title">#Performance</h2>
+      <p>تحسين سرعة الموقع وتقليل زمن التحميل.</p>
+      <ul>
+        <li>تحسين الصور وتقليل الطلبات</li>
+        <li>التخزين المؤقت Caching وLazy Loading</li>
+        <li>تحسين CSS وJS وتقليل الحجم</li>
+      </ul>
+      <a href="#resources-performance" class="btn view-sources" data-target="resources-performance">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-accessibility" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-accessibility-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-accessibility-title">#Accessibility</h2>
+      <p>جعل المواقع سهلة الاستخدام للجميع ووفق معايير WCAG.</p>
+      <ul>
+        <li>السمات ARIA</li>
+        <li>تباين الألوان والقراءة</li>
+        <li>التنقل عبر لوحة المفاتيح</li>
+      </ul>
+      <a href="#resources-accessibility" class="btn view-sources" data-target="resources-accessibility">رؤية المصادر</a>
+    </div>
+  </div>
+  <div class="roadmap-detail-popup" id="popup-testing" aria-hidden="true">
+    <div class="popup-content" role="dialog" aria-labelledby="popup-testing-title">
+      <button class="close-popup" aria-label="إغلاق">×</button>
+      <h2 id="popup-testing-title">#Testing</h2>
+      <p>طرق اختبار الأكواد وضمان الجودة.</p>
+      <ul>
+        <li>اختبار الوحدات Unit Tests</li>
+        <li>اختبار التكامل Integration Tests</li>
+        <li>أدوات مثل Jest وCypress</li>
+      </ul>
+      <a href="#resources-testing" class="btn view-sources" data-target="resources-testing">رؤية المصادر</a>
+    </div>
   </div>
 </div>
+
+
+
+
+<!-- Additional resources for non-language skills -->
+<section id="additional-resources" style="padding:2rem 4%; background:var(--primary-bg);">
+  <h2 style="text-align:center; color:var(--primary-dark);">مصادر الرودماب الإضافية</h2>
+  <div class="resources-container" style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+    <div class="resource-block" id="resources-git" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Git</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Git</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Git</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Git</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-frameworks" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Frameworks</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Frameworks</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Frameworks</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Frameworks</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-tools" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Build Tools</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Build Tools</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Build Tools</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Build Tools</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-design" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Design</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Design</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Design</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Design</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-deployment" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Deployment</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Deployment</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Deployment</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Deployment</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-performance" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Performance</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Performance</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Performance</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Performance</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-accessibility" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Accessibility</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Accessibility</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Accessibility</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Accessibility</a></li>
+      </ul>
+    </div>
+    <div class="resource-block" id="resources-testing" style="flex:1; min-width:220px; padding:1rem; background:var(--card-bg); border-radius:8px; margin:0.6rem;">
+      <h4 style="margin-top:0;">Testing</h4>
+      <ul>
+        <li><a href="#" class="footer-link">مصدر 1 - متعلق بـ Testing</a></li>
+        <li><a href="#" class="footer-link">مصدر 2 - متعلق بـ Testing</a></li>
+        <li><a href="#" class="footer-link">مصدر 3 - متعلق بـ Testing</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 
 </footer>
 
