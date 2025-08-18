@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EDUMATES | اختبار HTML شامل</title>
+  <link rel="stylesheet" href="exam-style.css"/>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">EDUMATES</div>
+      <div class="tagline">اختبار شامل لمستوى HTML</div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="mcq">اختيار من متعدد</button>
+      <button class="tab-btn" data-tab="practical">الاختبار العملي</button>
+      <button class="tab-btn" data-tab="result">النتيجة</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- MCQ -->
+    <section id="mcq" class="tab active">
+      <h2>📝 الاختيار من متعدد (30 سؤال)</h2>
+      <div class="legend">
+        <span class="pill">القسم 1: مفاهيم</span>
+        <span class="pill">القسم 2: كود</span>
+        <span class="pill">القسم 3: مخرجات حية</span>
+      </div>
+      <p class="hint">أجب ثم اضغط “حفظ إجابات الاختيار”.</p>
+      <form id="mcq-form" class="card"></form>
+      <div class="actions">
+        <button id="save-mcq" class="primary">حفظ إجابات الاختيار</button>
+        <span id="mcq-score" class="badge"></span>
+      </div>
+    </section>
+
+    <!-- Practical -->
+    <section id="practical" class="tab">
+      <h2>💻 الاختبار العملي (10 مهام)</h2>
+      <p class="hint">اكتب كود HTML في كل مهمة، ثم “تشغيل” للمعاينة و“تحقق” للتصحيح التلقائي.</p>
+      <div id="tasks" class="tasks"></div>
+      <div class="actions">
+        <button id="save-practical" class="primary">حفظ نتائج العملي</button>
+        <span id="practical-score" class="badge"></span>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section id="result" class="tab">
+      <h2>📊 النتيجة النهائية</h2>
+      <div class="card result-card">
+        <div class="grid-2">
+          <div>
+            <p>درجة الاختيار من متعدد: <strong id="res-mcq">0</strong> / 30</p>
+            <p>درجة الاختبار العملي: <strong id="res-practical">0</strong> / 10</p>
+            <hr/>
+            <p class="big">المجموع: <strong id="res-total">0</strong> / 40</p>
+          </div>
+          <div class="level-box">
+            <div>مستواك</div>
+            <div id="res-level" class="level">—</div>
+          </div>
+        </div>
+        <button id="calc-final" class="primary huge">عرض النتيجة النهائية</button>
+      </div>
+      <div class="notes">
+        <h3>💡 ملاحظات</h3>
+        <ul>
+          <li>القسم الثالث يعرض المخرجات الحقيقية؛ اختر الكود الذي أنتجها.</li>
+          <li>يمكن تعديل الإجابات وإعادة الحفظ في أي وقت.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 EDUMATES — كل الحقوق محفوظة
+  </footer>
+
+  <script src="exam-script.js"></script>
+</body>
+</html>
+
