@@ -1,3 +1,0 @@
-1-fix the links in the main bage
-2-fix btn start now
-3-make a menu
