@@ -1200,3 +1200,14 @@ body {
 .roadmap-detail-popup ul { padding-right:1rem; }
 .roadmap-detail-popup .btn.view-sources { margin-top: 0.8rem; display:inline-block; }
 
+@media (max-width: 768px) {
+  .auth-buttons {
+    position: absolute;
+    bottom: 2rem;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
