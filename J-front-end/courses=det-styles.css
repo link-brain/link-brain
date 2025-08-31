@@ -748,7 +748,7 @@ body {
 .close-roadmap {
   position: absolute;
   top: 0.8rem;
-  right: 0.8rem;   /* خليها يمين ثابت */
+  right: 0.8rem;   /* خلي الزر دايمًا في الركن اليمين */
   width: 36px;
   height: 36px;
   display: flex;
@@ -761,7 +761,7 @@ body {
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
-  z-index: 3000;   /* يتأكد أنه فوق أي عنصر */
+  z-index: 3000;   /* يخليه فوق أي عنصر */
 }
 
 .close-roadmap:hover,
