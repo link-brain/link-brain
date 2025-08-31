@@ -744,11 +744,10 @@ body {
   padding: 2rem;
   box-shadow: var(--box-shadow);
   position: relative;
-}
-.close-roadmap {
+}.close-roadmap {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0.8rem;
+  right: 0.8rem;   /* خليها يمين ثابت */
   width: 36px;
   height: 36px;
   display: flex;
@@ -761,6 +760,7 @@ body {
   border-radius: 50%;
   cursor: pointer;
   transition: var(--transition);
+  z-index: 3000;   /* يتأكد أنه فوق أي عنصر */
 }
 
 .close-roadmap:hover,
@@ -770,6 +770,7 @@ body {
   transform: scale(1.05);
   outline: none;
 }
+
 
 .roadmap-content h2 {
   font-size: 1.8rem;
