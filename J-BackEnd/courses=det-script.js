@@ -497,14 +497,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 });
-
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.roadmap-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            if (e.target.tagName.toLowerCase() === 'a') return;
-            const skill = item.dataset.skill;
-            if (!skill) return;
-            const popup = document.getElementById('popup-' + skill);
-            if (popup) {
-                popup.classList.add('active');
-                popup.setAttribute('aria-hidden', 'false');
+  document.querySelectorAll('.roadmap-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const skill = item.getAttribute('data-skill');
+      const popup = document.getElementById('popup-' + skill);
+      if (popup) {
+        popup.classList.add('active');
+        popup.setAttribute('aria-hidden', 'false');
+      }
+    });
+  });
+
+  // غلق البوب-أب لما يضغط على زر الإغلاق
+  document.querySelectorAll('.roadmap-detail-popup .close-popup').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const popup = e.target.closest('.roadmap-detail-popup');
+      if (popup) {
+        popup.classList.remove('active');
+        popup.setAttribute('aria-hidden', 'true');
+      }
+    });
+  });
+});
