@@ -295,6 +295,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       if (!name) return alert('من فضلك اكتب اسم صالح');
       localStorage.setItem('chat-username', name);
       alert('تم حفظ اسمك بنجاح ✅');
+    document.querySelector('.chat-username').style.display = 'none';
     });
   }
 
@@ -478,6 +479,12 @@ document.addEventListener('DOMContentLoaded', async function () {
       sendMessage();
     }
   });
+  const saved = localStorage.getItem('chat-username');
+if (saved) {
+  el.usernameInput.value = saved;
+  document.querySelector('.chat-username').style.display = 'none';
+}
+
 
   // -------------------------------
   // Ratings (stars)
