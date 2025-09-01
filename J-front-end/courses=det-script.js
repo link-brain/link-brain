@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       await addDoc(collection(db, 'messages'), {
         text,
         userId: user ? user.uid : 'guest',
-        userName: user ? (user.displayName || customName) : customName,
+        userName: customName,
         userPhoto: user ? (user.photoURL || 'https://via.placeholder.com/30') : 'https://via.placeholder.com/30',
         timestamp: serverTimestamp()
       });
