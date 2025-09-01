@@ -577,21 +577,5 @@ document.addEventListener('DOMContentLoaded', async function () {
   wireFeatureToggles();
   wireRatings();
 }
-                         if (el.saveUsernameBtn && el.usernameInput) {
-  const saved = localStorage.getItem('chat-username') || '';
-  if (saved) {
-    el.usernameInput.value = saved;
-    // ✅ إخفاء خانة الاسم لو الاسم محفوظ بالفعل
-    document.querySelector('.chat-username').style.display = 'none';
-  }
-
-  el.saveUsernameBtn.addEventListener('click', () => {
-    const name = el.usernameInput.value.trim();
-    if (!name) return alert('من فضلك اكتب اسم صالح');
-    localStorage.setItem('chat-username', name);
-    alert('تم حفظ اسمك بنجاح ✅');
-    // ✅ إخفاء الحقل بعد الحفظ
-    document.querySelector('.chat-username').style.display = 'none';
-  });
-}
+ 
 );
