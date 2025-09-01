@@ -1199,4 +1199,25 @@ body {
 .roadmap-detail-popup p { margin-bottom: 0.6rem; color:var(--text-medium); }
 .roadmap-detail-popup ul { padding-right:1rem; }
 .roadmap-detail-popup .btn.view-sources { margin-top: 0.8rem; display:inline-block; }
+.check-btn {
+  background: var(--accent-green);
+  color: var(--white);
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 0.6rem;
+}
+
+.check-btn:hover {
+  background: #15803d;
+  transform: translateY(-2px);
+}
+
+.roadmap-item.completed h3,
+.roadmap-item.completed p {
+  text-decoration: line-through;
+  color: var(--text-light);
+}
 
