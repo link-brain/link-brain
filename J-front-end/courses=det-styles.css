@@ -1220,4 +1220,39 @@ body {
   text-decoration: line-through;
   color: var(--text-light);
 }
+/* 🔹 تنسيقات خانة تسجيل الاسم في الدردشة */
+.chat-username {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.chat-username input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.chat-username input:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+}
+
+.chat-username button {
+  padding: 8px 14px;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.chat-username button:hover {
+  background: #45a049;
+}
 
