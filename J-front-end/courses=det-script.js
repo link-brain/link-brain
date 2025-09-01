@@ -636,3 +636,29 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
+function setupRoadmapChecks() {
+  document.querySelectorAll('.roadmap-item').forEach(item => {
+    const skill = item.getAttribute('data-skill');
+    const checkBtn = item.querySelector('.check-btn');
+
+    // استعادة الحالة من localStorage
+    if (localStorage.getItem(`roadmap-${skill}`) === 'completed') {
+      item.classList.add('completed');
+      checkBtn.textContent = 'تم ✔';
+    }
+
+    // عند الضغط على الزر
+    checkBtn.addEventListener('click', () => {
+      const isCompleted = item.classList.toggle('completed');
+      if (isCompleted) {
+        localStorage.setItem(`roadmap-${skill}`, 'completed');
+        checkBtn.textContent = 'تم ✔';
+      } else {
+        localStorage.removeItem(`roadmap-${skill}`);
+        checkBtn.textContent = 'تحقق';
+      }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setupRoadmapChecks);
