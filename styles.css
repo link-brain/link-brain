@@ -499,3 +499,41 @@ a{
     height: 2px;
     background-color: var(--white);
 }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* خلفية فاتحة مريحة */
+  color: #212529; /* لون نص غامق وواضح */
+}
+
+/* عناوين أساسية */
+h1, h2, h3 {
+  font-weight: 700; /* Bold */
+  color: #1e3a8a; /* أزرق غامق للعناوين */
+}
+
+/* نصوص الشرح */
+p, span, li {
+  font-weight: 400; /* Regular */
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+/* الأزرار */
+button {
+  font-weight: 500;
+  font-size: 16px;
+  background-color: #10b981; /* أخضر للأزرار */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: #059669; /* أخضر أغمق عند التمرير */
+}
