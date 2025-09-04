@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="course-info">
                         <h3 class="course-title">${course.title}</h3>
                         <div class="course-meta">
-                            <span>${course.lessons} درس</span>
+                            <span>${course.lessons} مصدر</span>
                             <span class="course-price ${course.price === 'مجاني' ? 'free' : ''}">${course.price}</span>
                         </div>
                         <a href="../J-front-end/courses=det.html" class="btn learn-btn">عرض التفاصيل</a>
@@ -134,3 +134,4 @@ document.addEventListener('DOMContentLoaded', function() {
     app.init();
 
 });
+
