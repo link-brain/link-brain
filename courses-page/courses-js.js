@@ -22,10 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
             id: 1,
             title: "تعلم front end",
             category: "تطوير الويب",
-            instructor: "elzero web school",
             level: "مبتدئ",
             image: "../pic/courses-pic/frontend-pic.jpg",
-            lessons: 24,
+            lessons: 17,
             price: "مجاني",
             description: "هذا الكورس سيعلمك أساسيات تطوير الويب باستخدام HTML و CSS لبناء مواقع ويب جميلة وتفاعلية."
         },
@@ -33,7 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
             id: 2,
             title: "تعلم Back End",
             category: "تطوير الويب",
-            instructor: "elzero web school",
             level: "مبتدئ",
             image: "../pic/courses-pic/backend.jpg",
             lessons: 20,
@@ -134,4 +132,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // بدء التطبيق
     app.init();
+
 });
