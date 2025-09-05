@@ -17,28 +17,30 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // بيانات الكورسات
-    const coursesData = [
-        {
-            id: 1,
-            title: "تعلم front end",
-            category: "تطوير الويب",
-            level: "مبتدئ",
-            image: "../pic/courses-pic/frontend-pic.jpg",
-            lessons: 17,
-            price: "مجاني",
-            description: "هذا الكورس سيعلمك أساسيات تطوير الويب باستخدام HTML و CSS لبناء مواقع ويب جميلة وتفاعلية."
-        },
-        {
-            id: 2,
-            title: "تعلم Back End",
-            category: "تطوير الويب",
-            level: "مبتدئ",
-            image: "../pic/courses-pic/backend.jpg",
-            lessons: 20,
-            price: "مجاني",
-            description: "هذا الكورس سيعلمك أساسيات تطوير الـ Back End باستخدام Node.js وExpress لإنشاء تطبيقات ويب ديناميكية وقوية."
-        },
-    ];
+const coursesData = [
+    {
+        id: 1,
+        title: "تعلم front end",
+        category: "تطوير الويب",
+        level: "مبتدئ",
+        image: "../pic/courses-pic/frontend-pic.jpg",
+        lessons: 17,
+        price: "مجاني",
+        description: "هذا الكورس سيعلمك أساسيات تطوير الويب باستخدام HTML و CSS لبناء مواقع ويب جميلة وتفاعلية.",
+        link: "../J-FrontEnd/courses=det.html" // 👈 الرابط الخاص بالفرونت
+    },
+    {
+        id: 2,
+        title: "تعلم Back End",
+        category: "تطوير الويب",
+        level: "مبتدئ",
+        image: "../pic/courses-pic/backend.jpg",
+        lessons: 20,
+        price: "مجاني",
+        description: "هذا الكورس سيعلمك أساسيات تطوير الـ Back End باستخدام Node.js وExpress لإنشاء تطبيقات ويب ديناميكية وقوية.",
+        link: "../J-BackEnd/courses=det.html" // 👈 الرابط الخاص بالباك
+    },
+];
 
     // تطبيق إدارة الكورسات
     const app = {
@@ -92,26 +94,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             }
         },
-
-        displayCourses(courses) {
-            elements.coursesContainer.innerHTML = '';
-            courses.forEach(course => {
-                const courseElement = document.createElement('div');
-                courseElement.classList.add('course-item');
-                courseElement.innerHTML = `
-                    <img src="${course.image}" alt="${course.title}" class="course-img">
-                    <div class="course-info">
-                        <h3 class="course-title">${course.title}</h3>
-                        <div class="course-meta">
-                            <span>${course.lessons} مصدر</span>
-                            <span class="course-price ${course.price === 'مجاني' ? 'free' : ''}">${course.price}</span>
-                        </div>
-                        <a href="../J-BackEnd/courses=det.html" class="btn learn-btn">عرض التفاصيل</a>
-                    </div>
-                `;
-                elements.coursesContainer.appendChild(courseElement);
-            });
-        },        filterCourses() {
+displayCourses(courses) {
+    elements.coursesContainer.innerHTML = '';
+    courses.forEach(course => {
+        const courseElement = document.createElement('div');
+        courseElement.classList.add('course-item');
+        courseElement.innerHTML = `
+            <img src="${course.image}" alt="${course.title}" class="course-img">
+            <div class="course-info">
+                <h3 class="course-title">${course.title}</h3>
+                <div class="course-meta">
+                    <span>${course.lessons} مصدر</span>
+                    <span class="course-price ${course.price === 'مجاني' ? 'free' : ''}">${course.price}</span>
+                </div>
+                <a href="${course.link}" class="btn learn-btn">عرض التفاصيل</a>
+            </div>
+        `;
+        elements.coursesContainer.appendChild(courseElement);
+    });
+}
+       filterCourses() {
             const searchTerm = elements.searchInput ? elements.searchInput.value.toLowerCase() : '';
             const category = elements.categoryFilter ? elements.categoryFilter.value : 'all';
             const level = elements.levelFilter ? elements.levelFilter.value : 'all';
@@ -132,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     app.init();
 
 });
+
 
 
 
