@@ -92,26 +92,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 elements.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             }
         },
-function displayCourses(courses) {
-    elements.coursesContainer.innerHTML = '';
-    courses.forEach(course => {
-        const courseElement = document.createElement('div');
-        courseElement.classList.add('course-item');
-        courseElement.innerHTML = 
-            <img src="${course.image}" alt="${course.title}" class="course-img"/>
-            <div class="course-info">
-                <h3 class="course-title">${course.title}</h3>
-                <div class="course-meta">
-                    <span>${course.lessons} دروس</span>
-                    <span class="course-price">${course.price === 'free' ? 'مجاني' : course.price}</span>
-                </div>
-                <a href="../BackEnd/courses-det.html" class="btn learn-btn">عرض التفاصيل</a>
-            </div>
-        ;
-        elements.coursesContainer.appendChild(courseElement);
-    });
-}
-        filterCourses() {
+
+        displayCourses(courses) {
+            elements.coursesContainer.innerHTML = '';
+            courses.forEach(course => {
+                const courseElement = document.createElement('div');
+                courseElement.classList.add('course-item');
+                courseElement.innerHTML = `
+                    <img src="${course.image}" alt="${course.title}" class="course-img">
+                    <div class="course-info">
+                        <h3 class="course-title">${course.title}</h3>
+                        <div class="course-meta">
+                            <span>${course.lessons} مصدر</span>
+                            <span class="course-price ${course.price === 'مجاني' ? 'free' : ''}">${course.price}</span>
+                        </div>
+                        <a href="../J-BackEnd/courses=det.html" class="btn learn-btn">عرض التفاصيل</a>
+                    </div>
+                `;
+                elements.coursesContainer.appendChild(courseElement);
+            });
+        },        filterCourses() {
             const searchTerm = elements.searchInput ? elements.searchInput.value.toLowerCase() : '';
             const category = elements.categoryFilter ? elements.categoryFilter.value : 'all';
             const level = elements.levelFilter ? elements.levelFilter.value : 'all';
@@ -132,6 +132,7 @@ function displayCourses(courses) {
     app.init();
 
 });
+
 
 
 
