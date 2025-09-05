@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
             lessons: 17,
             price: "مجاني",
             description: "هذا الكورس سيعلمك أساسيات تطوير الويب باستخدام HTML و CSS لبناء مواقع ويب جميلة وتفاعلية.",
-            link: "../J-frontend/courses=det.html" // 👈 رابط مخصص
+            link: "../J-front-end/courses=det.html" // 👈 رابط مخصص
         },
         {
             id: 2,
@@ -135,4 +135,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // بدء التطبيق
     app.init();
 });
+
 
