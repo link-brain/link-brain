@@ -68,7 +68,8 @@ mcqData.forEach((item, idx)=>{
     qBox.appendChild(label);
   });
   mcqForm.appendChild(qBox);
-});let mcqScore = 0;
+});
+let mcqScore = 0;
 let answersShown = false;
 
 document.getElementById("save-mcq").addEventListener("click", ()=>{
@@ -80,7 +81,6 @@ document.getElementById("save-mcq").addEventListener("click", ()=>{
   mcqData.forEach((item, idx)=>{
     const questionElem = mcqForm.children[idx];
     const options = questionElem.querySelectorAll("input[type=radio]");
-    let answeredCorrectly = false;
     
     options.forEach((opt, i)=>{
       const label = opt.parentElement;
@@ -93,7 +93,6 @@ document.getElementById("save-mcq").addEventListener("click", ()=>{
       if(opt.checked) {
         if(Number(opt.value) === item.ans) {
           score++;
-          answeredCorrectly = true;
         } else {
           label.classList.add("incorrect");
         }
@@ -129,19 +128,7 @@ document.getElementById("save-mcq").addEventListener("dblclick", ()=>{
     answersShown = false;
     mcqScore = 0;
   }
-});
-    const checked = document.querySelector(`input[name="q${idx+1}"]:checked`);
-    if(checked){
-      const label = checked.parentElement;
-      if(Number(checked.value) === item.ans){
-        label.style.color = "green"; // صحيح
-        score++;
-      } else {
-        label.style.color = "red";   // خطأ
-      }
-    }
-  });
-  mcqScore = score;
+});  mcqScore = score;
   document.getElementById("mcq-score").textContent = `تم الحفظ: ${score} / 30`;
 });
 /**********************
@@ -362,6 +349,7 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
 });
+
 
 
 
