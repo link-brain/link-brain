@@ -74,8 +74,22 @@ let mcqScore = 0;
 document.getElementById("save-mcq").addEventListener("click", ()=>{
   let score = 0;
   mcqData.forEach((item, idx)=>{
-    const checked = document.querySelector(`input[name="q${idx+1}"]:checked`);
-    if(checked && Number(checked.value) === item.ans) score++;
+    const opts = document.querySelectorAll(`input[name="q${idx+1}"]`);
+    opts.forEach(opt=>{
+      const label = opt.parentElement;
+      label.style.background = ""; // إعادة التهيئة
+      label.style.color = "";
+      if(opt.checked){
+        if(Number(opt.value) === item.ans){
+          score++;
+          label.style.background = "#d1fae5"; // أخضر فاتح
+          label.style.color = "#15803d";      // أخضر غامق
+        }else{
+          label.style.background = "#fee2e2"; // أحمر فاتح
+          label.style.color = "#b91c1c";      // أحمر غامق
+        }
+      }
+    });
   });
   mcqScore = score;
   document.getElementById("mcq-score").textContent = `تم الحفظ: ${score} / 30`;
@@ -285,3 +299,4 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
 });
+
