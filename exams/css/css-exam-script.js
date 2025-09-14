@@ -68,18 +68,68 @@ mcqData.forEach((item, idx)=>{
     qBox.appendChild(label);
   });
   mcqForm.appendChild(qBox);
-});
-let mcqScore = 0;
+});let mcqScore = 0;
+let answersShown = false;
+
 document.getElementById("save-mcq").addEventListener("click", ()=>{
+  // إضافة كلاس لعرض الإجابات
+  mcqForm.classList.add("show-answers");
+  answersShown = true;
+  
   let score = 0;
   mcqData.forEach((item, idx)=>{
-    const options = document.querySelectorAll(`input[name="q${idx+1}"]`);
-    options.forEach(opt=>{
+    const questionElem = mcqForm.children[idx];
+    const options = questionElem.querySelectorAll("input[type=radio]");
+    let answeredCorrectly = false;
+    
+    options.forEach((opt, i)=>{
       const label = opt.parentElement;
-      // رجّع اللون الافتراضي
-      label.style.color = "";
+      label.classList.add("disabled");
+      
+      if(i === item.ans) {
+        label.classList.add("correct");
+      }
+      
+      if(opt.checked) {
+        if(Number(opt.value) === item.ans) {
+          score++;
+          answeredCorrectly = true;
+        } else {
+          label.classList.add("incorrect");
+        }
+      }
     });
+  });
+  
+  mcqScore = score;
+  document.getElementById("mcq-score").textContent = `تم التصحيح: ${score} / 30`;
+  
+  // تغيير نص الزر بعد التصحيح
+  document.getElementById("save-mcq").textContent = "إعادة تعيين الإجابات";
+});
 
+// إضافة إمكانية إعادة تعيين الإجابات
+document.getElementById("save-mcq").addEventListener("dblclick", ()=>{
+  if(answersShown) {
+    mcqForm.classList.remove("show-answers");
+    
+    mcqData.forEach((item, idx)=>{
+      const questionElem = mcqForm.children[idx];
+      const options = questionElem.querySelectorAll("input[type=radio]");
+      
+      options.forEach(opt => {
+        opt.checked = false;
+        const label = opt.parentElement;
+        label.classList.remove("correct", "incorrect", "disabled");
+      });
+    });
+    
+    document.getElementById("mcq-score").textContent = "0 / 30";
+    document.getElementById("save-mcq").textContent = "حفظ إجابات الاختيار";
+    answersShown = false;
+    mcqScore = 0;
+  }
+});
     const checked = document.querySelector(`input[name="q${idx+1}"]:checked`);
     if(checked){
       const label = checked.parentElement;
@@ -312,5 +362,6 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
 });
+
 
 
