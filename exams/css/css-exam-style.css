@@ -129,3 +129,61 @@ body{
   text-align:center; color:#6b7b8f; padding:20px; margin-top:40px;
   border-top:1px solid #e9f0ff; background:#f9fbff;
 }
+
+/* أنماط الإجابات الصحيحة والخاطئة */
+#mcq-form label.correct {
+  background-color: #f0fff4;
+  border-color: #9ae6b4;
+  color: #22543d;
+  border-width: 2px;
+  position: relative;
+}
+
+#mcq-form label.correct::after {
+  content: "✓";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: #38a169;
+}
+
+#mcq-form label.incorrect {
+  background-color: #fff5f5;
+  border-color: #feb2b2;
+  color: #742a2a;
+  border-width: 2px;
+  position: relative;
+}
+
+#mcq-form label.incorrect::after {
+  content: "✗";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+  color: #e53e3e;
+}
+
+#mcq-form label.disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* تأثيرات انتقالية */
+#mcq-form label {
+  transition: all 0.3s ease;
+}
+
+/* تحسين المظهر عند عرض النتائج */
+.show-answers #mcq-form label {
+  pointer-events: none;
+}
+
+.show-answers .actions {
+  border-top: 2px solid #e5eefc;
+  padding-top: 20px;
+  margin-top: 20px;
+}
