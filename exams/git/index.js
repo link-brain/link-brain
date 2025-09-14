@@ -68,18 +68,33 @@ mcqData.forEach((item, idx)=>{
   });
   mcqForm.appendChild(qBox);
 });
-
 let mcqScore = 0;
 document.getElementById("save-mcq").addEventListener("click", ()=>{
   let score = 0;
   mcqData.forEach((item, idx)=>{
+    const options = document.querySelectorAll(`input[name="q${idx+1}"]`);
+    options.forEach(opt=>{
+      const label = opt.parentElement;
+      // رجّع اللون للوضع الافتراضي قبل التلوين
+      label.style.color = "";
+
+      // لو الخيار هو الصحيح → أخضر
+      if(Number(opt.value) === item.ans){
+        label.style.color = "green";
+      }
+
+      // لو الطالب اختار غلط → أحمر
+      if(opt.checked && Number(opt.value) !== item.ans){
+        label.style.color = "red";
+      }
+    });
+
     const checked = document.querySelector(`input[name="q${idx+1}"]:checked`);
     if(checked && Number(checked.value) === item.ans) score++;
   });
   mcqScore = score;
   document.getElementById("mcq-score").textContent = `تم الحفظ: ${score} / 30`;
 });
-
 /**********************
  * مهام عملية (10) + حقل نصي + تصحيح تلقائي
  **********************/
@@ -219,4 +234,5 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   const total = mcqScore + practicalScore;
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
+
 });
