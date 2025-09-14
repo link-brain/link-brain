@@ -128,8 +128,7 @@ document.getElementById("save-mcq").addEventListener("dblclick", ()=>{
     answersShown = false;
     mcqScore = 0;
   }
-});  mcqScore = score;
-  document.getElementById("mcq-score").textContent = `تم الحفظ: ${score} / 30`;
+}); 
 /**********************
  * مهام عملية (10) + محرر CodeMirror + تصحيح تلقائي
  **********************/
@@ -348,6 +347,7 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
 });
+
 
 
 
