@@ -76,27 +76,24 @@ document.getElementById("save-mcq").addEventListener("click", ()=>{
     const options = document.querySelectorAll(`input[name="q${idx+1}"]`);
     options.forEach(opt=>{
       const label = opt.parentElement;
-      // رجّع اللون للوضع الافتراضي قبل التلوين
+      // رجّع اللون الافتراضي
       label.style.color = "";
-
-      // لو الخيار هو الصحيح → أخضر
-      if(Number(opt.value) === item.ans){
-        label.style.color = "green";
-      }
-
-      // لو الطالب اختار غلط → أحمر
-      if(opt.checked && Number(opt.value) !== item.ans){
-        label.style.color = "red";
-      }
     });
 
     const checked = document.querySelector(`input[name="q${idx+1}"]:checked`);
-    if(checked && Number(checked.value) === item.ans) score++;
+    if(checked){
+      const label = checked.parentElement;
+      if(Number(checked.value) === item.ans){
+        label.style.color = "green"; // صحيح
+        score++;
+      } else {
+        label.style.color = "red";   // خطأ
+      }
+    }
   });
   mcqScore = score;
   document.getElementById("mcq-score").textContent = `تم الحفظ: ${score} / 30`;
 });
-
 /**********************
  * مهام عملية (10) + محرر CodeMirror + تصحيح تلقائي
  **********************/
@@ -315,4 +312,5 @@ document.getElementById("calc-final").addEventListener("click", ()=>{
   document.getElementById("res-total").textContent = total;
   document.getElementById("res-level").textContent = levelOf(total);
 });
+
 
