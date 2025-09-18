@@ -41,11 +41,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     currentYear: $('.current-year'),
     mobileMenuBtn: $('.mobile-menu-btn'),
     navLinks: $('.nav-links'),
-
-    // Roadmap
-    viewRoadmapBtn: $('#viewRoadmapBtn'),
-    roadmapPopup: $('#roadmapPopup'),
-
     // Chat
     chatBtn: $('#chatBtn'),
     chatPopup: $('#chatPopup'),
@@ -111,106 +106,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  // -------------------------------
-  // Roadmap popup + detail popups
-  // -------------------------------
-  function openRoadmap() {
-    if (!el.roadmapPopup) return;
-    el.roadmapPopup.classList.add('active');
-    el.roadmapPopup.setAttribute('aria-hidden', 'false');
-  }
-  function closeRoadmap() {
-    if (!el.roadmapPopup) return;
-    el.roadmapPopup.classList.remove('active');
-    el.roadmapPopup.setAttribute('aria-hidden', 'true');
-  }
-
-  // detail popups (#popup-html/css/js)
-  function wireRoadmapDetails() {
-    // افتح التفصيل عند الضغط على عنصر roadmap-item
-    $$('.roadmap-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const skill = item.getAttribute('data-skill'); // html / css / javascript / git
-        if (!skill) return;
-        const popup = $(`#popup-${skill}`);
-        if (!popup) return;
-        popup.classList.add('active');
-        popup.setAttribute('aria-hidden', 'false');
-      });
-    });
-
-    // زر الإغلاق والضغط خارج المحتوى
-    $$('.roadmap-detail-popup').forEach(modal => {
-      const content = $('.popup-content', modal);
-      const closeBtn = $('.close-popup', modal);
-      if (closeBtn) closeBtn.addEventListener('click', () => {
-        modal.classList.remove('active');
-        modal.setAttribute('aria-hidden', 'true');
-      });
-      modal.addEventListener('click', (e) => {
-        if (!content || !content.contains(e.target)) {
-          modal.classList.remove('active');
-          modal.setAttribute('aria-hidden', 'true');
-        }
-      });
-    });
-
-    // زر "رؤية المصادر" داخل البوب أب
-    $$('.view-sources').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('data-target');
-        const modal = link.closest('.roadmap-detail-popup');
-        if (modal) {
-          modal.classList.remove('active');
-          modal.setAttribute('aria-hidden', 'true');
-        }
-        if (targetId) {
-          const targetElem = document.getElementById(targetId);
-          if (targetElem) {
-            setTimeout(() => targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
-          }
-        }
-      });
-    });
-
-    // زر التحقق داخل عناصر roadmap (إن وُجد)
-    setupRoadmapChecks();
-  }
-
-  function setupRoadmapChecks() {
-    $$('.roadmap-item').forEach(item => {
-      const skill = item.getAttribute('data-skill');
-      if (!skill) return;
-
-      // ابحث عن زر .check-btn وإن لم يوجد، أنشئه (ليكون شغال بدون تعديل HTML)
-      let checkBtn = $('.check-btn', item);
-      if (!checkBtn) {
-        checkBtn = document.createElement('button');
-        checkBtn.className = 'check-btn';
-        checkBtn.textContent = 'تحقق';
-        item.appendChild(checkBtn);
-      }
-
-      // حالة محفوظة
-      if (localStorage.getItem(`roadmap-${skill}`) === 'completed') {
-        item.classList.add('completed');
-        checkBtn.textContent = 'تم ✔';
-      }
-
-      checkBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); // لا تفتح بوب أب عند الضغط على الزر
-        const isCompleted = item.classList.toggle('completed');
-        if (isCompleted) {
-          localStorage.setItem(`roadmap-${skill}`, 'completed');
-          checkBtn.textContent = 'تم ✔';
-        } else {
-          localStorage.removeItem(`roadmap-${skill}`);
-          checkBtn.textContent = 'تحقق';
-        }
-      });
-    });
-  }
 
   // -------------------------------
   // Toggle features (القوائم داخل الروابط التعليمية)
@@ -566,23 +461,4 @@ if (saved) {
     });
   }
 
-  // -------------------------------
-  // Wire all listeners
-  // -------------------------------
-  if (el.mobileMenuBtn) el.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-  $$('.nav-link').forEach(a => a.addEventListener('click', closeMobileMenuIfNarrow));
-  if (el.viewRoadmapBtn) el.viewRoadmapBtn.addEventListener('click', openRoadmap);
-  // اغلاق الـ roadmap popup عند الضغط خارج المحتوى
-  if (el.roadmapPopup) {
-    el.roadmapPopup.addEventListener('click', (e) => {
-      const content = $('.roadmap-content', el.roadmapPopup);
-      if (!content || !content.contains(e.target)) closeRoadmap();
-    });
-  }
-
-  wireRoadmapDetails();
-  wireFeatureToggles();
-  wireRatings();
-}
  
-);
