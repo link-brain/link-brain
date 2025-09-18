@@ -148,7 +148,7 @@ function showQuestion() {
   `;
 
   $("#app").innerHTML = `
-    <h1>Edvion - مخطّط التعلّم الذكي</h1>
+    <h1>خريطة الطريق الذكية-edumates</h1>
     <div class="question-box">${html}</div>
   `;
 
@@ -182,7 +182,7 @@ function nextStep() {
 
 function generatePlan() {
   $("#app").innerHTML = `
-    <h1>Edvion - مخطّط التعلّم الذكي</h1>
+    <h1>خريطة الطريق الذكية-edumates</h1>
     <div class="question-box">
       <h2>جاري إنشاء الخطة...</h2>
       <div class="progress-bar">
@@ -244,7 +244,7 @@ function generatePlan() {
     `;
 
     $("#app").innerHTML = `
-      <h1>Edvion - مخطّط التعلّم الذكي</h1>
+      <h1>خريطة الطريق الذكية-edumates</h1>
       <div class="plan-box">
         ${planContent}
       </div>
@@ -291,4 +291,5 @@ async function loadResources() {
 }
 
 // تشغيل تحميل البيانات أول ما يفتح الموقع
+
 loadResources();
