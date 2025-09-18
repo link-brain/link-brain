@@ -460,5 +460,8 @@ if (saved) {
       });
     });
   }
-
+  let classname = document.getElementByClassName("view-roadmap-btn")
+let roadmap = function () {
+  classname.addEventListener("click",function () = {window.location.href = "ed/index.html"})
+} 
  
