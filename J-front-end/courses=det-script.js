@@ -460,6 +460,3 @@ if (saved) {
       });
     });
   }
-  document.querySelector(".view-roadmap-btn").addEventListener("click", function () {
-  window.location.href = "ed/index.html";
-});
