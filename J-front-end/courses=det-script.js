@@ -1,6 +1,5 @@
-
 // ===============================
-// courses=det-script.js (FULL)
+// courses-det-script.js (CORRECTED)
 // ===============================
 document.addEventListener('DOMContentLoaded', async function () {
   // -------------------------------
@@ -10,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     apiKey: "AIzaSyBhCxGjQOQ88b2GynL515ZYQXqfiLPhjw4",
     authDomain: "edumates-983dd.firebaseapp.com",
     projectId: "edumates-983dd",
-    storageBucket: "edumates-983dd.firebasestorage.app",
+    storageBucket: "edumates-983dd.appspot.com", // <-- FIXED (.appspot.com)
     messagingSenderId: "172548876353",
     appId: "1:172548876353:web:955b1f41283d26c44c3ec0",
     measurementId: "G-L1KCZTW8R9"
@@ -20,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js");
   const { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } =
     await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js");
-  await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js");
+  await import("https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js"); // optional
   const {
     getFirestore, collection, addDoc, onSnapshot, query, orderBy,
     serverTimestamp, limitToLast, endBefore, getDocs, where
@@ -34,8 +33,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   // -------------------------------
   // DOM Cache
   // -------------------------------
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+  const $ = (sel, ctx = document) => (ctx ? ctx.querySelector(sel) : null);
+  const $$ = (sel, ctx = document) => (ctx ? Array.from(ctx.querySelectorAll(sel)) : []);
 
   const el = {
     currentYear: $('.current-year'),
@@ -50,9 +49,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     loadMoreBtn: $('#loadMoreBtn'),
     messageInput: $('#messageInput'),
     sendMessageBtn: $('#sendMessageBtn'),
-    usernameInput: $('#usernameInput'),       // قد لا تكون موجودة في HTML
-    saveUsernameBtn: $('#saveUsernameBtn'),   // قد لا تكون موجودة في HTML
-
+    usernameInput: $('#usernameInput'),
+    saveUsernameBtn: $('#saveUsernameBtn'),
     // Auth
     googleLoginBtn: $('#googleLoginBtn'),
   };
@@ -68,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const sanitizeHTML = (str) => {
     const div = document.createElement('div');
-    div.textContent = String(str ?? '').replace(/[<>]/g, '');
+    div.textContent = String(str ?? '');
     return div.innerHTML;
   };
 
@@ -105,7 +103,11 @@ document.addEventListener('DOMContentLoaded', async function () {
       el.mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
     }
   }
-
+  // Attach mobile menu handlers
+  if (el.mobileMenuBtn) el.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+  window.addEventListener('resize', closeMobileMenuIfNarrow);
+  // run once on load
+  closeMobileMenuIfNarrow();
 
   // -------------------------------
   // Toggle features (القوائم داخل الروابط التعليمية)
@@ -158,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <span>${sanitizeHTML(user.displayName || localStorage.getItem('chat-username') || 'مستخدم')}</span>
         <i class="fas fa-sign-out-alt logout-icon" title="تسجيل الخروج"></i>
       `;
-      const logoutIcon = $('.logout-icon', el.googleLoginBtn);
+      const logoutIcon = el.googleLoginBtn.querySelector('.logout-icon');
       if (logoutIcon) {
         logoutIcon.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -182,16 +184,17 @@ document.addEventListener('DOMContentLoaded', async function () {
   // -------------------------------
   if (el.saveUsernameBtn && el.usernameInput) {
     // Prefill
-    const saved = localStorage.getItem('chat-username') || '';
-    if (saved) el.usernameInput.value = saved;
-el.saveUsernameBtn.addEventListener('click', () => {
-  const name = el.usernameInput.value.trim();
-  if (!name) return alert('من فضلك اكتب اسم صالح');
-  localStorage.setItem('chat-username', name);
-  alert('تم حفظ اسمك بنجاح ✅');
-  document.querySelector('.chat-username').style.display = 'none';
-});
+    const savedName = localStorage.getItem('chat-username') || '';
+    if (savedName) el.usernameInput.value = savedName;
 
+    el.saveUsernameBtn.addEventListener('click', () => {
+      const name = el.usernameInput.value.trim();
+      if (!name) return alert('من فضلك اكتب اسم صالح');
+      localStorage.setItem('chat-username', name);
+      alert('تم حفظ اسمك بنجاح ✅');
+      const chatUsernameEl = document.querySelector('.chat-username');
+      if (chatUsernameEl) chatUsernameEl.style.display = 'none';
+    });
   }
 
   // -------------------------------
@@ -218,6 +221,7 @@ el.saveUsernameBtn.addEventListener('click', () => {
   // Chat: rendering & paging
   // -------------------------------
   function renderMessage(doc, currentUser) {
+    if (!el.chatMessages) return;
     const data = doc.data();
     const id = doc.id;
     if (renderedIds.has(id)) return; // avoid duplicates
@@ -243,6 +247,7 @@ el.saveUsernameBtn.addEventListener('click', () => {
   }
 
   function prependMessages(docs, currentUser) {
+    if (!el.chatMessages) return;
     // احفظ موضع التمرير
     const prevHeight = el.chatMessages.scrollHeight;
     const prevTop = el.chatMessages.scrollTop;
@@ -374,12 +379,13 @@ el.saveUsernameBtn.addEventListener('click', () => {
       sendMessage();
     }
   });
-  const saved = localStorage.getItem('chat-username');
-if (saved) {
-  el.usernameInput.value = saved;
-  document.querySelector('.chat-username').style.display = 'none';
-}
 
+  const saved = localStorage.getItem('chat-username');
+  if (saved && el.usernameInput) {
+    el.usernameInput.value = saved;
+    const chatUsernameEl = document.querySelector('.chat-username');
+    if (chatUsernameEl) chatUsernameEl.style.display = 'none';
+  }
 
   // -------------------------------
   // Ratings (stars)
@@ -460,3 +466,9 @@ if (saved) {
       });
     });
   }
+
+  // initial wiring
+  wireFeatureToggles();
+  wireRatings();
+
+});
