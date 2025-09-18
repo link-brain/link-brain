@@ -169,11 +169,13 @@ body {
   padding: 0.7rem 1.8rem;
   font-size: 0.95rem;
   cursor:pointer;
+  
 }
 
 .view-roadmap-btn {
   margin: 1.2rem auto;
   display: block;
+width: 30hv;
 }
 
 .quiz-btn {
@@ -716,99 +718,6 @@ body {
   outline: none;
 }
 
-/* Roadmap Popup */
-.roadmap-popup {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.65);
-  z-index: 2000;
-  align-items: center;
-  justify-content: center;
-}
-
-.roadmap-popup.active {
-  display: flex;
-}
-
-.roadmap-content {
-  background-color: var(--white);
-  max-width: 650px;
-  width: 94%;
-  max-height: 88vh;
-  overflow-y: auto;
-  border-radius: var(--border-radius);
-  padding: 2rem;
-  box-shadow: var(--box-shadow);
-  position: relative;
-}.close-roadmap {
-  position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;   /* خليها يمين ثابت */
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--text-dark);
-  background: rgba(0,0,0,0.05);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: var(--transition);
-  z-index: 3000;   /* يتأكد أنه فوق أي عنصر */
-}
-
-.close-roadmap:hover,
-.close-roadmap:focus {
-  background: var(--primary-blue);
-  color: var(--white);
-  transform: scale(1.05);
-  outline: none;
-}
-
-
-.roadmap-content h2 {
-  font-size: 1.8rem;
-  color: var(--primary-dark);
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-weight: 700;
-}
-
-.roadmap-item {
-  margin-bottom: 1.5rem;
-  padding: 1.2rem;
-  background-color: var(--light-bg);
-  border-radius: var(--border-radius);
-  transition: var(--transition);
-}
-
-.roadmap-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.roadmap-item h3 {
-  font-size: 1.3rem;
-  color: var(--primary-blue);
-  margin-bottom: 0.6rem;
-  font-weight: 600;
-}
-
-.roadmap-item h3 i {
-  margin-left: 0.4rem;
-}
-
-.roadmap-item p {
-  font-size: 0.95rem;
-  color: var(--text-dark);
-}
-
 /* Footer */
 .site-footer {
   background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-blue) 100%);
@@ -1023,16 +932,6 @@ body {
   .breadcrumbs {
     font-size: 0.85rem;
   }
-  .roadmap-content {
-    width: 96%;
-    padding: 1.5rem;
-  }
-  .course-image {
-    max-width: 80px;
-    height: 80px;
-  }
-}
-
 @media (max-width: 480px) {
   .resources-container {
     gap: 0.8rem;
@@ -1158,48 +1057,6 @@ body {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
-
-
-/* Roadmap Popup Enhancements */
-.roadmap-detail-popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 4000;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-.roadmap-detail-popup.active { display:flex; }
-.roadmap-detail-popup .popup-content {
-  background: var(--white);
-  max-width: 640px;
-  width: 100%;
-  padding: 1.4rem 1.6rem;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(10,20,40,0.2);
-  position: relative;
-}
-.roadmap-detail-popup .close-popup {
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  color: var(--text-dark);
-}
-.roadmap-detail-popup h2 {
-  margin-top: 0;
-  margin-bottom: 0.4rem;
-  color: var(--primary-blue);
-}
-.roadmap-detail-popup p { margin-bottom: 0.6rem; color:var(--text-medium); }
-.roadmap-detail-popup ul { padding-right:1rem; }
-.roadmap-detail-popup .btn.view-sources { margin-top: 0.8rem; display:inline-block; }
-
 @media (max-width: 768px) {
   .auth-buttons {
     position: absolute;
