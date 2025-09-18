@@ -2,7 +2,7 @@
 // ===============================
 // courses=det-script.js (FULL)
 // ===============================
-document.addEventListener('DOMContentLoaded', async function ()) {
+document.addEventListener('DOMContentLoaded', async function () {
   // -------------------------------
   // Firebase Init
   // -------------------------------
@@ -184,14 +184,14 @@ document.addEventListener('DOMContentLoaded', async function ()) {
     // Prefill
     const saved = localStorage.getItem('chat-username') || '';
     if (saved) el.usernameInput.value = saved;
+el.saveUsernameBtn.addEventListener('click', () => {
+  const name = el.usernameInput.value.trim();
+  if (!name) return alert('من فضلك اكتب اسم صالح');
+  localStorage.setItem('chat-username', name);
+  alert('تم حفظ اسمك بنجاح ✅');
+  document.querySelector('.chat-username').style.display = 'none';
+});
 
-    el.saveUsernameBtn.addEventListener('click', () => {
-      const name = el.usernameInput.value.trim();
-      if (!name) return alert('من فضلك اكتب اسم صالح');
-      localStorage.setItem('chat-username', name);
-      alert('تم حفظ اسمك بنجاح ✅');
-    document.querySelector('.chat-username').style.display = 'none';
-    });
   }
 
   // -------------------------------
