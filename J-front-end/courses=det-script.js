@@ -2,7 +2,7 @@
 // ===============================
 // courses=det-script.js (FULL)
 // ===============================
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', async function ()) {
   // -------------------------------
   // Firebase Init
   // -------------------------------
@@ -459,4 +459,4 @@ if (saved) {
         });
       });
     });
-  })
+  }
