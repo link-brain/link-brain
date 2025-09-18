@@ -442,9 +442,7 @@ if (saved) {
       console.error('submitRating error:', err);
       alert('تعذر تسجيل التقييم: ' + err.message);
     }
-  }
-
-  function wireRatings() {
+  }  function wireRatings() {
     $$('.rating-stars').forEach(container => {
       const li = container.closest('[data-link-id]');
       if (!li) return;
@@ -460,3 +458,11 @@ if (saved) {
       });
     });
   }
+
+  // -------------------------------
+  // Init
+  // -------------------------------
+  wireFeatureToggles();
+  wireRatings();
+
+}); // ← إغلاق الـ DOMContentLoaded
