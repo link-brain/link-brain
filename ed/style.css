@@ -1,0 +1,246 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+#app {
+  width: 100%;
+  max-width: 800px;
+}
+
+.question-box, .plan-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  color: #764ba2;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.option {
+  background: #f5f5f5;
+  padding: 12px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.option input {
+  margin-right: 10px;
+}
+
+.option:hover {
+  background: #667eea;
+  color: #fff;
+}
+
+button {
+  background: #764ba2;
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #667eea;
+}
+
+button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #667eea;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.plan-box {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  animation: fadeIn 1s ease-in-out;
+}
+
+.plan-content {
+  text-align: right;
+  line-height: 1.6;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.plan-content h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8em;
+  color: #764ba2;
+  position: relative;
+}
+
+.plan-content h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.plan-content h3 {
+  color: #764ba2;
+  margin-bottom: 10px;
+}
+
+.roadmap-step {
+  margin-bottom: 25px;
+  padding: 20px;
+  background: #fdfdfd;
+  border-radius: 12px;
+  border-left: 5px solid #667eea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+
+.roadmap-step:hover {
+  transform: translateX(-5px);
+}
+
+.roadmap-step h4 {
+  color: #764ba2;
+  margin-bottom: 12px;
+  font-size: 1.3em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roadmap-step h4::before {
+  content: "📍";
+}
+
+.roadmap-step h5 {
+  margin-top: 12px;
+  font-size: 1.1em;
+  color: #667eea;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.roadmap-step h5::before {
+  content: "📚";
+}
+
+.resource-link {
+  display: block;
+  margin: 8px 0;
+  padding: 12px 15px;
+  background: #f8f8ff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
+.resource-link:hover {
+  background: #667eea;
+  color: #fff;
+  transform: translateX(-3px);
+  border-color: #764ba2;
+}
+
+.resource-details {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 5px;
+}
+
+.resource-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 5px;
+}
+
+.resource-tag {
+  background: #e0e0e0;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8em;
+  transition: all 0.3s ease;
+}
+
+.resource-tag:hover {
+  background: #764ba2;
+  color: #fff;
+}
+
+.restart-btn {
+  background: #27ae60;
+  margin-top: 20px;
+}
+
+.restart-btn:hover {
+  background: #219653;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
