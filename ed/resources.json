@@ -388,8 +388,8 @@
         },
         {
           "title": "CSS: The Definitive Guide",
-          "url": "https://www.amazon.com/CSS-Definitive-Guide-Visual-Presentation/dp/1449393195",
-          "مدة": "500 صفحة",
+          "url": "https://www.amazon.com/CSS-Definitive-Guide-Visual-Presentation-Web/dp/1449393195",
+          "مدة": "450 صفحة",
           "نوع": "نظري",
           "مستوى": [
             "متوسط",
@@ -397,109 +397,31 @@
           ],
           "الكلمات_المفتاحية": [
             "css",
-            "مرجع",
+            "دليل",
             "كتاب"
           ],
           "تقييم": 4.7
-        },
-        {
-          "title": "CSS in Depth",
-          "url": "https://www.amazon.com/CSS-Depth-Keith-Grant/dp/1617293458",
-          "مدة": "350 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "متقدم",
-            "تصميم"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "CSS for Web Designers",
-          "url": "https://abookapart.com/products/css3-for-web-designers",
-          "مدة": "150 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "تصميم",
-            "كتاب"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "CSS The Missing Manual",
-          "url": "https://www.amazon.com/CSS-Missing-Manual-David-McFarland/dp/1491918055",
-          "مدة": "400 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "مبتدئ",
-            "كتاب"
-          ],
-          "تقييم": 4.6
         }
       ],
       "تمارين": [
         {
-          "title": "تحديات CSS يومية",
-          "url": "https://www.cssbattle.dev/",
-          "مدة": "30 تحدي",
+          "title": "تمارين CSS تفاعلية",
+          "url": "https://www.w3schools.com/css/css_exercises.asp",
+          "مدة": "20 تمرين",
           "نوع": "عملي",
           "مستوى": [
-            "مبتدئ",
-            "متوسط"
+            "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
             "css",
-            "تحديات",
+            "تمارين",
             "تفاعلي"
           ],
-          "تقييم": 4.7
+          "تقييم": 4.6
         },
         {
-          "title": "CSS Grid Practice",
-          "url": "https://cssgridgarden.com/",
-          "مدة": "28 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "grid",
-            "تمارين"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "Flexbox Froggy",
-          "url": "https://flexboxfroggy.com/",
-          "مدة": "24 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "flexbox",
-            "تفاعلي"
-          ],
-          "تقييم": 4.9
-        },
-        {
-          "title": "CSS Challenges by FreeCodeCamp",
-          "url": "https://www.freecodecamp.org/learn/responsive-web-design/",
+          "title": "تحديات CSS للمبتدئين",
+          "url": "https://www.codecademy.com/learn/learn-css",
           "مدة": "15 تمرين",
           "نوع": "عملي",
           "مستوى": [
@@ -507,243 +429,14 @@
           ],
           "الكلمات_المفتاحية": [
             "css",
-            "مشاريع",
-            "تطبيق"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "CSS Diner",
-          "url": "https://flukeout.github.io/",
-          "مدة": "32 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "css",
-            "selectors",
-            "تفاعلي"
-          ],
-          "تقييم": 4.8
-        }
-      ]
-    },
-    "javascript": {
-      "فيديوهات": [
-        {
-          "title": "JavaScript",
-          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv&si=Rot51EuVN3_Bfn95",
-          "مدة": "20 ساعة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "أساسيات",
-            "متقدم"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "JavaScript",
-          "url": "https://youtube.com/playlist?list=PLknwEmKsW8OuTqUDaFRBiAViDZ5uI3VcE&si=AOJG6P2_LlwQKik1",
-          "مدة": "8 ساعات",
-          "نوع": "نظري",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "مشاريع",
-            "مبتدئ"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "JavaScript",
-          "url": "https://youtube.com/playlist?list=PLYyqC4bNbCIeLEjcSPO61bsGPKEvYceb0&si=LibCXVQwnWOj3K_h",
-          "مدة": "4 ساعات",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "async",
-            "promises"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "JavaScript مشاريع عملية",
-          "url": "https://youtube.com/playlist?list=PLknwEmKsW8Otkp3ax3DWDWQufKy4RirWO&si=x0AUzmoFZUrxUKby",
-          "مدة": "5 ساعات",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "dom",
-            "تفاعلي"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "JavaScript مشروع عملي",
-          "url": "https://youtu.be/KzUmoedBmZ4?si=xNTADxGFtqo0f0ie",
-          "مدة": "5 ساعات",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "es6",
-            "حديث"
-          ],
-          "تقييم": 4.8
-        }
-      ],
-      "مواقع": [
-        {
-          "title": "أكاديمية حسوب - جافاسكربت",
-          "url": "https://academy.hsoub.com/web/javascript/",
-          "مدة": "غير محدد",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "تعليم",
-            "عربي"
-          ],
-          "تقييم": 4.8
-        }
-      ],
-      "كتب": [
-        {
-          "title": "Eloquent JavaScript",
-          "url": "https://eloquentjavascript.net/",
-          "مدة": "450 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "كتاب",
-            "مشاريع"
-          ],
-          "تقييم": 4.9
-        },
-        {
-          "title": "You Don’t Know JS",
-          "url": "https://github.com/getify/You-Dont-Know-JS",
-          "مدة": "600 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "متقدم",
-            "كتاب"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "JavaScript: The Definitive Guide",
-          "url": "https://www.amazon.com/JavaScript-Definitive-Guide-Activate-Your/dp/0596805527",
-          "مدة": "700 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "مرجع",
-            "كتاب"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "JavaScript: The Good Parts",
-          "url": "https://www.amazon.com/JavaScript-Good-Parts-Douglas-Crockford/dp/0596517742",
-          "مدة": "200 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "إحتراف",
-            "كتاب"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "Head First JavaScript Programming",
-          "url": "https://www.amazon.com/Head-First-JavaScript-Programming-Brain-Friendly/dp/144934013X",
-          "مدة": "500 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "مبتدئ",
-            "كتاب"
-          ],
-          "تقييم": 4.5
-        }
-      ],
-      "تمارين": [
-        {
-          "title": "تمارين JavaScript تفاعلية",
-          "url": "https://www.w3schools.com/js/js_exercises.asp",
-          "مدة": "50 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "تمارين",
-            "تفاعلي"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "JavaScript Coding Challenges",
-          "url": "https://www.hackerrank.com/domains/javascript",
-          "مدة": "30 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
             "تحديات",
-            "تفاعلي"
+            "مبتدئ"
           ],
-          "تقييم": 4.7
+          "تقييم": 4.5
         },
         {
-          "title": "FreeCodeCamp JavaScript Projects",
-          "url": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+          "title": "CSS Practice Projects",
+          "url": "https://www.freecodecamp.org/learn/responsive-web-design/",
           "مدة": "10 تمارين",
           "نوع": "عملي",
           "مستوى": [
@@ -751,32 +444,15 @@
             "متوسط"
           ],
           "الكلمات_المفتاحية": [
-            "javascript",
+            "css",
             "مشاريع",
             "تطبيق"
           ],
-          "تقييم": 4.6
+          "تقييم": 4.7
         },
         {
-          "title": "Codewars JavaScript Katas",
-          "url": "https://www.codewars.com/collections/javascript",
-          "مدة": "40 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "javascript",
-            "تحديات",
-            "تفاعلي"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "Edabit JavaScript Challenges",
-          "url": "https://edabit.com/challenges/javascript",
+          "title": "CSS Coding Challenges",
+          "url": "https://www.hackerrank.com/domains/css",
           "مدة": "25 تمرين",
           "نوع": "عملي",
           "مستوى": [
@@ -784,116 +460,201 @@
             "متوسط"
           ],
           "الكلمات_المفتاحية": [
-            "javascript",
-            "تمارين",
+            "css",
+            "تحديات",
             "تفاعلي"
           ],
-          "تقييم": 4.7
-        }
-      ]
-    },
-    "git": {
-      "فيديوهات": [
+          "تقييم": 4.6
+        },
         {
-          "title": "Git و GitHub سريع",
-          "url": "https://youtu.be/fDkR0TDR9dI?si=EaICf4WxaK15yscy",
-          "مدة": "1 ساعات",
-          "نوع": "نظري وعملي",
+          "title": "Interactive CSS Exercises",
+          "url": "https://www.khanacademy.org/computing/computer-programming/html-css",
+          "مدة": "12 تمرين",
+          "نوع": "عملي",
           "مستوى": [
             "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
-            "git",
-            "github",
+            "css",
+            "تمارين",
+            "تفاعلي"
+          ],
+          "تقييم": 4.5
+        }
+      ]
+    },
+    "javascript": {
+      "فيديوهات": [
+        {
+          "title": "كورس جافا سكريبت كامل بالعربي",
+          "url": "https://www.youtube.com/watch?v=PWuTLTFMtYw",
+          "مدة": "4 ساعات",
+          "نوع": "نظري",
+          "مستوى": [
             "مبتدئ"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "أساسيات",
+            "مبتدئ"
+          ],
+          "تقييم": 4.8
+        },
+        {
+          "title": "كورس جافا سكريبت من الصفر",
+          "url": "https://www.youtube.com/watch?v=nxx9cmdsYSw",
+          "مدة": "6 ساعات",
+          "نوع": "عملي",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "مشاريع",
+            "تطبيق"
+          ],
+          "تقييم": 4.5
+        },
+        {
+          "title": "JavaScript Full Course - Beginner to Pro",
+          "url": "https://www.youtube.com/watch?v=EerdGm-ehJQ",
+          "مدة": "5 ساعات",
+          "نوع": "نظري وعملي",
+          "مستوى": [
+            "متوسط",
+            "متقدم"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "متقدم"
           ],
           "تقييم": 4.7
         },
         {
-          "title": "Git and github",
-          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=Uocjna-xBuP8H1nq",
+          "title": "Learn JavaScript in Arabic",
+          "url": "https://www.youtube.com/playlist?list=PLMTdZ61eBnyp1nMM8mGRzpwuu6FNxFy0D",
           "مدة": "3 ساعات",
           "نوع": "عملي",
           "مستوى": [
             "متوسط"
           ],
           "الكلمات_المفتاحية": [
-            "git",
-            "branching",
-            "تطبيق"
+            "javascript",
+            "تعليم",
+            "عربي"
           ],
           "تقييم": 4.6
         },
         {
-          "title": "Git for سريع",
-          "url": "https://youtube.com/playlist?list=PLMTdZ61eBnypdpBVn2kb-2yizuEL7Phyj&si=5HibS_YPxpLWbpWS",
-          "مدة": "1 ساعات",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "إحتراف",
-            "متقدم"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Git Merge and Rebase",
-          "url": "https://www.youtube.com/watch?v=O6G58In7Tz0",
-          "مدة": "1 ساعة",
+          "title": "[Arabic] Learn JavaScript In One Video - Part One",
+          "url": "https://www.youtube.com/watch?v=gIGGhFlGgLI",
+          "مدة": "2 ساعات",
           "نوع": "نظري",
           "مستوى": [
-            "متوسط"
+            "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
-            "git",
-            "merge",
-            "rebase"
+            "javascript",
+            "مبتدئ",
+            "أساسيات"
           ],
           "تقييم": 4.4
-        },
-        {
-          "title": "GitHub Actions Tutorial",
-          "url": "https://www.youtube.com/watch?v=R8_veQiY1uo",
-          "مدة": "2 ساعات",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "github",
-            "actions"
-          ],
-          "تقييم": 4.6
         }
       ],
       "مواقع": [
         {
-          "title": "مقال: مدخل إلى Git - أكاديمية حسوب",
-          "url": "https://academy.hsoub.com/programming/git/",
+          "title": "دليل JavaScript من أكاديمية حسوب",
+          "url": "https://academy.hsoub.com/programming/javascript/",
           "مدة": "غير محدد",
+          "نوع": "نظري",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "تعليم",
+            "عربي"
+          ],
+          "تقييم": 4.8
+        }
+      ],
+      "كتب": [
+        {
+          "title": "JavaScript: The Definitive Guide",
+          "url": "https://www.amazon.com/JavaScript-Definitive-Guide-Activate-Guides/dp/0596805527",
+          "مدة": "450 صفحة",
+          "نوع": "نظري",
+          "مستوى": [
+            "متوسط",
+            "متقدم"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "دليل",
+            "كتاب"
+          ],
+          "تقييم": 4.7
+        },
+        {
+          "title": "Eloquent JavaScript",
+          "url": "https://eloquentjavascript.net/",
+          "مدة": "400 صفحة",
+          "نوع": "نظري وعملي",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "تعليم",
+            "كتاب"
+          ],
+          "تقييم": 4.6
+        }
+      ],
+      "تمارين": [
+        {
+          "title": "تمارين JavaScript تفاعلية",
+          "url": "https://www.w3schools.com/js/js_exercises.asp",
+          "مدة": "20 تمرين",
+          "نوع": "عملي",
+          "مستوى": [
+            "مبتدئ"
+          ],
+          "الكلمات_المفتاحية": [
+            "javascript",
+            "تمارين",
+            "تفاعلي"
+          ],
+          "تقييم": 4.6
+        }
+      ]
+    },
+    "git": {
+      "فيديوهات": [
+        {
+          "title": "دورة Git للمبتدئين",
+          "url": "https://www.youtube.com/watch?v=8JJ101D3knE",
+          "مدة": "2 ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
             "git",
-            "تعليم",
-            "عربي"
+            "أساسيات",
+            "مبتدئ"
           ],
-          "تقييم": 4.7
+          "تقييم": 4.8
         }
       ],
-      "كتب": [
+      "مواقع": [
         {
-          "title": "Pro Git",
-          "url": "https://git-scm.com/book/en/v2",
-          "مدة": "350 صفحة",
+          "title": "دليل Git من أكاديمية حسوب",
+          "url": "https://academy.hsoub.com/programming/git/",
+          "مدة": "غير محدد",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ",
@@ -901,17 +662,20 @@
           ],
           "الكلمات_المفتاحية": [
             "git",
-            "كتاب",
-            "شامل"
+            "تعليم",
+            "عربي"
           ],
-          "تقييم": 4.9
-        },
+          "تقييم": 4.8
+        }
+      ],
+      "كتب": [
         {
-          "title": "Version Control with Git",
-          "url": "https://www.amazon.com/Version-Control-Git-collaborative-development/dp/1449316387",
-          "مدة": "400 صفحة",
+          "title": "Pro Git",
+          "url": "https://git-scm.com/book/en/v2",
+          "مدة": "300 صفحة",
           "نوع": "نظري",
           "مستوى": [
+            "مبتدئ",
             "متوسط"
           ],
           "الكلمات_المفتاحية": [
@@ -920,128 +684,21 @@
             "إحتراف"
           ],
           "تقييم": 4.7
-        },
-        {
-          "title": "Git for Teams",
-          "url": "https://www.amazon.com/Git-Teams-Collaborative-Development-Workflow/dp/1491913754",
-          "مدة": "300 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "فرق",
-            "كتاب"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "Git in Practice",
-          "url": "https://www.amazon.com/Git-Practice-Mike-McQuaid/dp/1617291978",
-          "مدة": "250 صفحة",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "تطبيق",
-            "كتاب"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Learn Git in a Month of Lunches",
-          "url": "https://www.amazon.com/Learn-Month-Lunches-Rick-Umali/dp/1617292419",
-          "مدة": "300 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "مبتدئ",
-            "كتاب"
-          ],
-          "تقييم": 4.6
         }
       ],
       "تمارين": [
         {
-          "title": "تمارين Git التفاعلية",
+          "title": "تمارين Git تفاعلية",
           "url": "https://learngitbranching.js.org/",
           "مدة": "15 تمرين",
           "نوع": "عملي",
           "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "تمارين",
-            "تفاعلي"
-          ],
-          "تقييم": 4.9
-        },
-        {
-          "title": "GitHub Lab Exercises",
-          "url": "https://lab.github.com/",
-          "مدة": "10 تمارين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "github",
-            "تفاعلي"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "Git Practice Challenges",
-          "url": "https://try.github.io/",
-          "مدة": "12 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "تمارين",
-            "تطبيق"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "Git Exercises by Exercism",
-          "url": "https://exercism.org/tracks/git/exercises",
-          "مدة": "8 تمارين",
-          "نوع": "عملي",
-          "مستوى": [
             "مبتدئ",
             "متوسط"
           ],
           "الكلمات_المفتاحية": [
             "git",
             "تمارين",
-            "تفاعلي"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Git Workflow Challenges",
-          "url": "https://www.katacoda.com/courses/git",
-          "مدة": "10 تمارين",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "git",
-            "workflow",
             "تفاعلي"
           ],
           "تقييم": 4.6
@@ -1053,87 +710,25 @@
     "https-apis": {
       "فيديوهات": [
         {
-          "title": "اساسيات برمجة الويب",
-          "url": "https://youtube.com/playlist?list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&si=8DQNDDrLzBe-qk9u",
-          "مدة": "5 ساعات",
-          "نوع": "نظري",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "http",
-            "مبتدئ"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "api",
-          "url": "https://youtu.be/rq7DvjN1Gco?si=9FX7N7j2xrvNpiI4",
-          "مدة": "ساعة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "rest",
-            "تطبيق"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "https&http",
-          "url": "https://youtu.be/2wH6c4HQDcA?si=2ZJjV1auo9EBGc1Q",
-          "مدة": "0.3 ساعات",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "graphql",
-            "apis",
-            "متقدم"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "API Security Basics",
-          "url": "https://www.youtube.com/watch?v=2XBo8SLO0iQ",
-          "مدة": "2 ساعات",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "security",
-            "أمان"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Postman for API Testing",
-          "url": "https://www.youtube.com/watch?v=VywxIQh0u6s",
-          "مدة": "4 ساعات",
+          "title": "دورة REST API Tutorial",
+          "url": "https://www.youtube.com/watch?v=7YcW25PHnAA",
+          "مدة": "3 ساعات",
           "نوع": "عملي",
           "مستوى": [
-            "مبتدئ",
-            "متوسط"
+            "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
             "apis",
-            "postman",
-            "تطبيق"
+            "backend",
+            "مبتدئ"
           ],
-          "تقييم": 4.8
+          "تقييم": 4.7
         }
       ],
       "مواقع": [
         {
-          "title": "REST API Tutorial",
-          "url": "https://restfulapi.net/",
+          "title": "دليل APIs من أكاديمية حسوب",
+          "url": "https://academy.hsoub.com/programming/apis/",
           "مدة": "غير محدد",
           "نوع": "نظري",
           "مستوى": [
@@ -1142,149 +737,24 @@
           ],
           "الكلمات_المفتاحية": [
             "apis",
-            "rest",
-            "مرجع"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "GraphQL Official Docs",
-          "url": "https://graphql.org/learn/",
-          "مدة": "غير محدد",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "graphql",
-            "apis",
-            "وثائق"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "Postman Learning Center",
-          "url": "https://learning.postman.com/",
-          "مدة": "غير محدد",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "postman",
-            "تفاعلي"
+            "تعليم",
+            "عربي"
           ],
           "تقييم": 4.8
-        },
-        {
-          "title": "API Design Guide",
-          "url": "https://apiguide.readthedocs.io/",
-          "مدة": "غير محدد",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "تصميم",
-            "مرجع"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Swagger API Documentation",
-          "url": "https://swagger.io/docs/",
-          "مدة": "غير محدد",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "swagger",
-            "وثائق"
-          ],
-          "تقييم": 4.6
         }
       ],
       "كتب": [
         {
-          "title": "Designing Web APIs",
-          "url": "https://www.amazon.com/Designing-Web-APIs-Saurabh-Sahni/dp/1492026921",
-          "مدة": "280 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "تصميم",
-            "كتاب"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "RESTful Web APIs",
-          "url": "https://www.amazon.com/RESTful-Web-APIs-Services-Next-Generation/dp/1449358063",
+          "title": "RESTful Web Services",
+          "url": "https://www.amazon.com/RESTful-Web-Services-Leonard-Richardson/dp/0596529260",
           "مدة": "400 صفحة",
           "نوع": "نظري",
           "مستوى": [
-            "متوسط",
-            "متقدم"
+            "متوسط"
           ],
           "الكلمات_المفتاحية": [
             "apis",
             "rest",
-            "كتاب"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "GraphQL in Action",
-          "url": "https://www.amazon.com/GraphQL-Action-Samer-Buna/dp/161729568X",
-          "مدة": "350 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "متوسط",
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "graphql",
-            "apis",
-            "كتاب"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "APIs: A Strategy Guide",
-          "url": "https://www.amazon.com/APIs-Strategy-Guide-Daniel-Jacobson/dp/1449308929",
-          "مدة": "200 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "استراتيجية",
-            "كتاب"
-          ],
-          "تقييم": 4.4
-        },
-        {
-          "title": "Building Microservices with APIs",
-          "url": "https://www.amazon.com/Building-Microservices-Designing-Fine-Grained-Systems/dp/1491950358",
-          "مدة": "300 صفحة",
-          "نوع": "نظري",
-          "مستوى": [
-            "متقدم"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "microservices",
             "كتاب"
           ],
           "تقييم": 4.6
@@ -1292,170 +762,62 @@
       ],
       "تمارين": [
         {
-          "title": "بناء أول API خاص بك",
-          "url": "https://www.codecademy.com/learn/creating-a-rest-api",
-          "مدة": "10 تمارين",
+          "title": "تمارين APIs تفاعلية",
+          "url": "https://www.postman.com/explore",
+          "مدة": "10 تمرين",
           "نوع": "عملي",
           "مستوى": [
-            "مبتدئ"
+            "مبتدئ",
+            "متوسط"
           ],
           "الكلمات_المفتاحية": [
             "apis",
             "تمارين",
-            "تطبيق"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "Postman API Challenges",
-          "url": "https://www.postman.com/postman/workspace/postman-team-collections",
-          "مدة": "15 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "postman",
-            "تفاعلي"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "GraphQL Practice",
-          "url": "https://www.howtographql.com/",
-          "مدة": "12 تمرين",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "graphql",
-            "apis",
-            "تطبيق"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "API Testing Exercises",
-          "url": "https://www.katacoda.com/courses/postman",
-          "مدة": "10 تمارين",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "testing",
             "تفاعلي"
           ],
           "تقييم": 4.5
-        },
-        {
-          "title": "REST API Projects",
-          "url": "https://www.freecodecamp.org/learn/back-end-development-and-apis/",
-          "مدة": "8 تمارين",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "apis",
-            "مشاريع",
-            "تطبيق"
-          ],
-          "تقييم": 4.7
         }
       ]
     },
     "python": {
       "فيديوهات": [
         {
-          "title": "Python من الصفر",
-          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs&si=fSHGlBz2LufZqV4a",
-          "مدة": "22 ساعة",
-          "نوع": "نظري وعملي",
+          "title": "دورة Python للمبتدئين",
+          "url": "https://www.youtube.com/watch?v=JJMCYuxZ0rc",
+          "مدة": "4 ساعات",
+          "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
           ],
           "الكلمات_المفتاحية": [
             "python",
-            "مبتدئ",
-            "أساسيات"
+            "أساسيات",
+            "مبتدئ"
           ],
           "تقييم": 4.8
         },
         {
-          "title": "Django لبناء تطبيقات الويب",
-          "url": "https://youtube.com/playlist?list=PLknwEmKsW8OtK_n48UOuYGxJPbSFrICxm&si=ez9tciNyx7UeQlwO",
-          "مدة": "10 ساعات",
+          "title": "Python Advanced",
+          "url": "https://www.youtube.com/watch?v=HGOBD-yUPM4",
+          "مدة": "6 ساعات",
           "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "python",
-            "django",
-            "تطبيقات"
-          ],
-          "تقييم": 4.7
-        },
-        {
-          "title": "Python flask",
-          "url": "https://youtube.com/playlist?list=PL6X8IkNltYY_MgJNuEX-S1OABlAGOVUUw&si=4xqAGghYQsgigzFw",
-          "مدة": "2 ساعات",
-          "نوع": "نظري وعملي",
           "مستوى": [
             "متوسط",
             "متقدم"
           ],
           "الكلمات_المفتاحية": [
             "python",
-            "data-science",
-            "تحليل"
-          ],
-          "تقييم": 4.6
-        },
-        {
-          "title": "Python Automation Tutorial",
-          "url": "https://www.youtube.com/watch?v=s8XjEuplx_U",
-          "مدة": "5 ساعات",
-          "نوع": "عملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "python",
-            "automation",
-            "تطبيق"
-          ],
-          "تقييم": 4.5
-        },
-        {
-          "title": "Flask Web Development",
-          "url": "https://www.youtube.com/watch?v=MwZwr5Tvyxo",
-          "مدة": "6 ساعات",
-          "نوع": "عملي",
-          "مستوى": [
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "python",
-            "flask",
-            "تطبيقات"
+            "متقدم"
           ],
           "تقييم": 4.7
         }
       ],
       "مواقع": [
         {
-          "title": "أكاديمية حسوب - بايثون",
+          "title": "أكاديمية حسوب - Python",
           "url": "https://academy.hsoub.com/programming/python/",
           "مدة": "غير محدد",
-          "نوع": "نظري وعملي",
+          "نوع": "نظري",
           "مستوى": [
             "مبتدئ",
             "متوسط"
@@ -1465,41 +827,10 @@
             "تعليم",
             "عربي"
           ],
-          "تقييم": 4.9
+          "تقييم": 4.8
         }
       ],
       "كتب": [
-        {
-          "title": "Automate the Boring Stuff with Python",
-          "url": "https://automatetheboringstuff.com/",
-          "مدة": "350 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ"
-          ],
-          "الكلمات_المفتاحية": [
-            "python",
-            "أتمتة",
-            "كتاب"
-          ],
-          "تقييم": 4.8
-        },
-        {
-          "title": "Python Crash Course",
-          "url": "https://www.amazon.com/Python-Crash-Course-2nd-Comprehensive/dp/1593279280",
-          "مدة": "500 صفحة",
-          "نوع": "نظري وعملي",
-          "مستوى": [
-            "مبتدئ",
-            "متوسط"
-          ],
-          "الكلمات_المفتاحية": [
-            "python",
-            "تعليم",
-            "كتاب"
-          ],
-          "تقييم": 4.9
-        },
         {
           "title": "Fluent Python",
           "url": "https://www.amazon.com/Fluent-Python-Concise-Effective-Programming/dp/1491946008",
@@ -1887,6 +1218,79 @@
             "sql",
             "تحديات",
             "متقدم"
+          ],
+          "تقييم": 4.6
+        }
+      ]
+    },
+    "git": {
+      "فيديوهات": [
+        {
+          "title": "دورة Git للمبتدئين",
+          "url": "https://www.youtube.com/watch?v=8JJ101D3knE",
+          "مدة": "2 ساعات",
+          "نوع": "نظري",
+          "مستوى": [
+            "مبتدئ"
+          ],
+          "الكلمات_المفتاحية": [
+            "git",
+            "أساسيات",
+            "مبتدئ"
+          ],
+          "تقييم": 4.8
+        }
+      ],
+      "مواقع": [
+        {
+          "title": "دليل Git من أكاديمية حسوب",
+          "url": "https://academy.hsoub.com/programming/git/",
+          "مدة": "غير محدد",
+          "نوع": "نظري",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "git",
+            "تعليم",
+            "عربي"
+          ],
+          "تقييم": 4.8
+        }
+      ],
+      "كتب": [
+        {
+          "title": "Pro Git",
+          "url": "https://git-scm.com/book/en/v2",
+          "مدة": "300 صفحة",
+          "نوع": "نظري",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "git",
+            "كتاب",
+            "إحتراف"
+          ],
+          "تقييم": 4.7
+        }
+      ],
+      "تمارين": [
+        {
+          "title": "تمارين Git تفاعلية",
+          "url": "https://learngitbranching.js.org/",
+          "مدة": "15 تمرين",
+          "نوع": "عملي",
+          "مستوى": [
+            "مبتدئ",
+            "متوسط"
+          ],
+          "الكلمات_المفتاحية": [
+            "git",
+            "تمارين",
+            "تفاعلي"
           ],
           "تقييم": 4.6
         }
