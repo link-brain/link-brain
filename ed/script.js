@@ -233,25 +233,46 @@ function getResourcesForTopic(topic, subject, style, videoDuration) {
   }
 
   const subjectResources = resources[topic][subject];
-  if (!subjectResources[style]) {
-    return [];
+
+  let selectedResources = [];
+
+  let stylesToFetch = [];
+
+  if (style === "فيديوهات") {
+    stylesToFetch = ["فيديوهات"];
+  } else if (style === "مواقع") {
+    stylesToFetch = ["مواقع"];
+  } else if (style === "كليهما") {
+    stylesToFetch = ["فيديوهات", "كتب"];
   }
 
-  return subjectResources[style].filter(resource => {
-    let durationOk = true;
-    if (style === "فيديوهات" || style === "كليهما") {
-      let hours = 0;
-      if (resource.مدة && resource.مدة.match(/\d+/)) {
-        hours = parseInt(resource.مدة.match(/\d+/)[0]);
+  for (let s of stylesToFetch) {
+    if (subjectResources[s]) {
+      let res = subjectResources[s];
+      if (s === "فيديوهات") {
+        res = res.filter(resource => {
+          let durationOk = true;
+          let hours = 0;
+          if (resource.مدة && resource.مدة.match(/\d+/)) {
+            hours = parseInt(resource.مدة.match(/\d+/)[0]);
+          } else if (resource.مدة !== "غير محدد") {
+            return false;
+          }
+          if (videoDuration === "أقل من 5 ساعات") {
+            durationOk = hours < 5;
+          } else if (videoDuration === "أكثر من 5 ساعات") {
+            durationOk = hours > 5;
+          } else if (videoDuration === "الأقصى") {
+            durationOk = true;
+          }
+          return durationOk || resource.مدة === "غير محدد";
+        });
       }
-      if (videoDuration === "أقل من 5 ساعات") {
-        durationOk = hours < 5 || resource.مدة === "غير محدد";
-      } else if (videoDuration === "أكثر من 5 ساعات") {
-        durationOk = hours >= 5 || resource.مدة === "غير محدد";
-      }
+      selectedResources = selectedResources.concat(res);
     }
-    return durationOk;
-  });
+  }
+
+  return selectedResources;
 }
 
 async function loadResources() {
