@@ -34,22 +34,6 @@ const learningPlans = {
       {
         عنوان: "أساسيات Git",
         موضوع: "git"
-      },
-      {
-        عنوان: "HTML5 المتقدم",
-        موضوع: "html"
-      },
-      {
-        عنوان: "CSS المتقدم",
-        موضوع: "css"
-      },
-      {
-        عنوان: "JavaScript المتقدم",
-        موضوع: "javascript"
-      },
-      {
-        عنوان: "مشروع متكامل",
-        موضوع: "git"
       }
     ]
   },
@@ -69,22 +53,6 @@ const learningPlans = {
       },
       {
         عنوان: "مشروع بسيط",
-        موضوع: "git"
-      },
-      {
-        عنوان: "Python المتقدم",
-        موضوع: "python"
-      },
-      {
-        عنوان: "قواعد البيانات المتقدمة",
-        موضوع: "databases"
-      },
-      {
-        عنوان: "أنماط التصميم والأمان",
-        موضوع: "https-apis"
-      },
-      {
-        عنوان: "مشروع متكامل",
         موضوع: "git"
       }
     ]
@@ -243,7 +211,7 @@ function getResourcesForTopic(topic, subject, style, videoDuration) {
   } else if (style === "مواقع") {
     stylesToFetch = ["مواقع"];
   } else if (style === "كليهما") {
-    stylesToFetch = ["فيديوهات", "كتب"];
+    stylesToFetch = ["فيديوهات", "مواقع"];
   }
 
   for (let s of stylesToFetch) {
