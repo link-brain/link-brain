@@ -19,7 +19,7 @@
         },
         {
           "title": "مقدمة في HTML للمطورين",
-          "url": "https://www.youtube.com/watch?v=3JluqTojuME",
+          "url": "https://youtu.be/q3yFo-t1ykw?si=3z_vpzFwaTp4GAHN",
           "مدة": "2 ساعات",
           "نوع": "نظري",
           "مستوى": [
@@ -55,8 +55,8 @@
       "فيديوهات": [
         {
           "title": "CSS",
-          "url": "https://youtube.com/playlist?list=PLknwEmKsW8Os7rKViMCL8x6irVJT7McSS&si=2ld8YAk_gCDbp71p",
-          "مدة": "6 ساعات",
+          "url": "https://youtu.be/qyVkLebgfzY?si=Z15qmfo9yxOkRV2y",
+          "مدة": "11 ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
@@ -74,8 +74,8 @@
       "فيديوهات": [
         {
           "title": "كورس جافا سكريبت كامل بالعربي",
-          "url": "https://www.youtube.com/watch?v=PWuTLTFMtYw",
-          "مدة": "4 ساعات",
+          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAx3kiplQR_oeDqLDBUDYwVv&si=IUfIckPwdDLta_ZQ",
+          "مدة": "22ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
@@ -88,9 +88,9 @@
           "تقييم": 4.8
         },
         {
-          "title": "[Arabic] Learn JavaScript In One Video - Part One",
-          "url": "https://www.youtube.com/watch?v=gIGGhFlGgLI",
-          "مدة": "2 ساعات",
+          "title": "[Arabic] جافا اسكريبت ",
+          "url": "https://youtube.com/playlist?list=PLknwEmKsW8OuTqUDaFRBiAViDZ5uI3VcE&si=dWRab5RxAfoHV4m4",
+          "مدة": "5 ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
@@ -108,8 +108,8 @@
       "فيديوهات": [
         {
           "title": "دورة Git للمبتدئين",
-          "url": "https://www.youtube.com/watch?v=8JJ101D3knE",
-          "مدة": "2 ساعات",
+          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAw4eOj58MZPakHjaO3frVMF&si=K7YaoVtDBVNpuXw5",
+          "مدة": "3 ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
@@ -128,9 +128,9 @@
     "https-apis": {
       "فيديوهات": [
         {
-          "title": "دورة REST API Tutorial",
-          "url": "https://www.youtube.com/watch?v=7YcW25PHnAA",
-          "مدة": "3 ساعات",
+          "title": "شرح اساسيات الويب",
+          "url": "https://youtube.com/playlist?list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&si=7_NWnH_N-neafRTu",
+          "مدة": "2 ساعات",
           "نوع": "عملي",
           "مستوى": [
             "مبتدئ"
@@ -148,8 +148,8 @@
       "فيديوهات": [
         {
           "title": "دورة Python للمبتدئين",
-          "url": "https://www.youtube.com/watch?v=JJMCYuxZ0rc",
-          "مدة": "4 ساعات",
+          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs&si=zm8OiZFFa_hWUp3l",
+          "مدة": "20 ساعات",
           "نوع": "نظري",
           "مستوى": [
             "مبتدئ"
@@ -167,8 +167,8 @@
       "فيديوهات": [
         {
           "title": "قواعد البيانات SQL للمبتدئين",
-          "url": "https://youtube.com/playlist?list=PLxbVBWjVdAEj8TmOUKPG0avUmLqSoQOpf&si=kiuhwAPj-exE7pOI",
-          "مدة": "6 ساعات",
+          "url": "https://youtube.com/playlist?list=PLxbVBWjVdAEj8TmOUKPG0avUmLqSoQOpf&si=jpHChj_JKnyUcCef",
+          "مدة": "3 ساعات",
           "نوع": "نظري وعملي",
           "مستوى": [
             "مبتدئ"
@@ -181,9 +181,9 @@
           "تقييم": 4.7
         },
         {
-          "title": "MySQL for Beginners",
-          "url": "https://www.youtube.com/watch?v=7S_tz1z_5EU",
-          "مدة": "4 ساعات",
+          "title": "MySQL",
+          "url": "https://youtube.com/playlist?list=PLDoPjvoNmBAz6DT8SzQ1CODJTH-NIA7R9&si=3LlJXW9V82hADmR1",
+          "مدة": "5 ساعات",
           "نوع": "عملي",
           "مستوى": [
             "مبتدئ"
@@ -235,3 +235,4 @@
     }
   }
 }
+
