@@ -1,116 +1,93 @@
-
 const questions = [
   {
     key: "topic",
-    label: "ماذا تريد أن تتعلم؟",
+    label: "ما المجال الذي تتعلمه؟",
     options: ["frontend", "backend"]
-  },
-  {
-    key: "approach",
-    label: "ما هو أسلوبك المفضل؟",
-    options: ["نظري", "عملي"]
-  },
-  {
-    key: "level",
-    label: "ما هو مستواك الحالي؟",
-    options: ["مبتدئ", "متوسط"]
   },
   {
     key: "style",
     label: "تفضل التعلم كيف؟",
-    options: ["فيديوهات", "مواقع", "كتب"]
+    options: ["فيديوهات", "مواقع", "كليهما"]
   },
   {
-    key: "time",
-    label: "كم ساعة تستطيع أن تتعلم أسبوعياً؟",
-    options: ["1-3", "4-6", "7-10", "10+"]
+    key: "videoDuration",
+    label: "كم متوسط مدة الفيديوهات التي تريدها؟",
+    options: ["أقل من 5 ساعات", "أكثر من 5 ساعات", "الأقصى"]
   }
 ];
 
 const learningPlans = {
   frontend: {
-    مبتدئ: {
-      مواضيع: [
-        {
-          عنوان: "أساسيات HTML",
-          موضوع: "html"
-        },
-        {
-          عنوان: "أساسيات CSS",
-          موضوع: "css"
-        },
-        {
-          عنوان: "أساسيات JavaScript",
-          موضوع: "javascript"
-        },
-        {
-          عنوان: "أساسيات Git",
-          موضوع: "git"
-        }
-      ]
-    },
-    متوسط: {
-      مواضيع: [
-        {
-          عنوان: "HTML5 المتقدم",
-          موضوع: "html"
-        },
-        {
-          عنوان: "CSS المتقدم",
-          موضوع: "css"
-        },
-        {
-          عنوان: "JavaScript المتقدم",
-          موضوع: "javascript"
-        },
-        {
-          عنوان: "مشروع متكامل",
-          موضوع: "git"
-        }
-      ]
-    }
+    مواضيع: [
+      {
+        عنوان: "أساسيات HTML",
+        موضوع: "html"
+      },
+      {
+        عنوان: "أساسيات CSS",
+        موضوع: "css"
+      },
+      {
+        عنوان: "أساسيات JavaScript",
+        موضوع: "javascript"
+      },
+      {
+        عنوان: "أساسيات Git",
+        موضوع: "git"
+      },
+      {
+        عنوان: "HTML5 المتقدم",
+        موضوع: "html"
+      },
+      {
+        عنوان: "CSS المتقدم",
+        موضوع: "css"
+      },
+      {
+        عنوان: "JavaScript المتقدم",
+        موضوع: "javascript"
+      },
+      {
+        عنوان: "مشروع متكامل",
+        موضوع: "git"
+      }
+    ]
   },
   backend: {
-    مبتدئ: {
-      مواضيع: [
-        {
-          عنوان: "مقدمة في Backend وAPIs",
-          موضوع: "https-apis"
-        },
-        {
-          عنوان: "أساسيات Python",
-          موضوع: "python"
-        },
-        {
-          عنوان: "قواعد البيانات الأساسية",
-          موضوع: "databases"
-        },
-        {
-          عنوان: "مشروع بسيط",
-          موضوع: "git"
-        }
-      ]
-    },
-    متوسط: {
-      مواضيع: [
-        {
-          عنوان: "Python المتقدم",
-          موضوع: "python"
-        },
-        {
-          عنوان: "قواعد البيانات المتقدمة",
-          موضوع: "databases"
-        },
-        {
-          عنوان: "أنماط التصميم والأمان",
-          موضوع: "https-apis"
-        },
-        {
-          عنوان: "مشروع متكامل",
-          موضوع: "git"
-        }
-      ]
-    }
+    مواضيع: [
+      {
+        عنوان: "مقدمة في Backend وAPIs",
+        موضوع: "https-apis"
+      },
+      {
+        عنوان: "أساسيات Python",
+        موضوع: "python"
+      },
+      {
+        عنوان: "قواعد البيانات الأساسية",
+        موضوع: "databases"
+      },
+      {
+        عنوان: "مشروع بسيط",
+        موضوع: "git"
+      },
+      {
+        عنوان: "Python المتقدم",
+        موضوع: "python"
+      },
+      {
+        عنوان: "قواعد البيانات المتقدمة",
+        موضوع: "databases"
+      },
+      {
+        عنوان: "أنماط التصميم والأمان",
+        موضوع: "https-apis"
+      },
+      {
+        عنوان: "مشروع متكامل",
+        موضوع: "git"
+      }
+    ]
   }
 };
 
@@ -192,17 +169,15 @@ function generatePlan() {
   `;
 
   setTimeout(() => {
-    const { topic, level, style, time, approach } = answers;
-    const plan = learningPlans[topic][level];
+    const { topic, style, videoDuration } = answers;
+    const plan = learningPlans[topic];
 
     let planContent = `
       <div class="plan-content">
         <h2>خريطة التعلم الخاصة بك</h2>
         <h3>المجال: ${topic === "frontend" ? "Frontend (واجهات المستخدم)" : "Backend (واجهات الخلفية)"}</h3>
-        <h3>المستوى: ${level}</h3>
         <h3>أسلوب التعلم: ${style}</h3>
-        <h3>التوجه: ${approach}</h3>
-        <h3>الوقت المتاح: ${time} ساعة أسبوعياً</h3>
+        <h3>مدة الفيديوهات: ${videoDuration}</h3>
         <h3>خريطة التعلم:</h3>
     `;
 
@@ -213,7 +188,7 @@ function generatePlan() {
           <h5>المصادر المقترحة:</h5>
       `;
 
-      const resourcesList = getResourcesForTopic(topic, step.موضوع, style, level, approach, time);
+      const resourcesList = getResourcesForTopic(topic, step.موضوع, style, videoDuration);
 
       if (resourcesList && resourcesList.length > 0) {
         resourcesList.forEach(resource => {
@@ -238,7 +213,7 @@ function generatePlan() {
     });
 
     planContent += `
-        <p>نصيحة: حاول تخصيص ${time} ساعة أسبوعياً للتعلم والممارسة لتحقيق أفضل النتائج.</p>
+        <p>نصيحة: حاول تخصيص وقت مناسب للتعلم والممارسة لتحقيق أفضل النتائج.</p>
       </div>
       <button class="restart-btn" onclick="location.reload()">إنشاء خطة جديدة</button>
     `;
@@ -252,7 +227,7 @@ function generatePlan() {
   }, 2000);
 }
 
-function getResourcesForTopic(topic, subject, style, level, approach, time) {
+function getResourcesForTopic(topic, subject, style, videoDuration) {
   if (!resources[topic] || !resources[topic][subject]) {
     return [];
   }
@@ -262,22 +237,20 @@ function getResourcesForTopic(topic, subject, style, level, approach, time) {
     return [];
   }
 
-  let maxHours = Infinity;
-  if (time === "1-3") maxHours = 3;
-  else if (time === "4-6") maxHours = 6;
-  else if (time === "7-10") maxHours = 10;
-
   return subjectResources[style].filter(resource => {
-    const levelOk = !resource.مستوى || resource.مستوى.includes(level);
-    const approachOk = !resource.نوع || resource.نوع.includes(approach) || resource.نوع === "نظري وعملي";
-    
-    let hours = 0;
-    if (resource.مدة && resource.مدة.match(/\d+/)) {
-      hours = parseInt(resource.مدة.match(/\d+/)[0]);
+    let durationOk = true;
+    if (style === "فيديوهات" || style === "كليهما") {
+      let hours = 0;
+      if (resource.مدة && resource.مدة.match(/\d+/)) {
+        hours = parseInt(resource.مدة.match(/\d+/)[0]);
+      }
+      if (videoDuration === "أقل من 5 ساعات") {
+        durationOk = hours < 5 || resource.مدة === "غير محدد";
+      } else if (videoDuration === "أكثر من 5 ساعات") {
+        durationOk = hours >= 5 || resource.مدة === "غير محدد";
+      }
     }
-    const timeOk = hours <= maxHours || resource.مدة === "غير محدد";
-
-    return levelOk && approachOk && timeOk;
+    return durationOk;
   });
 }
 
@@ -286,10 +259,7 @@ async function loadResources() {
   resources = await response.json();
   console.log("تم تحميل المصادر:", resources);
 
-  // هنا تبدأ تشغيل الأسئلة بعد تحميل الملف
   showQuestion();
 }
-
-// تشغيل تحميل البيانات أول ما يفتح الموقع
 
 loadResources();
