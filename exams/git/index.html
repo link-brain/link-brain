@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDUMATES</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">EDUMATES</div>
+      <div class="tagline">اختبار شامل لمستوى Git</div>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="mcq">اختيار من متعدد</button>
+      <button class="tab-btn" data-tab="practical">الاختبار العملي</button>
+      <button class="tab-btn" data-tab="result">النتيجة</button>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div id="mcq" class="tab active">
+      <div class="card">
+        <h3>📝 الاختيار من متعدد (30 سؤال)</h3>
+        <p class="hint">
+          القسم 1: مفاهيم<br>
+          القسم 2: أوامر<br>
+          القسم 3: مخرجات ونتائج
+        </p>
+        <p>أجب ثم اضغط “حفظ إجابات الاختيار”.</p>
+        <form id="mcq-form"></form>
+        <div class="actions">
+          <button class="primary" id="save-mcq">حفظ إجابات الاختيار</button>
+          <span class="badge" id="mcq-score">0 / 30</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="practical" class="tab">
+      <div class="card">
+        <h3>💻 الاختبار العملي (10 مهام)</h3>
+        <p>اكتب أمر Git في كل مهمة، ثم اضغط “تحقق” للتصحيح التلقائي.</p>
+        <div id="tasks" class="tasks"></div>
+        <div class="actions">
+          <button class="primary" id="save-practical">حفظ نتائج العملي</button>
+          <span class="badge" id="practical-score">0 / 10</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="result" class="tab">
+      <div class="card result-card">
+        <h3>📊 النتيجة النهائية</h3>
+        <div class="grid-2">
+          <div>
+            <p>درجة الاختيار من متعدد: <span id="res-mcq">0</span> / 30</p>
+            <p>درجة الاختبار العملي: <span id="res-practical">0</span> / 10</p>
+            <p><strong>المجموع: <span id="res-total">0</span> / 40</strong></p>
+          </div>
+          <div class="level-box">
+            <p>مستواك</p>
+            <p class="level" id="res-level">—</p>
+          </div>
+        </div>
+        <button class="primary huge" id="calc-final">عرض النتيجة النهائية</button>
+        <p class="hint">
+          💡 ملاحظات<br>
+          القسم الثالث يعرض وصف النتائج الحقيقية؛ اختر الأمر الذي أنتجها.<br>
+          يمكن تعديل الإجابات وإعادة الحفظ في أي وقت.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    © 2025 EDUMATES — كل الحقوق محفوظة
+  </footer>
+
+  <script src="index.js"></script>
+</body>
+</html>

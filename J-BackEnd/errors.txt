@@ -1,0 +1,4 @@
+1-make a x btn for road map 
+2-make a rate for the unrated courses 
+3-fix the footer 
+4-delet the exams

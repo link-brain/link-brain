@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDUMATES</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">EDUMATES</div>
+      <div class="tagline">اختبار شامل لمستوى HTML</div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="mcq">اختيار من متعدد</button>
+      <button class="tab-btn" data-tab="practical">الاختبار العملي</button>
+      <button class="tab-btn" data-tab="result">النتيجة</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="mcq" class="tab active">
+      <div class="card">
+        <h3>📝 الاختيار من متعدد (30 سؤال)</h3>
+        <div class="hint">
+          <div class="badge">القسم 1: مفاهيم</div>
+          <div class="badge">القسم 2: كود</div>
+          <div class="badge">القسم 3: مخرجات حية</div>
+        </div>
+        <p>أجب ثم اضغط “حفظ إجابات الاختيار”.</p>
+        <form id="mcq-form"></form>
+        <div class="actions">
+          <button class="primary huge" id="save-mcq">حفظ إجابات الاختيار</button>
+          <span id="mcq-score" class="badge">0 / 30</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="practical" class="tab">
+      <div class="card">
+        <h3>💻 الاختبار العملي (10 مهام)</h3>
+        <p>اكتب كود HTML في كل مهمة، ثم “تشغيل” للمعاينة و“تحقق” للتصحيح التلقائي.</p>
+        <div id="tasks" class="tasks"></div>
+        <div class="actions">
+          <button class="primary huge" id="save-practical">حفظ نتائج العملي</button>
+          <span id="practical-score" class="badge">0 / 10</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="result" class="tab">
+      <div class="card result-card">
+        <h3>📊 النتيجة النهائية</h3>
+        <div class="grid-2">
+          <div class="level-box">
+            <div class="big">درجة الاختيار من متعدد: <span id="res-mcq">0</span> / 30</div>
+            <div class="big">درجة الاختبار العملي: <span id="res-practical">0</span> / 10</div>
+            <br>
+            <div class="big">المجموع: <span id="res-total">0</span> / 40</div>
+          </div>
+          <div class="level-box">
+            <div class="big">مستواك</div>
+            <div class="level" id="res-level">—</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary huge" id="calc-final">عرض النتيجة النهائية</button>
+        </div>
+        <div class="hint">
+          <h4>💡 ملاحظات</h4>
+          <p>القسم الثالث يعرض المخرجات الحقيقية؛ اختر الكود الذي أنتجها.</p>
+          <p>يمكن تعديل الإجابات وإعادة الحفظ في أي وقت.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    © 2025 EDUMATES — كل الحقوق محفوظة
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
