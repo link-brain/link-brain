@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
             lessons: 15,
             price: "مجاني",
             description: "هذا الكورس سيعلمك أساسيات البرمجة باستخدام Python، مع التركيز على المفاهيم الأساسية مثل المتغيرات، الحلقات، والدوال.",
-            link: "../J-ProgrammingBasics/courses=programming-basics.html"
+            link: "../ProgrammingBasics/programming-basics.html"
         }
     ];
 
@@ -145,4 +145,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // بدء التطبيق
     app.init();
+
 });
