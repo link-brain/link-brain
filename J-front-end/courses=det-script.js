@@ -437,7 +437,6 @@ el.saveUsernameBtn.addEventListener('click', () => {
       alert('تعذر تسجيل التقييم: ' + err.message);
     }
   }
-
   function wireRatings() {
     $$('.rating-stars').forEach(container => {
       const li = container.closest('[data-link-id]');
@@ -453,4 +452,6 @@ el.saveUsernameBtn.addEventListener('click', () => {
         });
       });
     });
-  };
+  }
+
+}); 
