@@ -1,0 +1,102 @@
+/* نافذة منبثقة */
+.roadmap-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.65);
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  animation: fadeIn 0.4s ease-in-out;
+}
+.roadmap-modal.active { display: flex; }
+
+/* المحتوى */
+.roadmap-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 550px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  position: relative;
+  animation: slideUp 0.5s ease;
+}
+.roadmap-content h2 {
+  margin-bottom: 1rem;
+  color: #1e3a8a;
+  text-align: center;
+  font-weight: 800;
+}
+
+/* زر الإغلاق */
+.close-roadmap {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: #f3f4f6;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 35px; height: 35px;
+  display: flex; align-items: center; justify-content: center;
+  transition: 0.3s;
+}
+.close-roadmap:hover { background: #e11d48; color: #fff; }
+
+/* قائمة المهام */
+.roadmap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.roadmap-task {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: 0.3s;
+}
+.roadmap-task:hover {
+  background: #eef2ff;
+  transform: translateY(-2px);
+}
+
+/* زر الإنجاز */
+.mark-done {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.mark-done:hover { background: #15803d; }
+
+/* عند الإنجاز */
+.roadmap-task.done span {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+.roadmap-task.done .mark-done {
+  background: #1e3a8a;
+  cursor: default;
+  content: "✔ مكتمل";
+}
+
+/* أنيميشن */
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
