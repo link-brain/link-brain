@@ -373,12 +373,7 @@ el.saveUsernameBtn.addEventListener('click', () => {
       sendMessage();
     }
   });
-  const saved = localStorage.getItem('chat-username');
-if (saved) {
-  el.usernameInput.value = saved;
-  document.querySelector('.chat-username').style.display = 'none';
-}
-
+ 
 
   // -------------------------------
   // Ratings (stars)
