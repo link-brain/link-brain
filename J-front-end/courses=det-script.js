@@ -452,6 +452,4 @@ el.saveUsernameBtn.addEventListener('click', () => {
         });
       });
     });
-  }
-
-}); 
+  }; 
