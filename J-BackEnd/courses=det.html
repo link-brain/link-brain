@@ -7,6 +7,7 @@
   <title>Edumates</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="courses=det-styles.css">
+   <link rel="stylesheet" href="roadmap.css">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6LJJZ6S57"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -51,7 +52,33 @@
     <div class="section-header">
       <h2>تعلم Backend</h2>
       <p>اكتشف أساسيات تطوير الخلفية مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية</p>
-      <a href="../ed/" class="btn view-roadmap-btn">خريطة الطريق الذكية</a>
+        <button class="view-roadmap-btn" id="viewRoadmapBtn" > خارطة الطريق</button>
+    <!-- نافذة خارطة الطريق -->
+<div class="roadmap-modal" id="roadmapModal">
+  <div class="roadmap-content">
+    <span class="close-roadmap" id="closeRoadmap">&times;</span>
+    <h2>خارطة الطريق</h2>
+    <ul>
+      <li class="roadmap-task">
+         https-APIs basics
+        <button class="mark-done">✔ أنجزت</button>
+      </li>
+      <li class="roadmap-task">
+       Python
+        <button class="mark-done">✔ أنجزت</button>
+      </li>
+      <li class="roadmap-task">
+        Databases
+        <button class="mark-done">✔ أنجزت</button>
+      </li>
+      <li class="roadmap-task">
+        Git & GitHub 
+        <button class="mark-done">✔ أنجزت</button>
+      </li>
+    </ul>
+  </div>
+</div>
+  
     </div>
 
     <div class="language-section" id="node-js">
@@ -413,7 +440,8 @@
     </div>
   </footer>
 <script type="module" src="courses=det-script.js"></script>
- <script type="module" src="../feedback.js"></script>
+<script type="module" src="../feedback.js"></script>
+<script type="module" src="../roadmap.js"></script>
 </body>
 
 </html>
