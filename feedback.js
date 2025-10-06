@@ -1,5 +1,5 @@
 // popup-rating.js
-// نافذة منبثقة بعد 20 ثانية لحفظ تقييم + ملاحظة في Firestore collection "feedback"
+// نافذة منبثقة بعد 40 ثانية لحفظ تقييم + ملاحظة في Firestore collection "feedback"
 
 (async function () {
   // ====== Firebase Init ======
@@ -123,9 +123,10 @@
     setTimeout(() => {
       const popup = buildPopup();
       document.body.appendChild(popup);
-    }, 20000); // 20 ثانية
+    }, 40000); // 20 ثانية
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
