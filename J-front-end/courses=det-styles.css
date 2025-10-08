@@ -1175,9 +1175,3 @@ width: 30vh;
     order: 2;
     margin: 10px auto;
   }
-  
-  /* إخفاء زر عرض المزيد */
-  .load-more-btn {
-    display: none !important;
-  }
-  
