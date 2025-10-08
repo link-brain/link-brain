@@ -15,6 +15,24 @@
 
   gtag('config', 'G-L6LJJZ6S57');
 </script>
+<style>
+@media (max-width: 768px) {
+    .auth-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .google-login-btn,
+    .view-roadmap-btn,
+    .chat-btn {
+        flex: 0 0 45%;
+        margin: 5px;
+    }
+}
+</style>
 </head>
 <body>
   <!-- Navigation Bar -->
@@ -533,7 +551,6 @@
 </div>
 
       <div class="chat-messages" id="chatMessages"></div>
-      <button class="load-more-btn" id="loadMoreBtn">عرض المزيد</button>
       <div class="chat-input">
         <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا..." aria-label="اكتب رسالتك">
         <button class="send-message-btn" id="sendMessageBtn">
