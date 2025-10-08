@@ -1150,3 +1150,65 @@ width: 30vh;
   font-size: 1.5rem;
   cursor: pointer;
 }
+/* تعديلات الدردشة للهواتف */
+@media (max-width: 768px) {
+  .chat-btn {
+    width: 45%;
+    margin: 10px auto;
+    display: block;
+    order: 3;
+  }
+  
+  .auth-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .google-login-btn {
+    width: 45%;
+    order: 1;
+  }
+  
+  .view-roadmap-btn {
+    width: 45%;
+    order: 2;
+    margin: 10px auto;
+  }
+  
+  /* إخفاء زر عرض المزيد */
+  .load-more-btn {
+    display: none !important;
+  }
+  
+  /* تحسين عرض الدردشة */
+  .chat-content {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .chat-messages {
+    max-height: 50vh;
+  }
+}
+
+/* تحسينات عامة للدردشة */
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  animation: fadeInMessage 0.3s ease-in;
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
