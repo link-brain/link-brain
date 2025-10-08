@@ -1180,8 +1180,8 @@ width: 30vh;
   #chatBtn {
     display: block;
     margin: 0.8rem auto 0; /* مسافة من الأعلى والأسفل */
-    width: 50%; /* نصف حجم زر خارطة الطريق */
-    font-size: 0.85rem;
+    width: 30%; /* نصف حجم زر خارطة الطريق */
+    font-size: 0rem;
   }
 
   /* التأكد أن الزرين في عمود واحد */
