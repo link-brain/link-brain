@@ -142,112 +142,100 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log('Scrolled to bottom of chat');
         }
     }
-
-    async function sendMessage() {
-        const user = auth.currentUser;
-        if (!user) {
-            alert('يرجى تسجيل الدخول لإرسال الرسائل');
-            return;
-        }
-
-        const messageText = elements.messageInput.value.trim();
-        if (!messageText) {
-            alert('يرجى إدخال رسالة غير فارغة');
-            return;
-        }
-
-        if (messageText.length > 500) {
-            alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
-            return;
-        }
-
-        try {
-            elements.sendMessageBtn.disabled = true;
-            await addDoc(collection(db, 'messages'), {
-                text: messageText,
-                userId: user.uid,
-                userName: user.displayName || 'مستخدم',
-                userPhoto: user.photoURL || 'https://via.placeholder.com/30',
-                timestamp: serverTimestamp()
-            });
-            elements.messageInput.value = '';
-            scrollChatToBottom(); // التمرير للأسفل بعد إرسال الرسالة
-            console.log('Message sent and scrolled to bottom');
-        } catch (error) {
-            console.error('خطأ في إرسال الرسالة:', error);
-            alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
-        } finally {
-            elements.sendMessageBtn.disabled = false;
-        }
+async function sendMessage() {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('يرجى تسجيل الدخول لإرسال الرسائل');
+        return;
     }
 
-    function loadMessages() {
-        if (!hasMoreMessages) return;
+    const messageText = elements.messageInput.value.trim();
+    if (!messageText) {
+        alert('يرجى إدخال رسالة غير فارغة');
+        return;
+    }
 
-        elements.chatLoading.classList.add('active');
-        let messagesQuery = query(
-            collection(db, 'messages'),
-            orderBy('timestamp', 'asc'), // ترتيب تصاعدي لعرض الرسائل القديمة أولاً
-            limit(messagesPerPage)
-        );
+    if (messageText.length > 500) {
+        alert('الرسالة طويلة جدًا، الحد الأقصى 500 حرف');
+        return;
+    }
 
-        if (lastVisible) {
-            messagesQuery = query(messagesQuery, startAfter(lastVisible));
-        }
-
-        unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
-            if (snapshot.empty) {
-                hasMoreMessages = false;
-                elements.loadMoreBtn.style.display = 'none';
-                elements.chatLoading.classList.remove('active');
-                console.log('No more messages to load');
-                return;
-            }
-
-            const messages = [];
-            snapshot.forEach((doc) => {
-                messages.push({ id: doc.id, ...doc.data() });
-            });
-
-            lastVisible = snapshot.docs[snapshot.docs.length - 1];
-            elements.loadMoreBtn.style.display = hasMoreMessages ? 'block' : 'none';
-            elements.chatLoading.classList.remove('active');
-
-            // تنظيف قائمة الرسائل فقط عند التحميل الأول
-            if (!elements.chatMessages.hasChildNodes()) {
-                elements.chatMessages.innerHTML = '';
-                console.log('Cleared chat messages on initial load');
-            }
-
-            // إضافة الرسائل في نهاية القائمة
-            messages.forEach((message) => {
-                if (!message.text || !message.timestamp) return; // تخطي الرسائل غير الصالحة
-                const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
-                const messageElement = document.createElement('div');
-                messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
-                messageElement.innerHTML = `
-                    <div class="message-header">
-                        <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
-                        <span class="message-sender">${sanitizeHTML(message.userName)}</span>
-                        <span class="message-time">${
-                            message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
-                        }</span>
-                    </div>
-                    <p class="message-text">${sanitizeHTML(message.text)}</p>
-                `;
-                elements.chatMessages.appendChild(messageElement); // إضافة الرسالة في النهاية
-                console.log(`Added message from ${message.userName} at ${message.timestamp ? new Date(message.timestamp.toMillis()).toISOString() : 'now'}`);
-            });
-
-            scrollChatToBottom();
-        }, (error) => {
-            console.error('خطأ في تحميل الرسائل:', error);
-            elements.chatLoading.classList.remove('active');
-            alert('حدث خطأ أثناء تحميل الرسائل: ' + error.message);
+    try {
+        elements.sendMessageBtn.disabled = true;
+        elements.messageInput.disabled = true;
+        
+        await addDoc(collection(db, 'messages'), {
+            text: messageText,
+            userId: user.uid,
+            userName: user.displayName || 'مستخدم',
+            userPhoto: user.photoURL || 'https://via.placeholder.com/30',
+            timestamp: serverTimestamp()
         });
+        
+        elements.messageInput.value = '';
+        console.log('Message sent successfully');
+        
+    } catch (error) {
+        console.error('خطأ في إرسال الرسالة:', error);
+        alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
+    } finally {
+        elements.sendMessageBtn.disabled = false;
+        elements.messageInput.disabled = false;
+        elements.messageInput.focus();
     }
+}
+function loadMessages() {
+    elements.chatLoading.classList.add('active');
+    
+    // تحميل جميع الرسائل مرة واحدة بدون تقسيم
+    let messagesQuery = query(
+        collection(db, 'messages'),
+        orderBy('timestamp', 'asc')
+    );
 
-    // وظيفة لتطهير النصوص
+    unsubscribeMessages = onSnapshot(messagesQuery, (snapshot) => {
+        elements.chatMessages.innerHTML = ''; // تنظيف الرسائل القديمة
+        
+        if (snapshot.empty) {
+            elements.chatLoading.classList.remove('active');
+            console.log('No messages found');
+            return;
+        }
+
+        const messages = [];
+        snapshot.forEach((doc) => {
+            messages.push({ id: doc.id, ...doc.data() });
+        });
+
+        elements.chatLoading.classList.remove('active');
+
+        // إضافة جميع الرسائل
+        messages.forEach((message) => {
+            if (!message.text || !message.timestamp) return;
+            
+            const isCurrentUser = auth.currentUser && message.userId === auth.currentUser.uid;
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isCurrentUser ? 'user-message' : ''}`;
+            messageElement.innerHTML = `
+                <div class="message-header">
+                    <img src="${message.userPhoto}" alt="صورة ${sanitizeHTML(message.userName)}" class="message-avatar">
+                    <span class="message-sender">${sanitizeHTML(message.userName)}</span>
+                    <span class="message-time">${
+                        message.timestamp ? new Date(message.timestamp.toMillis()).toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) : 'الآن'
+                    }</span>
+                </div>
+                <p class="message-text">${sanitizeHTML(message.text)}</p>
+            `;
+            elements.chatMessages.appendChild(messageElement);
+        });
+
+        scrollChatToBottom();
+    }, (error) => {
+        console.error('خطأ في تحميل الرسائل:', error);
+        elements.chatLoading.classList.remove('active');
+    });
+    
+}    // وظيفة لتطهير النصوص
     function sanitizeHTML(str) {
         const div = document.createElement('div');
         div.textContent = str.replace(/[<>]/g, '');
@@ -412,85 +400,83 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // إعداد مستمعي الأحداث
-    function setupEventListeners() {
-        if (elements.mobileMenuBtn) {
-            elements.mobileMenuBtn.addEventListener('click', () => {
-                console.log('Mobile menu button clicked');
-                toggleMobileMenu();
-            });
-        }
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', closeMobileMenu);
-        });
-
-        if (elements.viewRoadmapBtn) {
-            elements.viewRoadmapBtn.addEventListener('click', () => {
-                console.log('View roadmap button clicked');
-                toggleRoadmapPopup();
-            });
-        }
-
-        if (elements.closeRoadmap) {
-            elements.closeRoadmap.addEventListener('click', () => {
-                console.log('Close roadmap button clicked');
-                toggleRoadmapPopup();
-            });
-        }
-
-        if (elements.chatBtn) {
-            elements.chatBtn.addEventListener('click', () => {
-                console.log('Chat button clicked');
-                toggleChatPopup();
-            });
-        }
-
-        if (elements.closeChat) {
-            elements.closeChat.addEventListener('click', () => {
-                console.log('Close chat button clicked');
-                toggleChatPopup();
-            });
-        }
-
-        if (elements.sendMessageBtn) {
-            elements.sendMessageBtn.addEventListener('click', sendMessage);
-        }
-
-        if (elements.messageInput) {
-            elements.messageInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-        }
-
-        if (elements.loadMoreBtn) {
-            elements.loadMoreBtn.addEventListener('click', loadMessages);
-        }
-
-        elements.toggleFeatures.forEach(toggle => {
-            toggle.addEventListener('click', toggleFeatures);
-        });
-
-        if (elements.googleLoginBtn) {
-            elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
-        }
-
-        // إضافة مستمعي الأحداث للنجوم
-        document.querySelectorAll('.rating-stars').forEach(starsContainer => {
-            const linkId = starsContainer.parentElement.getAttribute('data-link-id');
-            loadRatings(linkId, starsContainer);
-
-            starsContainer.querySelectorAll('i').forEach(star => {
-                star.addEventListener('click', () => {
-                    const rating = parseInt(star.getAttribute('data-value'));
-                    submitRating(linkId, rating);
-                });
-            });
+  function setupEventListeners() {
+    if (elements.mobileMenuBtn) {
+        elements.mobileMenuBtn.addEventListener('click', () => {
+            console.log('Mobile menu button clicked');
+            toggleMobileMenu();
         });
     }
 
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', closeMobileMenu);
+    });
+
+    if (elements.viewRoadmapBtn) {
+        elements.viewRoadmapBtn.addEventListener('click', () => {
+            console.log('View roadmap button clicked');
+            toggleRoadmapPopup();
+        });
+    }
+
+    if (elements.closeRoadmap) {
+        elements.closeRoadmap.addEventListener('click', () => {
+            console.log('Close roadmap button clicked');
+            toggleRoadmapPopup();
+        });
+    }
+
+    if (elements.chatBtn) {
+        elements.chatBtn.addEventListener('click', () => {
+            console.log('Chat button clicked');
+            toggleChatPopup();
+        });
+    }
+
+    if (elements.closeChat) {
+        elements.closeChat.addEventListener('click', () => {
+            console.log('Close chat button clicked');
+            toggleChatPopup();
+        });
+    }
+
+    if (elements.sendMessageBtn) {
+        elements.sendMessageBtn.addEventListener('click', sendMessage);
+    }
+
+    if (elements.messageInput) {
+        elements.messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+
+    // ⬅️ تم حذف جزء loadMoreBtn من هنا
+
+    elements.toggleFeatures.forEach(toggle => {
+        toggle.addEventListener('click', toggleFeatures);
+    });
+
+    if (elements.googleLoginBtn) {
+        elements.googleLoginBtn.addEventListener('click', handleGoogleLogin);
+    }
+
+    // إضافة مستمعي الأحداث للنجوم
+    document.querySelectorAll('.rating-stars').forEach(starsContainer => {
+        const linkId = starsContainer.parentElement.getAttribute('data-link-id');
+        loadRatings(linkId, starsContainer);
+
+        starsContainer.querySelectorAll('i').forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = parseInt(star.getAttribute('data-value'));
+                submitRating(linkId, rating);
+            });
+        });
+    });
+}
+ 
     // تتبع حالة المصادقة
     auth.onAuthStateChanged(user => {
         if (user) {
