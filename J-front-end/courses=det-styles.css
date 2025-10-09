@@ -268,7 +268,6 @@ width: 30vh;
   border: 2px solid var(--primary-blue);
   padding: 0.6rem 1.5rem;
   border-radius: var(--border-radius);
-  display: flex;
   align-items: center;
   gap: 0.6rem;
   font-weight: 600;
