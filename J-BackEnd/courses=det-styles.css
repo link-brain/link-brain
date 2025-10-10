@@ -917,6 +917,7 @@ width: 30hv;
     order: 2;  /* يأتي بعد الزر الأول */
     display: block;
     margin: 0.5rem auto;
+  width: 30vw;
   }
 
   #viewRoadmapBtn {
