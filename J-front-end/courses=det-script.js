@@ -22,7 +22,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const provider = new GoogleAuthProvider();
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
-
+    //----------------------------------
+    
+    //----------------------------------
     // عناصر DOM
     const elements = {
         currentYear: document.querySelector('.current-year'),
@@ -47,7 +49,17 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (elements.currentYear) {
         elements.currentYear.textContent = new Date().getFullYear();
     }
-
+    //-----------------------
+    // ✅ عند تحميل الصفحة، تحقق إذا تم حفظ الاسم مسبقًا
+         const savedName = localStorage.getItem('chatUserName');
+        if (savedName) {
+           const nameField = document.getElementById('usernameInput');
+        if (nameField) {
+           nameField.value = savedName;
+           nameField.style.display = 'none';
+  }
+}
+    //----------------------
     // تحديث روابط الاختبارات ديناميكيًا
     function updateExamLinks() {
         const examLinks = [
@@ -170,8 +182,10 @@ async function sendMessage() {
             userName:
             localStorage.getItem('chatUserName') ||
             document.getElementById('usernameInput')?.value.trim() ||
-            user?.displayName ||
-            'مستخدم',
+           userName:
+          localStorage.getItem('chatUserName') ||
+          document.getElementById('usernameInput')?.value.trim() ||
+          user.displayName ||'مستخدم',
             userPhoto: user.photoURL || 'https://via.placeholder.com/30',
             timestamp: serverTimestamp()
         });
