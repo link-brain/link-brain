@@ -167,7 +167,11 @@ async function sendMessage() {
         await addDoc(collection(db, 'messages'), {
             text: messageText,
             userId: user.uid,
-            userName: user.displayName || 'مستخدم',
+            userName:
+            localStorage.getItem('chatUserName') ||
+            document.getElementById('usernameInput')?.value.trim() ||
+            user?.displayName ||
+            'مستخدم',
             userPhoto: user.photoURL || 'https://via.placeholder.com/30',
             timestamp: serverTimestamp()
         });
