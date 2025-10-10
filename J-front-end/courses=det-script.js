@@ -180,19 +180,24 @@ async function sendMessage() {
             text: messageText,
             userId: user.uid,
             userName:
-            localStorage.getItem('chatUserName') ||
-            document.getElementById('usernameInput')?.value.trim() ||
-           userName:
-          localStorage.getItem('chatUserName') ||
-          document.getElementById('usernameInput')?.value.trim() ||
-          user.displayName ||'مستخدم',
+              localStorage.getItem('chatUserName') ||
+              document.getElementById('usernameInput')?.value.trim() ||
+              user.displayName ||
+              'مستخدم',
             userPhoto: user.photoURL || 'https://via.placeholder.com/30',
             timestamp: serverTimestamp()
         });
         
         elements.messageInput.value = '';
         console.log('Message sent successfully');
-        
+
+        // ✅ حفظ الاسم في localStorage وإخفاء الحقل بعد أول استخدام
+        const nameField = document.getElementById('usernameInput');
+        if (nameField && nameField.value.trim() !== '') {
+          localStorage.setItem('chatUserName', nameField.value.trim());
+          nameField.style.display = 'none';
+        }
+
     } catch (error) {
         console.error('خطأ في إرسال الرسالة:', error);
         alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
