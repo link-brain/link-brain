@@ -169,9 +169,27 @@ body {
   padding: 0.7rem 1.8rem;
   font-size: 0.95rem;
   cursor:pointer;
-  
+}
+/* تعديل زر خارطة الطريق ليكون في الوسط */
+.view-roadmap-btn {
+  margin: 1.2rem auto 0.5rem;  /* مسافة أسفل للزر الثاني */
+  display: block;
+  width: 200px;  /* حجم ثابت مناسب بدلاً من 30vh الكبير */
+  text-align: center;
 }
 
+/* جعل زر المحادثة بنصف الحجم وفي الوسط */
+.chat-btn {
+  margin: 0 auto;  /* محاذاة في الوسط */
+  display: block;
+  width: 100px;  /* نصف حجم الزر الأول (200px / 2) */
+  text-align: center;
+  font-size: 0.85rem;  /* خط أصغر ليتناسب */
+}
+
+.chat-btn:hover {
+  width: 105px;  /* زيادة طفيفة عند الـhover */
+}
 .view-roadmap-btn {
   margin: 1.2rem auto;
 width: 30hv;
@@ -880,6 +898,39 @@ width: 30hv;
     box-shadow: -6px 0 12px rgba(0, 0, 0, 0.1);
     z-index: 999;
   }
+  @media (max-width: 768px) {
+  .view-roadmap-btn {
+    width: 150px;  /* حجم أصغر في الهاتف */
+    font-size: 0.9rem;
+    margin: 0.8rem auto 0.4rem;
+  }
+
+  .chat-btn {
+    width: 75px;  /* نصف حجم الزر الأول (150px / 2) */
+    font-size: 0.8rem;
+    margin: 0 auto;
+    padding: 0.4rem 0.8rem;  /* padding أصغر لتقليل الطول */
+  }
+
+  /* التأكد من الترتيب العمودي في الهاتف */
+  #chatBtn {
+    order: 2;  /* يأتي بعد الزر الأول */
+    display: block;
+    margin: 0.5rem auto;
+  }
+
+  #viewRoadmapBtn {
+    order: 1;
+    display: block;
+    margin: 0.5rem auto;
+  }
+
+  .auth-buttons {
+    flex-direction: column;  /* عمودي للأزرار في الهاتف */
+    justify-content: center;
+    gap: 0.5rem;
+  }
+}
   .nav-links.active {
     display: flex;
     right: 0;
