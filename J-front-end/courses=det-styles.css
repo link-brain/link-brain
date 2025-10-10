@@ -1189,3 +1189,18 @@ width: 30vh;
     margin: 1rem auto 0.5rem;
   }
 }
+#usernameInput {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+#usernameInput:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.2);
+}
