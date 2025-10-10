@@ -457,12 +457,18 @@ async function sendMessage() {
         });
     }
 
-    if (elements.chatBtn) {
-        elements.chatBtn.addEventListener('click', () => {
-            console.log('Chat button clicked');
-            toggleChatPopup();
-        });
-    }
+if (elements.chatBtn) {
+    elements.chatBtn.addEventListener('click', () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert('قم بتسجيل الدخول لفتح المحادثة');
+            return;
+        }
+
+        console.log('Chat button clicked');
+        toggleChatPopup();
+    });
+}
 
     if (elements.closeChat) {
         elements.closeChat.addEventListener('click', () => {
