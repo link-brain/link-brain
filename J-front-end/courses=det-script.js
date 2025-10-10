@@ -175,29 +175,36 @@ async function sendMessage() {
     try {
         elements.sendMessageBtn.disabled = true;
         elements.messageInput.disabled = true;
-        
+
+        // 🔹 الحصول على الاسم من الإدخال أو من التخزين المحلي أو من حساب المستخدم
+        const nameField = document.getElementById('usernameInput');
+        const saveBtn = document.getElementById('saveUsernameBtn');
+        let chatUserName =
+            localStorage.getItem('chatUserName') ||
+            nameField?.value.trim() ||
+            user.displayName ||
+            'مستخدم';
+
+        // 🔹 إذا كتب المستخدم اسمه الآن لأول مرة → احفظه وأخفِ الحقل والزر
+        if (nameField && nameField.value.trim() !== '') {
+            localStorage.setItem('chatUserName', nameField.value.trim());
+            nameField.style.display = 'none';
+            if (saveBtn) saveBtn.style.display = 'none';
+        }
+
+        // 🔹 إرسال الرسالة
         await addDoc(collection(db, 'messages'), {
             text: messageText,
             userId: user.uid,
-            userName:
-              localStorage.getItem('chatUserName') ||
-              document.getElementById('usernameInput')?.value.trim() ||
-              user.displayName ||
-              'مستخدم',
+            userName: chatUserName,
             userPhoto: user.photoURL || 'https://via.placeholder.com/30',
             timestamp: serverTimestamp()
         });
-        
+
+        // 🔹 مسح حقل الرسالة بعد الإرسال
         elements.messageInput.value = '';
         console.log('Message sent successfully');
-
-        // ✅ حفظ الاسم في localStorage وإخفاء الحقل بعد أول استخدام
-        const nameField = document.getElementById('usernameInput');
-        if (nameField && nameField.value.trim() !== '') {
-          localStorage.setItem('chatUserName', nameField.value.trim());
-          nameField.style.display = 'none';
-        }
-
+        
     } catch (error) {
         console.error('خطأ في إرسال الرسالة:', error);
         alert('حدث خطأ أثناء إرسال الرسالة: ' + error.message);
@@ -207,7 +214,8 @@ async function sendMessage() {
         elements.messageInput.focus();
     }
 }
-function loadMessages() {
+
+    function loadMessages() {
     elements.chatLoading.classList.add('active');
     
     // تحميل جميع الرسائل مرة واحدة بدون تقسيم
