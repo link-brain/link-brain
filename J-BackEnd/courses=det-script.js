@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             });
         });
-    }
+    })
     updateExamLinks();
 
     // متغيرات المحادثة
