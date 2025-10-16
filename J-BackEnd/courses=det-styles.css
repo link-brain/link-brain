@@ -1121,7 +1121,7 @@ width: 30hv;
 }
 /* Django Section Styling */
 #django-section h3 i {
-  color: #092e20; /* لون Django الأخضر الداكن */
+  color: #django-section h3 /* لون Django الأخضر الداكن */
 }
 #django-section .features-list {
   background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
