@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             { text: 'اختبار Python', href: 'exam-python.html' },
             { text: 'اختبار Databases', href: 'exam-databases.html' },
             { text: 'اختبار APIs', href: 'exam-api.html' }
+            { text: 'اختبار Django', href: '../exams/backend/django/index.html' } 
         ];
 
         document.querySelectorAll('.features-list a').forEach(link => {
