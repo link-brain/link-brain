@@ -1123,13 +1123,6 @@ width: 30hv;
 #django-section h3 i {
   color: #092e20; /* لون Django الأخضر الداكن */
 }
-
-/* تنسيقات إضافية لقسم Django */
-#django-section .resources-container {
-  background: linear-gradient(135deg, var(--card-bg) 0%, #f0fff4 100%);
-  border: 2px solid #c6f6d5;
-}
-
 #django-section .features-list {
   background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
   border-left: 4px solid #38a169;
