@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- الصفحة الرئيسية -->
+  <url>
+    <loc>https://edumates.netlify.app/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- صفحة الكورسات العامة -->
+  <url>
+    <loc>https://edumates.netlify.app/courses-page/courses.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- قسم الـ Backend -->
+  <url>
+    <loc>https://edumates.netlify.app/J-BackEnd/courses=det.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- قسم الـ Frontend -->
+  <url>
+    <loc>https://edumates.netlify.app/J-front-end/courses=det.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- أساسيات البرمجة -->
+  <url>
+    <loc>https://edumates.netlify.app/programing-basics/programing-basics.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- اختبارات HTML -->
+  <url>
+    <loc>https://edumates.netlify.app/exams/html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- اختبارات CSS -->
+  <url>
+    <loc>https://edumates.netlify.app/exams/css</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- اختبارات JavaScript -->
+  <url>
+    <loc>https://edumates.netlify.app/exams/java-script</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- اختبارات Git -->
+  <url>
+    <loc>https://edumates.netlify.app/exams/git</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUMATES - اختبار شامل لمستوى Python</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <h1 class="logo">EDUMATES</h1>
+            <span class="tagline">اختبار شامل لمستوى Python</span>
+        </div>
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="mcq">اختيار من متعدد</button>
+            <button class="tab-btn" data-tab="practical">الاختبار العملي</button>
+            <button class="tab-btn" data-tab="result">النتيجة</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="mcq" class="tab active">
+            <div class="card">
+                <h2>📝 الاختيار من متعدد (30 سؤال)</h2>
+                <div class="tabs">
+                    <button class="tab-btn active">القسم 1: مفاهيم</button>
+                    <button class="tab-btn">القسم 2: كود</button>
+                    <button class="tab-btn">القسم 3: مخرجات حية</button>
+                </div>
+                <p>أجب ثم اضغط “حفظ إجابات الاختيار”.</p>
+                <form id="mcq-form"></form>
+                <div class="actions">
+                    <button id="save-mcq" class="primary huge">حفظ إجابات الاختيار</button>
+                    <span id="mcq-score" class="badge">0 / 30</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="practical" class="tab">
+            <div class="card">
+                <h2>💻 الاختبار العملي (10 مهام)</h2>
+                <p>اكتب كود Python في كل مهمة، ثم “تشغيل” للمعاينة و“تحقق” للتصحيح التلقائي.</p>
+                <div id="tasks" class="tasks"></div>
+                <div class="actions">
+                    <button id="save-practical" class="primary huge">حفظ نتائج العملي</button>
+                    <span id="practical-score" class="badge">0 / 10</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="result" class="tab">
+            <div class="card result-card">
+                <h2>📊 النتيجة النهائية</h2>
+                <div class="grid-2">
+                    <div>
+                        <h3>درجة الاختيار من متعدد: <span id="res-mcq">0</span> / 30</h3>
+                        <h3>درجة الاختبار العملي: <span id="res-practical">0</span> / 10</h3>
+                        <h3>المجموع: <span id="res-total">0</span> / 40</h3>
+                    </div>
+                    <div class="level-box">
+                        <div class="level" id="res-level">—</div>
+                        <div class="big">مستواك</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button id="calc-final" class="primary huge">عرض النتيجة النهائية</button>
+                </div>
+                <div class="hint">
+                    <h4>💡 ملاحظات</h4>
+                    <p>القسم الثالث يعرض المخرجات الحقيقية؛ اختر الكود الذي أنتجها.</p>
+                    <p>يمكن تعديل الإجابات وإعادة الحفظ في أي وقت.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="site-footer">
+        © 2025 EDUMATES — كل الحقوق محفوظة
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

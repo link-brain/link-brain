@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edumates - تعلم تحليل البيانات</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="data-analysis.css">
+  <link rel="stylesheet" href="../roadmap.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L6LJJZ6S57"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-L6LJJZ6S57');
+  </script>
+</head>
+
+<body>
+<header class="navbar">
+  <a href="../index.html" class="logo">Edumates</a>
+  
+  <nav class="nav-links">
+    <a href="../index.html" class="nav-link">الرئيسية</a>
+    <a href="../courses-page/courses.html" class="nav-link active">الكورسات</a>
+    <a href="#footer" class="nav-link">اتصل بنا</a>
+
+    <!-- أزرار تسجيل الدخول والمحادثة هنا -->
+    <div class="auth-buttons">
+      <button id="googleLoginBtn" class="google-login-btn">
+        <i class="fab fa-google"></i> تسجيل الدخول عبر جوجل
+      </button>
+    </div>
+  </nav>
+
+  <button class="mobile-menu-btn">
+    <i class="fas fa-bars"></i>
+  </button>
+</header>
+
+<div class="breadcrumbs">
+  <a href="../index.html">الرئيسية</a> &gt; <a href="../courses-page/courses.html">الكورسات</a> &gt;
+  <span>تحليل البيانات</span>
+</div>
+
+<section class="course-details-section">
+  <div class="section-header">
+    <h2>تعلم تحليل البيانات</h2>
+    <p>اكتشف أساسيات تحليل البيانات مع موارد تعليمية شاملة تشمل فيديوهات وكتب واختبارات تفاعلية</p>
+    <button class="view-roadmap-btn" id="viewRoadmapBtn">خارطة الطريق</button>
+    <button class="chat-btn" id="chatBtn">
+      <i class="fas fa-comments"></i> المحادثة
+    </button>
+    <!-- نافذة خارطة الطريق -->
+    <div class="roadmap-modal" id="roadmapModal">
+      <div class="roadmap-content">
+        <span class="close-roadmap" id="closeRoadmap">&times;</span>
+        <h2>خارطة الطريق</h2>
+        <ul>
+          <li class="roadmap-task">
+            فهم تحليل البيانات
+            <button class="mark-done">تم</button>
+          </li>
+          <li class="roadmap-task">
+            SQL
+            <button class="mark-done">تم</button>
+          </li>
+          <li class="roadmap-task">
+            Excel
+            <button class="mark-done">تم</button>
+          </li>
+          <li class="roadmap-task">
+            Python
+            <button class="mark-done">تم</button>
+          </li>
+          <li class="roadmap-task">
+            Tableau
+            <button class="mark-done">تم</button>
+          </li>
+          <li class="roadmap-task">
+            الإحصاء الأساسي
+            <button class="mark-done">تم</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 1: فهم تحليل البيانات -->
+  <div class="language-section" id="intro-data">
+    <h3><i class="fas fa-chart-line"></i> فهم تحليل البيانات</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/stat.jpg" alt="Introduction to Data Analysis Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="intro-elzero">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=ru-qkwYRT84">مقدمة في تحليل البيانات - الجزء (1)</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>شرح عملي وتفاعلي</p>
+              <p>مقدمة شاملة للمبتدئين</p>
+              <p>تغطية أساسيات المجال</p>
+            </div>
+          </li>
+          <li data-link-id="intro-corey">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=oOv1gE0ER3I">كورس تحليل البيانات للمبتدأين من الصفر 1 (المقدمة)</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>تطبيقات عملية</p>
+              <p>شرح الأدوات الأساسية</p>
+              <p>مشاريع متكاملة</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="intro-docs">
+            <div class="link-title">
+              <a href="https://www.youtube.com/playlist?list=PLonOrMR73lKiRTVZ65tKXwczwi09qzlUt">كورس تحليل البيانات للمبتدأين من الصفر</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع شامل</p>
+              <p>أمثلة برمجية</p>
+              <p>تحديثات مستمرة</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-intro.html" class="btn quiz-btn">اختبار المقدمة</a> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 2: SQL -->
+  <div class="language-section" id="sql">
+    <h3><i class="fas fa-database"></i> SQL</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/sql.png" alt="SQL Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="sql-freecodecamp">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=iCiGXxu35aM">كورس تحليل البيانات للمبتدأين .. المحاضرة 10 .. SQL</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>تعلم SQL من الصفر</p>
+              <p>تطبيقات عملية</p>
+              <p>تمارين تفاعلية</p>
+            </div>
+          </li>
+          <li data-link-id="sql-mongodb">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=g5u50TbYmfo">تطبيق عملي لتحليل البيانات باستخدام SQL</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>شرح NoSQL vs SQL</p>
+              <p>تطبيقات MongoDB</p>
+              <p>مشاريع عملية</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="sql-w3schools">
+            <div class="link-title">
+              <a href="https://www.youtube.com/playlist?list=PLvsVwFBrUFQqjbfWjBh6N5I9YarRtl69x">دورة SQL</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع سريع</p>
+              <p>أمثلة تفاعلية</p>
+              <p>مناسب للمبتدئين</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-sql.html" class="btn quiz-btn">اختبار SQL</a> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 3: Excel -->
+  <div class="language-section" id="excel">
+    <h3><i class="fas fa-file-excel"></i> Excel</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/excel.png" alt="Excel Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="excel-freecodecamp">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=DXNg8wjRgRQ">كورس تحليل البيانات للمبتدأين من الصفر 2 .. (Excel)</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>شرح شامل للأساسيات</p>
+              <p>مشاريع عملية</p>
+              <p>مناسب للمبتدئين</p>
+            </div>
+          </li>
+          <li data-link-id="excel-corey">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=mV8s55-6mag">حلقه 1 - فهم البيانات - كورس تحليل البيانات بالاكسل</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>تحليل بيانات متقدم</p>
+              <p>مشاريع خلفية</p>
+              <p>تطبيقات عملية</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="excel-docs">
+            <div class="link-title">
+              <a href="https://www.youtube.com/playlist?list=PLXlHqMRg9lAbetpJy3ePXsN0sj9Zs-pvT">كورس تحليل البيانات بالاكسل</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع شامل</p>
+              <p>أمثلة برمجية</p>
+              <p>تحديثات مستمرة</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-excel.html" class="btn quiz-btn">اختبار Excel</a> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 4: Python -->
+  <div class="language-section" id="python">
+    <h3><i class="fab fa-python"></i> Python</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/python.jpg" alt="Python Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="python-freecodecamp">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=y7Mr60Clzo0">كورس تحليل البيانات للمبتدأين من الصفر .. 12 .. Python</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>تعلم Python من الصفر</p>
+              <p>تطبيقات عملية</p>
+              <p>تمارين تفاعلية</p>
+            </div>
+          </li>
+          <li data-link-id="python-mongodb">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=3ZOiet9A47o">كورس تحليل البيانات للمبتدأين من الصفر .. 13 .. Python</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>شرح Pandas وNumPy</p>
+              <p>تطبيقات MongoDB</p>
+              <p>مشاريع عملية</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="python-w3schools">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=DB62lhr7JYU">كورس تحليل البيانات بأستخدام بايثون كامل في 8 ساعات</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع سريع</p>
+              <p>أمثلة تفاعلية</p>
+              <p>مناسب للمبتدئين</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-python.html" class="btn quiz-btn">اختبار Python</a> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 5: Tableau -->
+  <div class="language-section" id="tableau">
+    <h3><i class="fas fa-chart-bar"></i> Tableau</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/tableau.webp" alt="Tableau Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="tableau-freecodecamp">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=fX_H3hKmxs4">تحليل البيانات بسهولة باستخدام التابلو</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>تعلم الرسوم البيانية</p>
+              <p>تطبيقات عملية</p>
+              <p>تمارين تفاعلية</p>
+            </div>
+          </li>
+          <li data-link-id="tableau-seaborn">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=mHFvIQmp_C0">شرح التابلو بالكامل Tableau Complete Guide</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>رسوم بيانية متقدمة</p>
+              <p>تكامل مع البيانات</p>
+              <p>مشاريع عملية</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="tableau-docs">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=LpCFwBw_mcQ">دورة Tableau - تابليو الدورة كاملة</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع سريع</p>
+              <p>أمثلة تفاعلية</p>
+              <p>مناسب للمبتدئين</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-tableau.html" class="btn quiz-btn">اختبار Tableau</a> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- قسم 6: الإحصاء الأساسي -->
+  <div class="language-section" id="statistics">
+    <h3><i class="fas fa-calculator"></i> الإحصاء الأساسي</h3>
+    <div class="resources-container">
+      <img src="../pic/data-analysis/stat.jpg" alt="Statistics Image" class="course-image">
+      <div class="video-links">
+        <h4>فيديوهات الشرح</h4>
+        <ul>
+          <li data-link-id="stats-khan">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=Jxfaz_znIGU">الإحصاء لتحليل البيانات</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>إحصاء وصفي</p>
+              <p>تطبيقات عملية</p>
+              <p>تمارين تفاعلية</p>
+            </div>
+          </li>
+          <li data-link-id="stats-edx">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=c-Ev274RKIo">كورس تحليل البيانات للمبتدأين .. 6 .. (الإحصاء الوصفية)</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>إحصاء استقرائي</p>
+              <p>تكامل مع Python</p>
+              <p>مشاريع عملية</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="book-links">
+        <h4>مواقع ومراجع</h4>
+        <ul>
+          <li data-link-id="stats-khan-academy">
+            <div class="link-title">
+              <a href="https://www.youtube.com/watch?v=_VO9GSrKlYM">الإحصاء لعلم البيانات (الإحصاء الوصفية)</a>
+              <i class="fas fa-chevron-down toggle-arrow toggle-features"></i>
+            </div>
+            <div class="rating-stars">
+              <span class="average-rating">0.0</span>
+              <span class="rating-count">(0 تقييم)</span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+            </div>
+            <div class="features-list">
+              <p>مرجع سريع</p>
+              <p>أمثلة تفاعلية</p>
+              <p>مناسب للمبتدئين</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="quiz-button">
+        <!-- <a href="exam-statistics.html" class="btn quiz-btn">اختبار الإحصاء</a> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="chat-popup" id="chatPopup" aria-hidden="true">
+  <div class="chat-content">
+    <button id="closeChat" class="close-chat" aria-label="إغلاق المحادثة"><i class="fas fa-times"></i></button>
+    <h2>محادثة الطلاب</h2>
+    <div id="chatLoading" class="chat-loading">جارٍ التحميل...</div>
+    <div id="chatMessages" class="chat-messages"></div>
+    <button id="loadMoreBtn" class="btn load-more-btn" style="display: none;">عرض المزيد</button>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="اكتب رسالتك...">
+      <button id="sendMessageBtn" class="btn send-message-btn">
+        <i class="fas fa-paper-plane"></i> إرسال
+      </button>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h2 class="footer-logo">Edumates</h2>
+      <p class="footer-description">منصة التعليم التفاعلي التي تساعدك على تطوير مهاراتك وتحقيق أهدافك</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=61573714877124" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://x.com/edumates_?t=7uVsGeKx1uNor4VjoeSAzg&s=09" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.linkedin.com/in/mostafa-edumates-2ba076378?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-column">
+        <h3 class="footer-title">المساعدة</h3>
+        <ul>
+          <li><a href="#" class="footer-link">سياسة الخصوصية</a></li>
+          <li><a href="#" class="footer-link">شروط الاستخدام</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h3 class="footer-title">تواصل معنا</h3>
+        <ul>
+          <li><a href="legal/privacy-policy.html" class="footer-link"><i class="fas fa-chevron-left"></i> سياسة الخصوصية</a></li>
+          <li><a href="legal/terms-of-use.html" class="footer-link"><i class="fas fa-chevron-left"></i> شروط الاستخدام</a></li>
+          <li><a href="legal/about.html" class="footer-link"><i class="fas fa-chevron-left"></i>عنا</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="copyright">© <span class="current-year"></span> Edumates. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<script type="module" src="data-analysis.js"></script>
+<script type="module" src="../feedback.js"></script>
+<script type="module" src="../roadmap.js"></script>
+</body>
+
+</html>
